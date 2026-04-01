@@ -33,6 +33,30 @@ Simply open `index.html` in any modern browser. Works best on mobile devices in 
 
 See `PLAN.md` for detailed implementation plan and architecture decisions.
 
+### Testing Mini-Games
+
+You can test specific mini-games directly using URL parameters:
+
+```
+# Mud Wash Game
+?minigame=mud-wash
+or ?minigame=wash
+
+# Sticker Shop Game
+?minigame=sticker-shop
+or ?minigame=stickers
+
+# Big Jump Game
+?minigame=big-jump
+or ?minigame=jump
+```
+
+**Examples:**
+- Local: `http://localhost:3000?minigame=mud-wash`
+- GitHub Pages: `https://pstember.github.io/toodle-monster-truck?minigame=jump`
+
+This is useful for testing individual mini-games without playing through 3 levels.
+
 ## Adding Sounds
 
 Replace the placeholder `playSound()` function in `script.js` with:

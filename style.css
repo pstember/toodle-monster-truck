@@ -1103,8 +1103,8 @@ body::after {
 /* Mobile devices */
 @media (max-width: 768px) {
     :root {
-        --size-large: 70px;
-        --size-small: 35px;
+        --size-large: 65px;
+        --size-small: 32px;
     }
 
     .level-display {
@@ -1117,14 +1117,14 @@ body::after {
     }
 
     .slots-container {
-        gap: 12px;
+        gap: 15px;
         max-width: 95%;
-        top: 75%;
+        top: 72%;
     }
 
     .slot {
-        min-width: 70px;
-        min-height: 70px;
+        min-width: 65px;
+        min-height: 65px;
         border: 4px dashed rgba(255, 255, 255, 1);
         border-radius: 12px;
     }
@@ -1134,9 +1134,22 @@ body::after {
     }
 
     .inventory-items {
-        gap: 12px;
+        gap: 15px;
         padding: 12px;
         max-width: 95vw;
+    }
+
+    .draggable-item {
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-4px);
+        }
     }
 
     .mini-game-title {
@@ -1184,8 +1197,8 @@ body::after {
 /* Small phones */
 @media (max-width: 480px) {
     :root {
-        --size-large: 60px;
-        --size-small: 30px;
+        --size-large: 55px;
+        --size-small: 28px;
     }
 
     .level-display {
@@ -1194,13 +1207,13 @@ body::after {
     }
 
     .slots-container {
-        gap: 8px;
-        top: 70%;
+        gap: 10px;
+        top: 68%;
     }
 
     .slot {
-        min-width: 60px;
-        min-height: 60px;
+        min-width: 55px;
+        min-height: 55px;
         border: 3px dashed rgba(255, 255, 255, 1);
     }
 
@@ -1209,7 +1222,7 @@ body::after {
     }
 
     .inventory-items {
-        gap: 8px;
+        gap: 10px;
         padding: 10px;
     }
 
@@ -1235,6 +1248,72 @@ body::after {
 
     .sticker {
         font-size: 40px;
+    }
+
+    .draggable-item {
+        filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-3px);
+        }
+    }
+}
+
+/* Very small phones - extra tight spacing */
+@media (max-width: 400px) {
+    :root {
+        --size-large: 50px;
+        --size-small: 25px;
+    }
+
+    .slots-container {
+        gap: 8px;
+        top: 65%;
+        max-width: 98%;
+    }
+
+    .slot {
+        min-width: 50px;
+        min-height: 50px;
+        border: 2px dashed rgba(255, 255, 255, 1);
+        border-radius: 8px;
+    }
+
+    .slot.filled {
+        border: 2px solid rgba(255, 215, 0, 1);
+    }
+
+    .inventory-items {
+        gap: 8px;
+        padding: 8px;
+        max-width: 98vw;
+    }
+
+    .level-display {
+        font-size: 16px;
+        padding: 5px 10px;
+    }
+
+    .draggable-item {
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .draggable-item:hover {
+        transform: scale(1.05) rotate(3deg);
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-2px);
+        }
     }
 }
 

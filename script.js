@@ -846,31 +846,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (testMinigame) {
         console.log(`🧪 Testing mini-game: ${testMinigame}`);
-        // Hide game container and show intermission
-        document.getElementById('game-container').style.display = 'none';
-        triggerIntermission();
 
-        // Override random selection to show specific mini-game
+        // Manually show intermission container
+        const intermissionContainer = document.getElementById('intermission-container');
+        intermissionContainer.classList.remove('hidden');
+        gameState.isInIntermission = true;
+
+        // Hide all mini-games first
+        document.querySelectorAll('.mini-game').forEach(g => g.classList.add('hidden'));
+
+        // Show specific mini-game
         setTimeout(() => {
             switch (testMinigame) {
                 case 'mud-wash':
                 case 'wash':
-                    document.querySelectorAll('.mini-game').forEach(g => g.classList.add('hidden'));
+                    console.log('🧽 Starting Mud Wash');
                     startMudWashGame();
                     break;
                 case 'sticker-shop':
                 case 'stickers':
-                    document.querySelectorAll('.mini-game').forEach(g => g.classList.add('hidden'));
+                    console.log('✨ Starting Sticker Shop');
                     startStickerShopGame();
                     break;
                 case 'big-jump':
                 case 'jump':
-                    document.querySelectorAll('.mini-game').forEach(g => g.classList.add('hidden'));
+                    console.log('🚀 Starting Big Jump');
                     startBigJumpGame();
                     break;
                 default:
-                    console.warn(`Unknown mini-game: ${testMinigame}`);
-                    console.log('Available mini-games: mud-wash, sticker-shop, big-jump');
+                    console.warn(`❌ Unknown mini-game: ${testMinigame}`);
+                    console.log('Available: mud-wash, sticker-shop, big-jump');
+                    // Show normal game if unknown
+                    intermissionContainer.classList.add('hidden');
+                    gameState.isInIntermission = false;
+                    generateLevel(gameState.levelCount);
             }
         }, 100);
     } else {

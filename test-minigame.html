@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini-Game Test Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        .test-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+        }
+        a {
+            background: linear-gradient(135deg, #4ECDC4, #44E5B4);
+            color: white;
+            padding: 20px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        a:hover {
+            transform: scale(1.05);
+        }
+        .back {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Mini-Game Testing</h1>
+    <p>Click a link to test a specific mini-game:</p>
+
+    <div class="test-links">
+        <a href="index.html?minigame=mud-wash">🧽 Mud Wash Game</a>
+        <a href="index.html?minigame=sticker-shop">✨ Sticker Shop Game</a>
+        <a href="index.html?minigame=big-jump">🚀 Big Jump Game</a>
+        <a href="index.html" class="back">🎮 Normal Game (No URL params)</a>
+    </div>
+
+    <h2>URL Format:</h2>
+    <ul>
+        <li><code>?minigame=mud-wash</code> or <code>?minigame=wash</code></li>
+        <li><code>?minigame=sticker-shop</code> or <code>?minigame=stickers</code></li>
+        <li><code>?minigame=big-jump</code> or <code>?minigame=jump</code></li>
+    </ul>
+</body>
+</html>

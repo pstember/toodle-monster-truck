@@ -860,6 +860,53 @@ body::after {
     background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
 }
 
+.mud-progress-container {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.mud-progress-label {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.mud-progress-bar {
+    width: 100%;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    border: 4px solid #FFD700;
+    overflow: hidden;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.5),
+        inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.mud-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4ECDC4, #44E5B4, #2ECC71);
+    transition: width 0.3s ease;
+    box-shadow:
+        0 0 20px rgba(78, 205, 196, 0.8),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    animation: progressShine 2s ease infinite;
+}
+
+@keyframes progressShine {
+    0%, 100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.2);
+    }
+}
+
 /* ===================================
    STICKER SHOP GAME
    =================================== */
@@ -1179,6 +1226,18 @@ body::after {
         height: 250px;
     }
 
+    .mud-progress-container {
+        max-width: 90vw;
+    }
+
+    .mud-progress-label {
+        font-size: 20px;
+    }
+
+    .mud-progress-bar {
+        height: 35px;
+    }
+
     .sticker-truck-area {
         width: 90vw;
         max-width: 400px;
@@ -1254,6 +1313,14 @@ body::after {
         width: 85vw;
         max-width: 300px;
         height: 200px;
+    }
+
+    .mud-progress-label {
+        font-size: 18px;
+    }
+
+    .mud-progress-bar {
+        height: 30px;
     }
 
     .draggable-item {

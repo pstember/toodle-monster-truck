@@ -601,9 +601,47 @@ function startMudWashGame() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     let isDrawing = false;
-    let pixelsCleared = 0;
     const totalPixels = canvas.width * canvas.height;
     let gameEnding = false; // Prevent multiple calls to endIntermission
+    let checkCounter = 0; // Throttle pixel checking
+
+    // Progress bar elements
+    const progressFill = document.getElementById('mud-progress-fill');
+    const progressText = document.getElementById('mud-progress-text');
+
+    function calculateClearedPercentage() {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = imageData.data;
+        let clearedPixels = 0;
+
+        // Check alpha channel - transparent pixels are cleared
+        for (let i = 3; i < pixels.length; i += 4) {
+            if (pixels[i] === 0) {
+                clearedPixels++;
+            }
+        }
+
+        return (clearedPixels / totalPixels) * 100;
+    }
+
+    function updateProgress() {
+        const percentCleared = calculateClearedPercentage();
+        const displayPercent = Math.min(99, Math.floor(percentCleared)); // Cap at 99% until complete
+
+        // Update progress bar
+        progressFill.style.width = displayPercent + '%';
+        progressText.textContent = displayPercent + '%';
+
+        // Check if game should end (95% threshold)
+        if (percentCleared >= 95 && !gameEnding) {
+            gameEnding = true;
+            progressFill.style.width = '100%';
+            progressText.textContent = '100%';
+            setTimeout(() => {
+                endIntermission();
+            }, 500);
+        }
+    }
 
     function clearMud(x, y) {
         ctx.globalCompositeOperation = 'destination-out';
@@ -611,18 +649,15 @@ function startMudWashGame() {
         ctx.arc(x, y, 30, 0, Math.PI * 2);
         ctx.fill();
 
-        // Count cleared pixels (approximation)
-        pixelsCleared += Math.PI * 30 * 30;
-
-        const percentCleared = (pixelsCleared / totalPixels) * 100;
-        // Increased threshold from 80% to 95% for more cleaning required
-        if (percentCleared >= 95 && !gameEnding) {
-            gameEnding = true; // Mark as ending to prevent multiple calls
-            setTimeout(() => {
-                endIntermission();
-            }, 500);
+        // Update progress every 5 strokes to avoid performance issues
+        checkCounter++;
+        if (checkCounter % 5 === 0) {
+            updateProgress();
         }
     }
+
+    // Initial progress
+    updateProgress();
 
     canvas.addEventListener('mousedown', () => isDrawing = true);
     canvas.addEventListener('mouseup', () => isDrawing = false);

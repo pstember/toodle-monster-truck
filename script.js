@@ -534,7 +534,7 @@ function triggerIntermission() {
     intermissionContainer.classList.remove('hidden');
 
     // Randomly select a mini-game
-    const games = ['mud-wash', 'sticker-shop', 'big-jump'];
+    const games = ['mud-wash', 'sticker-shop', 'big-jump', 'bubble-wrap'];
     const selectedGame = games[Math.floor(Math.random() * games.length)];
 
     console.log(`🎯 Selected: ${selectedGame}`);
@@ -548,6 +548,9 @@ function triggerIntermission() {
             break;
         case 'big-jump':
             startBigJumpGame();
+            break;
+        case 'bubble-wrap':
+            startBubbleWrapGame();
             break;
     }
 }
@@ -823,6 +826,75 @@ function createFireworks() {
 }
 
 // ===================================
+// BUBBLE WRAP GAME
+// ===================================
+
+function startBubbleWrapGame() {
+    const game = document.getElementById('bubble-wrap-game');
+    game.classList.remove('hidden');
+
+    const bubbleGrid = document.getElementById('bubble-grid');
+    const bubblesPopped = document.getElementById('bubbles-popped');
+    const bubblesTotal = document.getElementById('bubbles-total');
+
+    // Determine grid size based on screen size
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+
+    let rows, cols;
+    if (isSmallMobile) {
+        rows = 3;
+        cols = 2;
+    } else if (isMobile) {
+        rows = 4;
+        cols = 3;
+    } else {
+        rows = 3;
+        cols = 4;
+    }
+
+    const totalBubbles = rows * cols;
+    let poppedCount = 0;
+
+    // Update grid layout
+    bubbleGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+    bubbleGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+    // Update total counter
+    bubblesTotal.textContent = totalBubbles;
+    bubblesPopped.textContent = '0';
+
+    // Clear existing bubbles
+    bubbleGrid.innerHTML = '';
+
+    // Create bubbles
+    for (let i = 0; i < totalBubbles; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.dataset.index = i;
+
+        bubble.onclick = () => {
+            if (!bubble.classList.contains('popped')) {
+                bubble.classList.add('popped');
+                poppedCount++;
+                bubblesPopped.textContent = poppedCount;
+                playSound('pop');
+
+                // Check if all bubbles are popped
+                if (poppedCount === totalBubbles) {
+                    setTimeout(() => {
+                        playSound('success');
+                        endIntermission();
+                    }, 500);
+                }
+            }
+        };
+
+        bubbleGrid.appendChild(bubble);
+    }
+}
+
+// ===================================
 // UTILITY FUNCTIONS
 // ===================================
 
@@ -872,6 +944,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'jump':
                     console.log('🚀 Starting Big Jump');
                     startBigJumpGame();
+                    break;
+                case 'bubble-wrap':
+                case 'bubbles':
+                    console.log('🎈 Starting Bubble Wrap');
+                    startBubbleWrapGame();
                     break;
                 default:
                     console.warn(`❌ Unknown mini-game: ${testMinigame}`);

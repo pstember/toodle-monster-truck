@@ -462,75 +462,222 @@ body::after {
     filter: brightness(1.1);
 }
 
-/* PNG Tire Base System - colorize rim using SVG masks */
-.circle::after { content: ''; mask: url(#tire-mask-circle); }
-.square::after { content: ''; mask: url(#tire-mask-square); }
-.triangle::after { content: ''; mask: url(#tire-mask-triangle); }
-.star::after { content: ''; mask: url(#tire-mask-star); }
-.heart::after { content: ''; mask: url(#tire-mask-heart); }
-.hexagon::after { content: ''; mask: url(#tire-mask-hexagon); }
-.diamond::after { content: ''; mask: url(#tire-mask-diamond); }
+/* PNG Tire Base System - solid color shapes behind tire (shows through transparent rim) */
 
-.circle::after,
-.square::after,
-.triangle::after,
-.star::after,
-.heart::after,
-.hexagon::after,
-.diamond::after {
+/* Circle - circular solid color */
+.circle::before {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--rim-color, #FF4444);
-    -webkit-mask: inherit;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55%;
+    height: 55%;
+    background: var(--rim-color);
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Square - square solid color with rounded corners */
+.square::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 54%;
+    height: 54%;
+    background: var(--rim-color);
+    border-radius: 15%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Triangle - triangular solid color */
+.triangle::before {
+    content: '';
+    position: absolute;
+    top: 51%;
+    left: 52%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    border-bottom: 69px solid var(--rim-color);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Star - star-shaped using clip-path */
+.star::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 88%;
+    height: 88%;
+    background: var(--rim-color);
+    clip-path: polygon(
+        50% 0%,
+        61% 35%,
+        98% 35%,
+        68% 57%,
+        79% 91%,
+        50% 70%,
+        21% 91%,
+        32% 57%,
+        2% 35%,
+        39% 35%
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Heart - heart-shaped using clip-path */
+.heart::before {
+    content: '';
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 78%;
+    height: 78%;
+    background: var(--rim-color);
+    clip-path: path('M50,85 C20,60 5,45 5,30 C5,18 12,10 23,10 C32,10 40,15 50,25 C60,15 68,10 77,10 C88,10 95,18 95,30 C95,45 80,60 50,85 Z');
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Hexagon - hexagonal solid color */
+.hexagon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55%;
+    height: 63%;
+    background: var(--rim-color);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Diamond - diamond solid color */
+.diamond::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 50%;
+    height: 50%;
+    background: var(--rim-color);
+    z-index: 1;
     pointer-events: none;
 }
 
 .circle {
     width: var(--size-large);
     height: var(--size-large);
+}
+
+.circle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url('images/tires/tire_circle.png');
-    background-size: contain;
+    background-size: 170%;
     background-repeat: no-repeat;
     background-position: center;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .square {
     width: var(--size-large);
     height: var(--size-large);
+}
+
+.square::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url('images/tires/tire_square.png');
-    background-size: contain;
+    background-size: 170%;
     background-repeat: no-repeat;
     background-position: center;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .triangle {
     width: var(--size-large);
     height: var(--size-large);
+}
+
+.triangle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url('images/tires/tire_triangle.png');
-    background-size: contain;
+    background-size: 170%;
     background-repeat: no-repeat;
     background-position: center;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .star {
     width: var(--size-large);
     height: var(--size-large);
+}
+
+.star::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url('images/tires/tire_star.png');
-    background-size: contain;
+    background-size: 170%;
     background-repeat: no-repeat;
     background-position: center;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .heart {
     width: var(--size-large);
     height: var(--size-large);
+}
+
+.heart::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url('images/tires/tire_heart.png');
-    background-size: contain;
+    background-size: 170%;
     background-repeat: no-repeat;
     background-position: center;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .pentagon {
@@ -555,19 +702,41 @@ body::after {
 .hexagon {
     width: var(--size-large);
     height: var(--size-large);
+}
+
+.hexagon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url('images/tires/tire_hexagon.png');
-    background-size: contain;
+    background-size: 170%;
     background-repeat: no-repeat;
     background-position: center;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .diamond {
     width: var(--size-large);
     height: var(--size-large);
+}
+
+.diamond::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: url('images/tires/tire_diamond.png');
-    background-size: contain;
+    background-size: 130%;
     background-repeat: no-repeat;
     background-position: center;
+    z-index: 2;
+    pointer-events: none;
 }
 
 /* Size Modifiers */
@@ -1016,6 +1185,106 @@ body::after {
 }
 
 /* ===================================
+   BUBBLE WRAP GAME
+   =================================== */
+
+.bubble-counter {
+    font-size: 36px;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    margin-bottom: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px 40px;
+    border-radius: 20px;
+    border: 3px solid rgba(255, 215, 0, 0.6);
+}
+
+.bubble-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.bubble {
+    aspect-ratio: 1;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(150, 200, 255, 0.3), rgba(100, 150, 255, 0.5));
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow:
+        inset 0 -10px 30px rgba(0, 0, 0, 0.1),
+        inset 0 10px 30px rgba(255, 255, 255, 0.8),
+        0 5px 20px rgba(100, 150, 255, 0.5);
+    position: relative;
+    transition: transform 0.1s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.bubble::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 20%;
+    width: 30%;
+    height: 30%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9), transparent);
+    border-radius: 50%;
+    filter: blur(3px);
+}
+
+.bubble::after {
+    content: '';
+    position: absolute;
+    bottom: 20%;
+    right: 25%;
+    width: 15%;
+    height: 15%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
+    border-radius: 50%;
+    filter: blur(2px);
+}
+
+.bubble:hover:not(.popped) {
+    transform: scale(1.05);
+}
+
+.bubble:active:not(.popped) {
+    transform: scale(0.95);
+}
+
+.bubble.popped {
+    background: radial-gradient(circle, rgba(200, 200, 200, 0.1), rgba(150, 150, 150, 0.05));
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: default;
+    animation: pop 0.3s ease-out;
+    border: 2px solid rgba(100, 100, 100, 0.2);
+}
+
+.bubble.popped::before,
+.bubble.popped::after {
+    display: none;
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0.3;
+    }
+}
+
+/* ===================================
    GIANT BUTTONS
    =================================== */
 
@@ -1240,6 +1509,18 @@ body::after {
     .sticker-inventory {
         gap: 15px;
     }
+
+    .bubble-counter {
+        font-size: 24px;
+        padding: 10px 25px;
+        margin-bottom: 20px;
+    }
+
+    .bubble-grid {
+        gap: 15px;
+        padding: 15px;
+        max-width: 90vw;
+    }
 }
 
 /* Small phones */
@@ -1345,6 +1626,18 @@ body::after {
         50% {
             transform: translateY(-3px);
         }
+    }
+
+    .bubble-counter {
+        font-size: 20px;
+        padding: 8px 20px;
+        margin-bottom: 15px;
+    }
+
+    .bubble-grid {
+        gap: 12px;
+        padding: 12px;
+        max-width: 85vw;
     }
 }
 

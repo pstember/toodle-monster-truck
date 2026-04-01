@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Tire Images</title>
+    <style>
+        body {
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-tire {
+            width: 200px;
+            height: 200px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 2px solid #333;
+            margin: 10px;
+            display: inline-block;
+        }
+        img {
+            width: 200px;
+            height: auto;
+            border: 2px solid #333;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tire Image Test</h1>
+
+    <h2>Direct IMG Tags:</h2>
+    <div>
+        <img src="images/tires/tire_circle.png" alt="Circle">
+        <img src="images/tires/tire_square.png" alt="Square">
+        <img src="images/tires/tire_triangle.png" alt="Triangle">
+    </div>
+
+    <h2>CSS Background Images:</h2>
+    <div>
+        <div class="test-tire" style="background-image: url('images/tires/tire_circle.png')"></div>
+        <div class="test-tire" style="background-image: url('images/tires/tire_square.png')"></div>
+        <div class="test-tire" style="background-image: url('images/tires/tire_triangle.png')"></div>
+    </div>
+</body>
+</html>

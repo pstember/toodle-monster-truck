@@ -454,6 +454,7 @@ body::after {
     font-weight: bold;
     font-size: 24px;
     transition: all 0.3s ease;
+    position: relative;
 }
 
 .shape:hover {
@@ -461,100 +462,76 @@ body::after {
     filter: brightness(1.1);
 }
 
+/* PNG Tire Base System - colorize rim using SVG masks */
+.circle::after { content: ''; mask: url(#tire-mask-circle); }
+.square::after { content: ''; mask: url(#tire-mask-square); }
+.triangle::after { content: ''; mask: url(#tire-mask-triangle); }
+.star::after { content: ''; mask: url(#tire-mask-star); }
+.heart::after { content: ''; mask: url(#tire-mask-heart); }
+.hexagon::after { content: ''; mask: url(#tire-mask-hexagon); }
+.diamond::after { content: ''; mask: url(#tire-mask-diamond); }
+
+.circle::after,
+.square::after,
+.triangle::after,
+.star::after,
+.heart::after,
+.hexagon::after,
+.diamond::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--rim-color, #FF4444);
+    -webkit-mask: inherit;
+    pointer-events: none;
+}
+
 .circle {
     width: var(--size-large);
     height: var(--size-large);
+    background-image: url('images/tires/tire_circle.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-
-.circle.color-red { background-image: url('images/tires/circle-red.svg'); }
-.circle.color-blue { background-image: url('images/tires/circle-blue.svg'); }
-.circle.color-green { background-image: url('images/tires/circle-green.svg'); }
-.circle.color-yellow { background-image: url('images/tires/circle-yellow.svg'); }
-.circle.color-purple { background-image: url('images/tires/circle-purple.svg'); }
-.circle.color-orange { background-image: url('images/tires/circle-orange.svg'); }
-.circle.color-pink { background-image: url('images/tires/circle-pink.svg'); }
-.circle.color-cyan { background-image: url('images/tires/circle-cyan.svg'); }
-.circle.color-brown { background-image: url('images/tires/circle-brown.svg'); }
-.circle.color-lime { background-image: url('images/tires/circle-lime.svg'); }
 
 .square {
     width: var(--size-large);
     height: var(--size-large);
+    background-image: url('images/tires/tire_square.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-
-.square.color-red { background-image: url('images/tires/square-red.svg'); }
-.square.color-blue { background-image: url('images/tires/square-blue.svg'); }
-.square.color-green { background-image: url('images/tires/square-green.svg'); }
-.square.color-yellow { background-image: url('images/tires/square-yellow.svg'); }
-.square.color-purple { background-image: url('images/tires/square-purple.svg'); }
-.square.color-orange { background-image: url('images/tires/square-orange.svg'); }
-.square.color-pink { background-image: url('images/tires/square-pink.svg'); }
-.square.color-cyan { background-image: url('images/tires/square-cyan.svg'); }
-.square.color-brown { background-image: url('images/tires/square-brown.svg'); }
-.square.color-lime { background-image: url('images/tires/square-lime.svg'); }
 
 .triangle {
     width: var(--size-large);
     height: var(--size-large);
+    background-image: url('images/tires/tire_triangle.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-
-.triangle.color-red { background-image: url('images/tires/triangle-red.svg'); }
-.triangle.color-blue { background-image: url('images/tires/triangle-blue.svg'); }
-.triangle.color-green { background-image: url('images/tires/triangle-green.svg'); }
-.triangle.color-yellow { background-image: url('images/tires/triangle-yellow.svg'); }
-.triangle.color-purple { background-image: url('images/tires/triangle-purple.svg'); }
-.triangle.color-orange { background-image: url('images/tires/triangle-orange.svg'); }
-.triangle.color-pink { background-image: url('images/tires/triangle-pink.svg'); }
-.triangle.color-cyan { background-image: url('images/tires/triangle-cyan.svg'); }
-.triangle.color-brown { background-image: url('images/tires/triangle-brown.svg'); }
-.triangle.color-lime { background-image: url('images/tires/triangle-lime.svg'); }
 
 .star {
     width: var(--size-large);
     height: var(--size-large);
+    background-image: url('images/tires/tire_star.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-
-.star.color-red { background-image: url('images/tires/star-red.svg'); }
-.star.color-blue { background-image: url('images/tires/star-blue.svg'); }
-.star.color-green { background-image: url('images/tires/star-green.svg'); }
-.star.color-yellow { background-image: url('images/tires/star-yellow.svg'); }
-.star.color-purple { background-image: url('images/tires/star-purple.svg'); }
-.star.color-orange { background-image: url('images/tires/star-orange.svg'); }
-.star.color-pink { background-image: url('images/tires/star-pink.svg'); }
-.star.color-cyan { background-image: url('images/tires/star-cyan.svg'); }
-.star.color-brown { background-image: url('images/tires/star-brown.svg'); }
-.star.color-lime { background-image: url('images/tires/star-lime.svg'); }
 
 .heart {
     width: var(--size-large);
     height: var(--size-large);
+    background-image: url('images/tires/tire_heart.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-
-.heart.color-red { background-image: url('images/tires/heart-red.svg'); }
-.heart.color-blue { background-image: url('images/tires/heart-blue.svg'); }
-.heart.color-green { background-image: url('images/tires/heart-green.svg'); }
-.heart.color-yellow { background-image: url('images/tires/heart-yellow.svg'); }
-.heart.color-purple { background-image: url('images/tires/heart-purple.svg'); }
-.heart.color-orange { background-image: url('images/tires/heart-orange.svg'); }
-.heart.color-pink { background-image: url('images/tires/heart-pink.svg'); }
-.heart.color-cyan { background-image: url('images/tires/heart-cyan.svg'); }
-.heart.color-brown { background-image: url('images/tires/heart-brown.svg'); }
-.heart.color-lime { background-image: url('images/tires/heart-lime.svg'); }
 
 .pentagon {
     width: var(--size-large);
@@ -578,40 +555,20 @@ body::after {
 .hexagon {
     width: var(--size-large);
     height: var(--size-large);
+    background-image: url('images/tires/tire_hexagon.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-
-.hexagon.color-red { background-image: url('images/tires/hexagon-red.svg'); }
-.hexagon.color-blue { background-image: url('images/tires/hexagon-blue.svg'); }
-.hexagon.color-green { background-image: url('images/tires/hexagon-green.svg'); }
-.hexagon.color-yellow { background-image: url('images/tires/hexagon-yellow.svg'); }
-.hexagon.color-purple { background-image: url('images/tires/hexagon-purple.svg'); }
-.hexagon.color-orange { background-image: url('images/tires/hexagon-orange.svg'); }
-.hexagon.color-pink { background-image: url('images/tires/hexagon-pink.svg'); }
-.hexagon.color-cyan { background-image: url('images/tires/hexagon-cyan.svg'); }
-.hexagon.color-brown { background-image: url('images/tires/hexagon-brown.svg'); }
-.hexagon.color-lime { background-image: url('images/tires/hexagon-lime.svg'); }
 
 .diamond {
     width: var(--size-large);
     height: var(--size-large);
+    background-image: url('images/tires/tire_diamond.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-
-.diamond.color-red { background-image: url('images/tires/diamond-red.svg'); }
-.diamond.color-blue { background-image: url('images/tires/diamond-blue.svg'); }
-.diamond.color-green { background-image: url('images/tires/diamond-green.svg'); }
-.diamond.color-yellow { background-image: url('images/tires/diamond-yellow.svg'); }
-.diamond.color-purple { background-image: url('images/tires/diamond-purple.svg'); }
-.diamond.color-orange { background-image: url('images/tires/diamond-orange.svg'); }
-.diamond.color-pink { background-image: url('images/tires/diamond-pink.svg'); }
-.diamond.color-cyan { background-image: url('images/tires/diamond-cyan.svg'); }
-.diamond.color-brown { background-image: url('images/tires/diamond-brown.svg'); }
-.diamond.color-lime { background-image: url('images/tires/diamond-lime.svg'); }
 
 /* Size Modifiers */
 .size-large {

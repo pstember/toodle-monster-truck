@@ -1,0 +1,18 @@
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="stripesyellow" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="10" fill="#2a2a2a"/>
+      <rect width="5" height="10" fill="#1a1a1a"/>
+    </pattern>
+    <radialGradient id="gradyellow">
+      <stop offset="0%" stop-color="#FFE44D" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#FFA500"/>
+    </radialGradient>
+  </defs>
+  <path d="M60 15 L105 100 L15 100 Z" fill="url(#stripesyellow)" stroke="#1a1a1a" stroke-width="3"/>
+  <path d="M60 45 L80 75 L40 75 Z" fill="#FFD700"/>
+  <path d="M60 45 L80 75 L40 75 Z" fill="url(#gradyellow)"/>
+  <circle cx="60" cy="65" r="5" fill="#1a1a1a"/>
+  <circle cx="60" cy="65" r="3" fill="#2a2a2a"/>
+  <ellipse cx="55" cy="55" rx="8" ry="5" fill="#ffffff" opacity="0.2"/>
+</svg>

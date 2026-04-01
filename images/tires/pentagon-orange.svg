@@ -1,0 +1,15 @@
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+  <path d="M60 10 L105 45 L88 100 L32 100 L15 45 Z" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="3"/>
+  <path d="M60 25 L90 50 L78 85 L42 85 L30 50 Z" fill="#1a1a1a" opacity="0.5"/>
+  <circle cx="60" cy="60" r="20" fill="#FF8C00"/>
+  <circle cx="60" cy="60" r="20" fill="url(#gradorange)"/>
+  <circle cx="60" cy="60" r="7" fill="#1a1a1a"/>
+  <circle cx="60" cy="60" r="5" fill="#2a2a2a"/>
+  <ellipse cx="52" cy="52" rx="10" ry="6" fill="#ffffff" opacity="0.2"/>
+  <defs>
+    <radialGradient id="gradorange">
+      <stop offset="0%" stop-color="#FFA54D" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#E67E00"/>
+    </radialGradient>
+  </defs>
+</svg>

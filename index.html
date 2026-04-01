@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>🚙 Monster Truck Match</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Main Game Container -->
+    <div id="game-container">
+
+        <!-- Level Counter (hidden but tracked) -->
+        <div id="level-display" class="level-display">
+            Level <span id="level-number">1</span>
+        </div>
+
+        <!-- Truck Area (Top 60%) -->
+        <div id="truck-area" class="truck-area">
+            <!-- Monster Truck -->
+            <div id="monster-truck" class="monster-truck">
+                <div class="truck-body">
+                    <div class="truck-cabin">🚙</div>
+                    <div class="truck-bed"></div>
+                </div>
+
+                <!-- Empty Slots (dynamically generated) -->
+                <div id="slots-container" class="slots-container">
+                    <!-- Slots will be inserted here by JavaScript -->
+                </div>
+
+                <!-- Truck Wheels -->
+                <div class="truck-wheels">
+                    <div class="wheel wheel-front"></div>
+                    <div class="wheel wheel-back"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Area (Bottom 40%) -->
+        <div id="inventory-area" class="inventory-area">
+            <div id="inventory-items" class="inventory-items">
+                <!-- Draggable items will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Confetti Container (for celebrations) -->
+        <div id="confetti-container" class="confetti-container"></div>
+
+        <!-- Celebration Overlay -->
+        <div id="celebration-overlay" class="celebration-overlay hidden">
+            <div class="celebration-text">🎉 Amazing! 🎉</div>
+        </div>
+
+        <!-- Intermission Container -->
+        <div id="intermission-container" class="intermission-container hidden">
+
+            <!-- Mud Wash Game -->
+            <div id="mud-wash-game" class="mini-game hidden">
+                <div class="mini-game-title">🧽 Wash the Truck! 🧽</div>
+                <div class="mini-game-instructions">Swipe to clean off the mud!</div>
+                <div class="canvas-container">
+                    <canvas id="mud-canvas"></canvas>
+                    <div id="clean-truck" class="clean-truck">
+                        <div class="truck-body">
+                            <div class="truck-cabin">🚙</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sticker Shop Game -->
+            <div id="sticker-shop-game" class="mini-game hidden">
+                <div class="mini-game-title">✨ Decorate Your Truck! ✨</div>
+                <div class="mini-game-instructions">Drag stickers onto your truck, then click DONE!</div>
+                <div id="sticker-truck-area" class="sticker-truck-area">
+                    <div class="truck-body large">
+                        <div class="truck-cabin">🚙</div>
+                    </div>
+                </div>
+                <div id="sticker-inventory" class="sticker-inventory">
+                    <div class="sticker" draggable="true">⭐</div>
+                    <div class="sticker" draggable="true">🔥</div>
+                    <div class="sticker" draggable="true">💀</div>
+                    <div class="sticker" draggable="true">🎉</div>
+                    <div class="sticker" draggable="true">🌈</div>
+                </div>
+                <button id="sticker-done-btn" class="giant-button">DONE!</button>
+            </div>
+
+            <!-- Big Jump Game -->
+            <div id="big-jump-game" class="mini-game hidden">
+                <div class="mini-game-title">🚀 BIG JUMP! 🚀</div>
+                <div class="mini-game-instructions">Click JUMP to do a backflip!</div>
+                <div id="jump-scene" class="jump-scene">
+                    <div id="jump-truck" class="jump-truck">
+                        <div class="truck-body">
+                            <div class="truck-cabin">🚙</div>
+                        </div>
+                    </div>
+                    <div class="ramp">📐</div>
+                </div>
+                <button id="jump-btn" class="giant-button jump-button">JUMP!</button>
+                <div id="fireworks-container" class="fireworks-container"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

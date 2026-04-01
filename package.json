@@ -1,0 +1,22 @@
+{
+  "name": "toddler-truck-game",
+  "version": "1.0.0",
+  "description": "A colorful, forgiving drag-and-drop matching game designed specifically for 3-year-olds.",
+  "main": "script.js",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:unit": "playwright test tests/unit/",
+    "test:integration": "playwright test tests/integration/",
+    "test:e2e": "playwright test tests/e2e/",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "playwright": "^1.58.2"
+  }
+}

@@ -1,0 +1,1126 @@
+/* ===================================
+   CSS VARIABLES & RESET
+   =================================== */
+
+:root {
+    /* Enhanced Color Palette - More Vibrant & Distinct */
+    --red: linear-gradient(135deg, #FF4444, #E63946);
+    --blue: linear-gradient(135deg, #1E90FF, #4169E1);  /* Clear blue, not cyan */
+    --green: linear-gradient(135deg, #2ECC40, #27AE60);  /* True green, not teal */
+    --yellow: linear-gradient(135deg, #FFD700, #FFC107);
+    --purple: linear-gradient(135deg, #9B59B6, #8E44AD);
+    --orange: linear-gradient(135deg, #FF8C00, #FF6347);
+    --pink: linear-gradient(135deg, #FF69B4, #FF1493);
+    --cyan: linear-gradient(135deg, #00CED1, #40E0D0);
+
+    /* Flat colors for triangles */
+    --red-flat: #FF4444;
+    --blue-flat: #1E90FF;
+    --green-flat: #2ECC40;
+    --yellow-flat: #FFD700;
+    --purple-flat: #9B59B6;
+    --orange-flat: #FF8C00;
+    --pink-flat: #FF69B4;
+    --cyan-flat: #00CED1;
+
+    /* UI Colors - Monster Truck Theme */
+    --bg-sky: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 100%);
+    --ground: linear-gradient(180deg, #A0714D 0%, #8B6239 50%, #6B4E35 100%);
+    --dirt-shadow: rgba(101, 67, 33, 0.4);
+    --truck-body: linear-gradient(135deg, #4CAF50, #45a049);
+    --truck-cabin: linear-gradient(135deg, #64B5F6, #42A5F5);
+    --white: #FFFFFF;
+    --black: #000000;
+
+    /* Sizes */
+    --size-large: 120px;
+    --size-small: 60px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+    background: url('background.png') center center / cover no-repeat fixed;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    position: relative;
+}
+
+body::before {
+    display: none;
+}
+
+body::after {
+    display: none;
+}
+
+@keyframes cloudFloat {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(100px);
+    }
+}
+
+/* ===================================
+   GAME CONTAINER
+   =================================== */
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#game-container::before {
+    display: none;
+}
+
+#game-container::after {
+    display: none;
+}
+
+.level-display {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 36px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #000;
+    padding: 12px 28px;
+    border-radius: 20px;
+    text-shadow:
+        2px 2px 0px rgba(255,255,255,0.8),
+        3px 3px 0px rgba(0,0,0,0.3);
+    box-shadow:
+        0 6px 12px rgba(0,0,0,0.4),
+        inset 0 2px 4px rgba(255,255,255,0.5),
+        0 0 20px rgba(255, 215, 0, 0.6);
+    z-index: 10;
+    border: 4px solid #000;
+    animation: levelPulse 2s ease-in-out infinite;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    letter-spacing: 1px;
+}
+
+@keyframes levelPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* ===================================
+   TRUCK AREA (60%)
+   =================================== */
+
+.truck-area {
+    flex: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: visible;
+}
+
+.truck-area::before {
+    display: none;
+}
+
+.truck-area::after {
+    display: none;
+}
+
+@keyframes flagWave {
+    0%, 100% {
+        transform: rotate(-5deg) translateY(0px);
+    }
+    50% {
+        transform: rotate(5deg) translateY(-10px);
+    }
+}
+
+@keyframes horizonDrift {
+    0%, 100% {
+        transform: translateX(0) scale(0.9);
+    }
+    50% {
+        transform: translateX(30px) scale(0.95);
+    }
+}
+
+.monster-truck {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+}
+
+.monster-truck.driving-off {
+    animation: driveOff 1s ease-in-out forwards;
+}
+
+@keyframes driveOff {
+    to {
+        transform: translateX(150vw);
+    }
+}
+
+.truck-body {
+    position: relative;
+    width: 300px;
+    height: 100px;
+    background: transparent;
+    margin: 0 auto;
+}
+
+.truck-body::before {
+    display: none;
+}
+
+.truck-cabin {
+    display: none;
+}
+
+.truck-cabin::before {
+    display: none;
+}
+
+.truck-bed {
+    display: none;
+}
+
+.truck-bed::before {
+    display: none;
+}
+
+.truck-wheels {
+    display: none;
+}
+
+.wheel {
+    display: none;
+}
+
+/* ===================================
+   SLOTS CONTAINER
+   =================================== */
+
+.slots-container {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 90%;
+}
+
+.slot {
+    position: relative;
+    border: 8px dashed rgba(255, 255, 255, 1);
+    border-radius: 20px;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.85),
+        rgba(255, 255, 255, 0.7)
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s ease-in-out infinite;
+    min-width: 120px;
+    min-height: 120px;
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.6),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.2),
+        0 0 30px rgba(255, 255, 255, 0.8);
+}
+
+.slot.filled {
+    border: 8px solid rgba(255, 215, 0, 1);
+    animation: fillSuccess 0.5s ease;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.95),
+        rgba(255, 240, 200, 0.9)
+    );
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.6),
+        inset 0 -4px 8px rgba(255, 215, 0, 0.3),
+        0 0 40px rgba(255, 215, 0, 0.8);
+}
+
+.slot.hover-highlight {
+    border: 6px solid rgba(255, 215, 0, 0.9);
+    background: linear-gradient(135deg,
+        rgba(255, 215, 0, 0.4),
+        rgba(255, 215, 0, 0.2)
+    );
+    box-shadow:
+        0 0 40px rgba(255, 215, 0, 0.8),
+        0 0 80px rgba(255, 215, 0, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+}
+
+.slot.filled .slot-outline {
+    display: none;
+}
+
+.slot-outline {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: brightness(0.7) saturate(1.2) drop-shadow(0 0 4px rgba(0,0,0,0.5));
+    transform: scale(0.85);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow:
+            0 0 30px rgba(255, 255, 255, 0.6),
+            0 0 60px rgba(255, 215, 0, 0.4),
+            inset 0 2px 4px rgba(255, 255, 255, 0.5);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow:
+            0 0 50px rgba(255, 255, 255, 0.9),
+            0 0 100px rgba(255, 215, 0, 0.6),
+            inset 0 2px 4px rgba(255, 255, 255, 0.5);
+        transform: scale(1.05);
+    }
+}
+
+@keyframes fillSuccess {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+        filter: brightness(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ===================================
+   INVENTORY AREA (40%)
+   =================================== */
+
+.inventory-area {
+    flex: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    padding: 20px;
+    position: relative;
+}
+
+.inventory-area::before {
+    display: none;
+}
+
+.inventory-items {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 90vw;
+    padding: 20px;
+    background: rgba(217, 184, 134, 0.4);
+    border-radius: 20px;
+    backdrop-filter: blur(3px);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        inset 0 2px 8px rgba(255, 255, 255, 0.2),
+        inset 0 -2px 8px rgba(139, 111, 71, 0.3);
+    border: 3px solid rgba(139, 111, 71, 0.6);
+}
+
+/* ===================================
+   DRAGGABLE ITEMS & SHAPES
+   =================================== */
+
+.draggable-item {
+    cursor: grab;
+    touch-action: none;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
+}
+
+.draggable-item:hover {
+    transform: scale(1.1) rotate(5deg);
+    filter: brightness(1.2);
+}
+
+.draggable-item:active {
+    cursor: grabbing;
+}
+
+.draggable-item.dragging {
+    opacity: 0.9;
+    z-index: 1000;
+    /* Removed transform - it interferes with drag positioning */
+    /* transform: scale(1.2) rotate(10deg); */
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.5))
+            drop-shadow(0 0 30px rgba(255,215,0,0.6));
+    cursor: grabbing;
+    /* Removed wiggle animation - causes position jitter during drag */
+    /* animation: wiggle 0.3s ease infinite; */
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes wiggle {
+    0%, 100% {
+        transform: scale(1.2) rotate(8deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(12deg);
+    }
+}
+
+.draggable-item.snapping {
+    animation: snapIn 0.3s ease;
+}
+
+@keyframes snapIn {
+    0% {
+        transform: scale(1.2);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.draggable-item.bouncing {
+    animation: bounceBack 0.5s ease;
+}
+
+@keyframes bounceBack {
+    0% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-20px);
+    }
+    70% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Shape Classes */
+.shape {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 24px;
+    transition: all 0.3s ease;
+}
+
+.shape:hover {
+    transform: translateY(-4px);
+    filter: brightness(1.1);
+}
+
+.circle {
+    width: var(--size-large);
+    height: var(--size-large);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.circle.color-red { background-image: url('images/tires/circle-red.svg'); }
+.circle.color-blue { background-image: url('images/tires/circle-blue.svg'); }
+.circle.color-green { background-image: url('images/tires/circle-green.svg'); }
+.circle.color-yellow { background-image: url('images/tires/circle-yellow.svg'); }
+.circle.color-purple { background-image: url('images/tires/circle-purple.svg'); }
+.circle.color-orange { background-image: url('images/tires/circle-orange.svg'); }
+.circle.color-pink { background-image: url('images/tires/circle-pink.svg'); }
+.circle.color-cyan { background-image: url('images/tires/circle-cyan.svg'); }
+
+.square {
+    width: var(--size-large);
+    height: var(--size-large);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.square.color-red { background-image: url('images/tires/square-red.svg'); }
+.square.color-blue { background-image: url('images/tires/square-blue.svg'); }
+.square.color-green { background-image: url('images/tires/square-green.svg'); }
+.square.color-yellow { background-image: url('images/tires/square-yellow.svg'); }
+.square.color-purple { background-image: url('images/tires/square-purple.svg'); }
+.square.color-orange { background-image: url('images/tires/square-orange.svg'); }
+.square.color-pink { background-image: url('images/tires/square-pink.svg'); }
+.square.color-cyan { background-image: url('images/tires/square-cyan.svg'); }
+
+.triangle {
+    width: var(--size-large);
+    height: var(--size-large);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.triangle.color-red { background-image: url('images/tires/triangle-red.svg'); }
+.triangle.color-blue { background-image: url('images/tires/triangle-blue.svg'); }
+.triangle.color-green { background-image: url('images/tires/triangle-green.svg'); }
+.triangle.color-yellow { background-image: url('images/tires/triangle-yellow.svg'); }
+.triangle.color-purple { background-image: url('images/tires/triangle-purple.svg'); }
+.triangle.color-orange { background-image: url('images/tires/triangle-orange.svg'); }
+.triangle.color-pink { background-image: url('images/tires/triangle-pink.svg'); }
+.triangle.color-cyan { background-image: url('images/tires/triangle-cyan.svg'); }
+
+.star {
+    width: var(--size-large);
+    height: var(--size-large);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.star.color-red { background-image: url('images/tires/star-red.svg'); }
+.star.color-blue { background-image: url('images/tires/star-blue.svg'); }
+.star.color-green { background-image: url('images/tires/star-green.svg'); }
+.star.color-yellow { background-image: url('images/tires/star-yellow.svg'); }
+.star.color-purple { background-image: url('images/tires/star-purple.svg'); }
+.star.color-orange { background-image: url('images/tires/star-orange.svg'); }
+.star.color-pink { background-image: url('images/tires/star-pink.svg'); }
+.star.color-cyan { background-image: url('images/tires/star-cyan.svg'); }
+
+.heart {
+    width: var(--size-large);
+    height: var(--size-large);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.heart.color-red { background-image: url('images/tires/heart-red.svg'); }
+.heart.color-blue { background-image: url('images/tires/heart-blue.svg'); }
+.heart.color-green { background-image: url('images/tires/heart-green.svg'); }
+.heart.color-yellow { background-image: url('images/tires/heart-yellow.svg'); }
+.heart.color-purple { background-image: url('images/tires/heart-purple.svg'); }
+.heart.color-orange { background-image: url('images/tires/heart-orange.svg'); }
+.heart.color-pink { background-image: url('images/tires/heart-pink.svg'); }
+.heart.color-cyan { background-image: url('images/tires/heart-cyan.svg'); }
+
+.pentagon {
+    width: var(--size-large);
+    height: var(--size-large);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.pentagon.color-red { background-image: url('images/tires/pentagon-red.svg'); }
+.pentagon.color-blue { background-image: url('images/tires/pentagon-blue.svg'); }
+.pentagon.color-green { background-image: url('images/tires/pentagon-green.svg'); }
+.pentagon.color-yellow { background-image: url('images/tires/pentagon-yellow.svg'); }
+.pentagon.color-purple { background-image: url('images/tires/pentagon-purple.svg'); }
+.pentagon.color-orange { background-image: url('images/tires/pentagon-orange.svg'); }
+.pentagon.color-pink { background-image: url('images/tires/pentagon-pink.svg'); }
+.pentagon.color-cyan { background-image: url('images/tires/pentagon-cyan.svg'); }
+
+.hexagon {
+    width: var(--size-large);
+    height: var(--size-large);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.hexagon.color-red { background-image: url('images/tires/hexagon-red.svg'); }
+.hexagon.color-blue { background-image: url('images/tires/hexagon-blue.svg'); }
+.hexagon.color-green { background-image: url('images/tires/hexagon-green.svg'); }
+.hexagon.color-yellow { background-image: url('images/tires/hexagon-yellow.svg'); }
+.hexagon.color-purple { background-image: url('images/tires/hexagon-purple.svg'); }
+.hexagon.color-orange { background-image: url('images/tires/hexagon-orange.svg'); }
+.hexagon.color-pink { background-image: url('images/tires/hexagon-pink.svg'); }
+.hexagon.color-cyan { background-image: url('images/tires/hexagon-cyan.svg'); }
+
+.diamond {
+    width: var(--size-large);
+    height: var(--size-large);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.diamond.color-red { background-image: url('images/tires/diamond-red.svg'); }
+.diamond.color-blue { background-image: url('images/tires/diamond-blue.svg'); }
+.diamond.color-green { background-image: url('images/tires/diamond-green.svg'); }
+.diamond.color-yellow { background-image: url('images/tires/diamond-yellow.svg'); }
+.diamond.color-purple { background-image: url('images/tires/diamond-purple.svg'); }
+.diamond.color-orange { background-image: url('images/tires/diamond-orange.svg'); }
+.diamond.color-pink { background-image: url('images/tires/diamond-pink.svg'); }
+.diamond.color-cyan { background-image: url('images/tires/diamond-cyan.svg'); }
+
+/* Size Modifiers */
+.size-large {
+    --size-large: 120px;
+    --size-small: 60px;
+}
+
+.size-small {
+    --size-large: 80px;
+    --size-small: 40px;
+    transform: scale(0.7);
+}
+
+/* Color Classes - Set rim colors for tires */
+.color-red {
+    --rim-color: #FF4444;
+    --rim-color-dark: #CC3333;
+}
+.color-blue {
+    --rim-color: #1E90FF;
+    --rim-color-dark: #1565C0;
+}
+.color-green {
+    --rim-color: #2ECC40;
+    --rim-color-dark: #27AE60;
+}
+.color-yellow {
+    --rim-color: #FFD700;
+    --rim-color-dark: #FFA500;
+}
+.color-purple {
+    --rim-color: #9B59B6;
+    --rim-color-dark: #7D3C98;
+}
+.color-orange {
+    --rim-color: #FF8C00;
+    --rim-color-dark: #E67E00;
+}
+.color-pink {
+    --rim-color: #FF69B4;
+    --rim-color-dark: #E91E63;
+}
+.color-cyan {
+    --rim-color: #00CED1;
+    --rim-color-dark: #00ACC1;
+}
+
+/* Triangle and other shapes now use tire styling with colored rims */
+
+/* ===================================
+   CONFETTI
+   =================================== */
+
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.confetti {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    animation: fall 3s linear forwards;
+    box-shadow:
+        0 0 10px currentColor,
+        0 0 20px currentColor;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(50vh) rotate(360deg) scale(1.5);
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   CELEBRATION OVERLAY
+   =================================== */
+
+.celebration-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9998;
+    animation: fadeIn 0.3s ease;
+}
+
+.celebration-overlay.hidden {
+    display: none;
+}
+
+.celebration-text {
+    font-size: 72px;
+    font-weight: bold;
+    background: linear-gradient(45deg,
+        #FFD700, #FFA500, #FF1493, #00CED1, #32CD32, #FFD700
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow:
+        0 0 20px rgba(255, 215, 0, 0.8),
+        0 0 40px rgba(255, 105, 180, 0.6),
+        4px 4px 8px rgba(0,0,0,0.8);
+    animation: bounce 0.6s ease infinite, rainbow 3s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(255,215,0,0.8));
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1) rotate(-3deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(3deg);
+    }
+}
+
+@keyframes rainbow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ===================================
+   INTERMISSION CONTAINER
+   =================================== */
+
+.intermission-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-color);
+    z-index: 10000;
+}
+
+.intermission-container.hidden {
+    display: none;
+}
+
+.mini-game {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mini-game.hidden {
+    display: none;
+}
+
+.mini-game-title {
+    font-size: 56px;
+    font-weight: bold;
+    background: linear-gradient(45deg,
+        #FFD700, #FFA500, #FF1493, #00CED1, #FFD700
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow:
+        0 0 20px rgba(255, 215, 0, 0.8),
+        0 0 40px rgba(255, 105, 180, 0.6);
+    margin-bottom: 20px;
+    animation: rainbow 3s linear infinite, titleBounce 1s ease-in-out infinite;
+    filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.5));
+}
+
+.mini-game-instructions {
+    font-size: 32px;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-shadow:
+        2px 2px 4px rgba(0,0,0,0.8),
+        0 0 10px rgba(255, 215, 0, 0.5);
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px 30px;
+    border-radius: 20px;
+    border: 3px solid rgba(255, 215, 0, 0.6);
+}
+
+@keyframes titleBounce {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ===================================
+   MUD WASH GAME
+   =================================== */
+
+.canvas-container {
+    position: relative;
+    width: 400px;
+    height: 300px;
+}
+
+#mud-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    cursor: pointer;
+    touch-action: none;
+}
+
+.clean-truck {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.clean-truck .truck-body {
+    background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+}
+
+/* ===================================
+   STICKER SHOP GAME
+   =================================== */
+
+.sticker-truck-area {
+    position: relative;
+    width: 500px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.sticker-truck-area .truck-body.large {
+    width: 400px;
+    height: 150px;
+}
+
+.sticker-inventory {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.sticker {
+    font-size: 80px;
+    cursor: grab;
+    touch-action: none;
+    filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.3));
+    transition: transform 0.2s ease;
+}
+
+.sticker:active {
+    cursor: grabbing;
+    transform: scale(1.2);
+}
+
+.sticker.placed {
+    position: absolute;
+    cursor: default;
+}
+
+/* ===================================
+   BIG JUMP GAME
+   =================================== */
+
+.jump-scene {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 50px;
+    overflow: hidden;
+}
+
+.jump-truck {
+    position: absolute;
+    bottom: 50px;
+    left: -200px;
+    animation: driveToRamp 3s ease-in-out forwards;
+}
+
+@keyframes driveToRamp {
+    to {
+        left: calc(50% - 150px);
+    }
+}
+
+.jump-truck.jumping {
+    animation: backflip 1.5s ease-in-out forwards;
+}
+
+@keyframes backflip {
+    0% {
+        transform: rotate(0deg) translateY(0);
+    }
+    50% {
+        transform: rotate(-180deg) translateY(-200px);
+    }
+    100% {
+        transform: rotate(-360deg) translateY(0);
+    }
+}
+
+.ramp {
+    position: absolute;
+    bottom: 30px;
+    right: 20%;
+    font-size: 120px;
+    transform: rotate(-30deg);
+}
+
+.fireworks-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.firework {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+    to {
+        transform: translate(var(--tx), var(--ty));
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   GIANT BUTTONS
+   =================================== */
+
+.giant-button {
+    width: 400px;
+    height: 150px;
+    font-size: 64px;
+    font-weight: bold;
+    color: var(--white);
+    background: linear-gradient(135deg,
+        #FF6B6B 0%,
+        #FF8E53 25%,
+        #FFA500 50%,
+        #4ECDC4 75%,
+        #4FACFE 100%
+    );
+    background-size: 200% 200%;
+    border: 8px solid var(--white);
+    border-radius: 40px;
+    cursor: pointer;
+    touch-action: none;
+    box-shadow:
+        0 12px 24px rgba(0,0,0,0.4),
+        0 0 40px rgba(255, 215, 0, 0.3),
+        inset 0 4px 8px rgba(255,255,255,0.2);
+    transition: all 0.2s ease;
+    animation: buttonShine 3s ease infinite;
+    text-shadow:
+        3px 3px 6px rgba(0,0,0,0.5),
+        0 0 20px rgba(255,255,255,0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.giant-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 70%
+    );
+    animation: buttonGloss 3s ease infinite;
+}
+
+.giant-button:hover {
+    box-shadow:
+        0 16px 32px rgba(0,0,0,0.5),
+        0 0 60px rgba(255, 215, 0, 0.5),
+        inset 0 4px 8px rgba(255,255,255,0.3);
+}
+
+.giant-button:active {
+    box-shadow:
+        0 8px 16px rgba(0,0,0,0.3),
+        0 0 30px rgba(255, 215, 0, 0.3),
+        inset 0 2px 4px rgba(255,255,255,0.1);
+}
+
+@keyframes buttonShine {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes buttonGloss {
+    0% {
+        transform: translate(-100%, -100%) rotate(45deg);
+    }
+    100% {
+        transform: translate(100%, 100%) rotate(45deg);
+    }
+}
+
+.jump-button {
+    position: relative;
+    margin: 30px auto 0;
+}
+
+/* ===================================
+   MOBILE OPTIMIZATIONS
+   =================================== */
+
+@media (max-width: 768px) {
+    .monster-truck {
+        width: 300px;
+        height: 150px;
+    }
+
+    .truck-body {
+        width: 250px;
+        height: 80px;
+    }
+
+    .truck-cabin {
+        width: 80px;
+        height: 60px;
+        font-size: 36px;
+    }
+
+    .mini-game-title {
+        font-size: 36px;
+    }
+
+    .giant-button {
+        width: 300px;
+        height: 120px;
+        font-size: 48px;
+    }
+
+    :root {
+        --size-large: 100px;
+        --size-small: 50px;
+    }
+}
+
+@media (orientation: portrait) {
+    body::before {
+        content: "↻ Please rotate your device";
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 32px;
+        color: var(--white);
+        text-align: center;
+        z-index: 99999;
+        background: rgba(0,0,0,0.8);
+        padding: 40px;
+        border-radius: 20px;
+    }
+}
+
+.hidden {
+    display: none !important;
+}

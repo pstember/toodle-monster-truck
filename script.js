@@ -16,8 +16,8 @@ const gameState = {
 // DATA POOLS
 // ===================================
 
-const ALL_SHAPES = ['circle', 'square', 'triangle', 'star', 'heart', 'pentagon', 'hexagon', 'diamond'];
-const ALL_COLORS = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'cyan'];
+const ALL_SHAPES = ['circle', 'square', 'triangle', 'star', 'heart', 'pentagon', 'hexagon', 'diamond', 'oval'];
+const ALL_COLORS = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'cyan', 'brown', 'lime'];
 const SIZES = ['large', 'small'];
 
 // ===================================
@@ -45,7 +45,7 @@ function getUnlockedShapes(level) {
     } else if (level <= 12) {
         return ['circle', 'square', 'triangle', 'star', 'heart', 'pentagon', 'hexagon']; // Tier 4: 7 shapes
     } else {
-        return ALL_SHAPES; // Endless: all 8 shapes
+        return ALL_SHAPES; // Endless: all 9 shapes (includes diamond and oval)
     }
 }
 
@@ -59,7 +59,7 @@ function getUnlockedColors(level) {
     } else if (level <= 12) {
         return ['red', 'blue', 'green', 'yellow', 'purple', 'orange']; // Tier 4: 6 colors
     } else {
-        return ALL_COLORS; // Endless: all 8 colors
+        return ALL_COLORS; // Endless: all 10 colors (includes pink, cyan, brown, lime)
     }
 }
 

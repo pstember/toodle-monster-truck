@@ -26,6 +26,9 @@ import { getUnlockedShapes, getUnlockedColors, createSlot, createDraggableItem }
 // Import utilities
 import { shuffleArray, clearContainer } from './src/utils.js';
 
+// Import visual effects
+import { triggerIntermission, endIntermission } from './src/visual-effects.js';
+
 // Import minigame functions
 import { startMudWashGame } from './src/minigames/mud-wash.js';
 import { startStickerShopGame } from './src/minigames/sticker-shop.js';
@@ -48,6 +51,8 @@ if (typeof window !== 'undefined') {
     window.generateLevel = generateLevel;
     window.gameState = gameState;
     window.handleDragStart = handleDragStart;
+    window.triggerIntermission = triggerIntermission;
+    window.endIntermission = endIntermission;
 }
 
 // ===================================

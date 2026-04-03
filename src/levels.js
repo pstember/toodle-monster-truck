@@ -45,7 +45,7 @@ export function getUnlockedColors(level) {
     } else if (level <= TIER_THRESHOLDS.TIER_4) {
         return ['red', 'blue', 'green', 'yellow', 'purple', 'orange']; // Tier 4: 6 colors
     } else {
-        return ALL_COLORS; // Endless: all 10 colors (includes pink, cyan, brown, lime)
+        return ALL_COLORS; // Endless: all 8 colors (includes pink, cyan)
     }
 }
 
@@ -121,43 +121,185 @@ export function createDraggableItem(shape, color, size, handleDragStart) {
 }
 
 /**
+ * Gets tier configuration based on level
+ * @param {number} level - Current level
+ * @returns {Object} Configuration with numTargets, numInventory, useSize
+ */
+function getTierConfiguration(level) {
+    if (level <= TIER_THRESHOLDS.TIER_1) {
+        return {
+            numTargets: TIER_CONFIG.TIER_1.numTargets,
+            numInventory: TIER_CONFIG.TIER_1.numInventory,
+            useSize: TIER_CONFIG.TIER_1.useSize
+        };
+    } else if (level <= TIER_THRESHOLDS.TIER_2) {
+        return {
+            numTargets: TIER_CONFIG.TIER_2.numTargets,
+            numInventory: TIER_CONFIG.TIER_2.numInventory,
+            useSize: TIER_CONFIG.TIER_2.useSize
+        };
+    } else if (level <= TIER_THRESHOLDS.TIER_3) {
+        return {
+            numTargets: TIER_CONFIG.TIER_3.numTargetsMin + Math.floor(Math.random() * (TIER_CONFIG.TIER_3.numTargetsMax - TIER_CONFIG.TIER_3.numTargetsMin + 1)),
+            numInventory: TIER_CONFIG.TIER_3.numInventory,
+            useSize: TIER_CONFIG.TIER_3.useSize
+        };
+    } else if (level <= TIER_THRESHOLDS.TIER_4) {
+        return {
+            numTargets: TIER_CONFIG.TIER_4.numTargets,
+            numInventory: TIER_CONFIG.TIER_4.numInventory,
+            useSize: TIER_CONFIG.TIER_4.useSize
+        };
+    } else {
+        // Endless mode: randomize difficulty
+        return {
+            numTargets: TIER_CONFIG.ENDLESS.numTargetsMin + Math.floor(Math.random() * (TIER_CONFIG.ENDLESS.numTargetsMax - TIER_CONFIG.ENDLESS.numTargetsMin + 1)),
+            numInventory: TIER_CONFIG.ENDLESS.numInventoryMin + Math.floor(Math.random() * (TIER_CONFIG.ENDLESS.numInventoryMax - TIER_CONFIG.ENDLESS.numInventoryMin + 1)),
+            useSize: Math.random() > TIER_CONFIG.ENDLESS.useSizeChance
+        };
+    }
+}
+
+/**
+ * Generates unique slot requirements
+ * @param {number} numTargets - Number of slots to generate
+ * @param {string[]} shapes - Available shapes
+ * @param {string[]} colors - Available colors
+ * @param {boolean} useSize - Whether to vary size
+ * @returns {Object[]} Array of slot requirements
+ */
+function generateSlotRequirements(numTargets, shapes, colors, useSize) {
+    const requirements = [];
+    const maxAttempts = 100;
+
+    for (let i = 0; i < numTargets; i++) {
+        let shape, color, size;
+        let attempts = 0;
+
+        do {
+            shape = shapes[Math.floor(Math.random() * shapes.length)];
+            color = colors[Math.floor(Math.random() * colors.length)];
+            size = useSize ? (Math.random() > 0.5 ? 'large' : 'small') : 'large';
+            attempts++;
+
+            if (attempts >= maxAttempts) break;
+        } while (requirements.some(req =>
+            req.shape === shape && req.color === color && req.size === size
+        ));
+
+        requirements.push({ shape, color, size });
+    }
+
+    return requirements;
+}
+
+/**
+ * Generates inventory items (correct matches + distractors)
+ * @param {Object[]} slotReqs - Slot requirements
+ * @param {number} numInventory - Total inventory size
+ * @param {string[]} shapes - Available shapes
+ * @param {string[]} colors - Available colors
+ * @param {boolean} useSize - Whether to vary size
+ * @returns {Object[]} Array of inventory items
+ */
+function generateInventoryItems(slotReqs, numInventory, shapes, colors, useSize) {
+    const items = [];
+
+    // Add correct matches
+    slotReqs.forEach(req => items.push({ ...req }));
+
+    // Calculate safe inventory size
+    const possibleSizes = useSize ? 2 : 1;
+    const maxUnique = shapes.length * colors.length * possibleSizes;
+    const safeSize = Math.min(numInventory, maxUnique);
+    const numDistractors = safeSize - slotReqs.length;
+
+    // Add distractors
+    const maxAttempts = 100;
+    for (let i = 0; i < numDistractors; i++) {
+        let distractor;
+        let attempts = 0;
+
+        do {
+            distractor = {
+                shape: shapes[Math.floor(Math.random() * shapes.length)],
+                color: colors[Math.floor(Math.random() * colors.length)],
+                size: useSize ? (Math.random() > 0.5 ? 'large' : 'small') : 'large'
+            };
+            attempts++;
+
+            if (attempts >= maxAttempts) {
+                console.error('Failed to generate unique distractor - skipping');
+                break;
+            }
+        } while (items.some(item =>
+            item.shape === distractor.shape &&
+            item.color === distractor.color &&
+            item.size === distractor.size
+        ));
+
+        if (attempts < maxAttempts) {
+            items.push(distractor);
+        }
+    }
+
+    return items;
+}
+
+/**
+ * Renders slots, inventory, and updates UI
+ * @param {Object[]} slotReqs - Slot requirements
+ * @param {Object[]} items - Inventory items
+ * @param {Function} dragHandler - Drag start handler
+ * @param {number} level - Current level number
+ */
+function renderGameElements(slotReqs, items, dragHandler, level) {
+    const slotsContainer = document.getElementById('slots-container');
+    const inventoryContainer = document.getElementById('inventory-items');
+
+    // Render slots
+    slotReqs.forEach(req => {
+        const slot = createSlot(req.shape, req.color, req.size);
+        slotsContainer.appendChild(slot);
+        gameState.slots.push({
+            shape: req.shape,
+            color: req.color,
+            size: req.size,
+            filled: false,
+            element: slot
+        });
+    });
+
+    // Shuffle and render inventory
+    shuffleArray(items);
+    items.forEach(item => {
+        const draggable = createDraggableItem(item.shape, item.color, item.size, dragHandler);
+        inventoryContainer.appendChild(draggable);
+    });
+
+    // Update UI
+    const levelNumber = document.getElementById('level-number');
+    if (levelNumber) levelNumber.textContent = level;
+
+    const truck = document.getElementById('monster-truck');
+    if (truck) {
+        truck.classList.remove('driving-off');
+        truck.style.transform = '';
+    }
+}
+
+/**
  * Generates a new level with slots and inventory items
  * @param {number} level - Level number to generate
  * @param {Function} handleDragStart - Drag start handler to attach to items
  */
 export function generateLevel(level, handleDragStart) {
     try {
-        // Reset level completing flag for new level
         gameState.levelCompleting = false;
 
         const unlockedShapes = getUnlockedShapes(level);
         const unlockedColors = getUnlockedColors(level);
-
-        let numTargets, numInventory, useSize;
-
-        // Tier logic
-        if (level <= TIER_THRESHOLDS.TIER_1) {
-            numTargets = TIER_CONFIG.TIER_1.numTargets;
-            numInventory = TIER_CONFIG.TIER_1.numInventory;
-            useSize = TIER_CONFIG.TIER_1.useSize;
-        } else if (level <= TIER_THRESHOLDS.TIER_2) {
-            numTargets = TIER_CONFIG.TIER_2.numTargets;
-            numInventory = TIER_CONFIG.TIER_2.numInventory;
-            useSize = TIER_CONFIG.TIER_2.useSize;
-        } else if (level <= TIER_THRESHOLDS.TIER_3) {
-            numTargets = TIER_CONFIG.TIER_3.numTargetsMin + Math.floor(Math.random() * (TIER_CONFIG.TIER_3.numTargetsMax - TIER_CONFIG.TIER_3.numTargetsMin + 1));
-            numInventory = TIER_CONFIG.TIER_3.numInventory;
-            useSize = TIER_CONFIG.TIER_3.useSize;
-        } else if (level <= TIER_THRESHOLDS.TIER_4) {
-            numTargets = TIER_CONFIG.TIER_4.numTargets;
-            numInventory = TIER_CONFIG.TIER_4.numInventory;
-            useSize = TIER_CONFIG.TIER_4.useSize;
-        } else {
-            // Endless mode: randomize difficulty
-            numTargets = TIER_CONFIG.ENDLESS.numTargetsMin + Math.floor(Math.random() * (TIER_CONFIG.ENDLESS.numTargetsMax - TIER_CONFIG.ENDLESS.numTargetsMin + 1));
-            numInventory = TIER_CONFIG.ENDLESS.numInventoryMin + Math.floor(Math.random() * (TIER_CONFIG.ENDLESS.numInventoryMax - TIER_CONFIG.ENDLESS.numInventoryMin + 1));
-            useSize = Math.random() > TIER_CONFIG.ENDLESS.useSizeChance;
-        }
+        const config = getTierConfiguration(level);
 
         // Clear previous level
         gameState.slots = [];
@@ -174,108 +316,26 @@ export function generateLevel(level, handleDragStart) {
         clearContainer(slotsContainer);
         clearContainer(inventoryContainer);
 
-        // Generate target slots (ensure no duplicate slot requirements)
-        const slotRequirements = [];
-        for (let i = 0; i < numTargets; i++) {
-            let targetShape, targetColor, targetSize;
-            let attempts = 0;
-            const maxAttempts = 100;
+        // Generate and render level
+        const slotReqs = generateSlotRequirements(
+            config.numTargets,
+            unlockedShapes,
+            unlockedColors,
+            config.useSize
+        );
 
-            // Keep generating until we get a unique slot requirement
-            do {
-                targetShape = unlockedShapes[Math.floor(Math.random() * unlockedShapes.length)];
-                targetColor = unlockedColors[Math.floor(Math.random() * unlockedColors.length)];
-                targetSize = useSize ? (Math.random() > 0.5 ? 'large' : 'small') : 'large';
-                attempts++;
+        const items = generateInventoryItems(
+            slotReqs,
+            config.numInventory,
+            unlockedShapes,
+            unlockedColors,
+            config.useSize
+        );
 
-                // Prevent infinite loop if pool is too small
-                if (attempts >= maxAttempts) break;
-
-            } while (slotRequirements.some(req =>
-                req.shape === targetShape &&
-                req.color === targetColor &&
-                req.size === targetSize
-            ));
-
-            slotRequirements.push({ shape: targetShape, color: targetColor, size: targetSize });
-
-            const slot = createSlot(targetShape, targetColor, targetSize);
-            slotsContainer.appendChild(slot);
-            gameState.slots.push({ shape: targetShape, color: targetColor, size: targetSize, filled: false, element: slot });
-        }
-
-        // Generate inventory items (correct + distractors)
-        const inventoryItems = [];
-
-        // Add correct items (one per unique slot requirement)
-        slotRequirements.forEach(req => {
-            inventoryItems.push({ shape: req.shape, color: req.color, size: req.size });
-        });
-
-        // Calculate maximum possible unique items
-        const possibleSizes = useSize ? 2 : 1;
-        const maxUniqueItems = unlockedShapes.length * unlockedColors.length * possibleSizes;
-
-        // Adjust inventory size if we don't have enough unique combinations
-        const safeInventorySize = Math.min(numInventory, maxUniqueItems);
-        const numDistractors = safeInventorySize - numTargets;
-
-        // Add distractor items (ensure no duplicates)
-        for (let i = 0; i < numDistractors; i++) {
-            let distractor;
-            let attempts = 0;
-            const maxAttempts = 100;
-
-            do {
-                const shape = unlockedShapes[Math.floor(Math.random() * unlockedShapes.length)];
-                const color = unlockedColors[Math.floor(Math.random() * unlockedColors.length)];
-                const size = useSize ? (Math.random() > 0.5 ? 'large' : 'small') : 'large';
-                distractor = { shape, color, size };
-                attempts++;
-
-                // Prevent infinite loop if pool is too small
-                if (attempts >= maxAttempts) {
-                    console.error('Failed to generate unique distractor - skipping');
-                    break;
-                }
-
-            } while (inventoryItems.some(item =>
-                item.shape === distractor.shape &&
-                item.color === distractor.color &&
-                item.size === distractor.size
-            ));
-
-            // Only add if we successfully generated a unique item
-            if (attempts < maxAttempts) {
-                inventoryItems.push(distractor);
-            }
-        }
-
-        // Shuffle inventory
-        shuffleArray(inventoryItems);
-
-        // Render inventory
-        inventoryItems.forEach(item => {
-            const draggable = createDraggableItem(item.shape, item.color, item.size, handleDragStart);
-            inventoryContainer.appendChild(draggable);
-        });
-
-        // Update level display
-        const levelNumber = document.getElementById('level-number');
-        if (levelNumber) {
-            levelNumber.textContent = level;
-        }
-
-        // Reset truck position
-        const truck = document.getElementById('monster-truck');
-        if (truck) {
-            truck.classList.remove('driving-off');
-            truck.style.transform = '';
-        }
+        renderGameElements(slotReqs, items, handleDragStart, level);
 
     } catch (error) {
         console.error('Failed to generate level:', error);
-        // Try to recover by reloading the page
         const shouldReload = confirm('An error occurred. Would you like to reload the game?');
         if (shouldReload) {
             window.location.reload();

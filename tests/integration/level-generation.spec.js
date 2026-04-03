@@ -123,7 +123,7 @@ test.describe('Level Generation', () => {
 
     await game.generateLevel(1);
     const level1Items = await game.getInventoryItems();
-    expect(level1Items).toHaveLength(3);
+    expect(level1Items).toHaveLength(2); // Level 1 capped at 2 unique combinations
 
     await game.generateLevel(5);
     const level5Items = await game.getInventoryItems();

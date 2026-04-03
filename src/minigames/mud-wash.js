@@ -15,16 +15,14 @@ import { playSound } from '../utils.js';
 let mudWashListeners = null;
 
 /**
- * Starts the mud wash mini-game
+ * Sets up the mud wash canvas with responsive sizing
+ * @param {HTMLCanvasElement} canvas - The canvas element
+ * @returns {CanvasRenderingContext2D} The 2D context
  */
-export function startMudWashGame() {
-    const game = document.getElementById('mud-wash-game');
-    game.classList.remove('hidden');
-
-    const canvas = document.getElementById('mud-canvas');
+function setupMudWashCanvas(canvas) {
     const ctx = canvas.getContext('2d');
 
-    // Set canvas size - responsive to screen size
+    // Responsive sizing
     const isMobile = window.innerWidth <= BREAKPOINT_TABLET;
     const isSmallMobile = window.innerWidth <= BREAKPOINT_MOBILE;
 
@@ -42,6 +40,19 @@ export function startMudWashGame() {
     // Fill with mud
     ctx.fillStyle = '#654321';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    return ctx;
+}
+
+/**
+ * Starts the mud wash mini-game
+ */
+export function startMudWashGame() {
+    const game = document.getElementById('mud-wash-game');
+    game.classList.remove('hidden');
+
+    const canvas = document.getElementById('mud-canvas');
+    const ctx = setupMudWashCanvas(canvas);
 
     let isDrawing = false;
     const totalPixels = canvas.width * canvas.height;

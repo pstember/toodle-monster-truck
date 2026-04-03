@@ -43,7 +43,7 @@ test.describe('Game State Management', () => {
     const items1 = await game.getInventoryItems();
 
     expect(slots1).toHaveLength(1);
-    expect(items1).toHaveLength(3);
+    expect(items1).toHaveLength(2); // Level 1 capped at 2 unique combinations
 
     // Generate level 5 - should clear and regenerate
     await game.generateLevel(5);

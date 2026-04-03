@@ -27,6 +27,12 @@ export class GamePage {
 
     // Wait for game to initialize
     await this.page.waitForTimeout(100);
+
+    // Click start button to begin game
+    await this.page.click('#start-game-btn');
+
+    // Wait for level 1 to generate
+    await this.page.waitForTimeout(200);
   }
 
   /**

@@ -89,6 +89,7 @@ const gameState = {
     slots: [],
     inventory: [],
     isInIntermission: false,
+    levelCompleting: false, // Guard to prevent race condition in checkLevelComplete
     rafId: null, // requestAnimationFrame ID for drag updates
     currentHoverSlot: null, // Track currently highlighted slot to avoid unnecessary DOM updates
     slotRects: [] // Cached slot positions for fast collision detection during drag
@@ -151,6 +152,9 @@ function getUnlockedColors(level) {
 
 function generateLevel(level) {
     console.log(`📦 Generating Level ${level}`);
+
+    // Reset level completing flag for new level
+    gameState.levelCompleting = false;
 
     const unlockedShapes = getUnlockedShapes(level);
     const unlockedColors = getUnlockedColors(level);
@@ -337,9 +341,9 @@ function handleDragStart(e) {
     e.preventDefault();
 
     // Prevent starting a new drag if one is already in progress
-    // This prevents the multi-touch bug where touching a second item
+    // This prevents the multi-touch bug where touching/clicking a second item
     // while dragging another causes the first item to get stuck
-    if (gameState.currentDragItem && e.type === 'touchstart') {
+    if (gameState.currentDragItem) {
         return;
     }
 
@@ -589,7 +593,9 @@ function handleFailedMatch(item) {
 function checkLevelComplete() {
     const allFilled = gameState.slots.every(slot => slot.filled);
 
-    if (allFilled) {
+    // Prevent race condition: only trigger once even if multiple matches happen rapidly
+    if (allFilled && !gameState.levelCompleting) {
+        gameState.levelCompleting = true;
         console.log('🎉 Level Complete!');
         playSound('levelComplete');
 
@@ -1075,6 +1081,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (testMinigame) {
             console.log(`🧪 Testing mini-game: ${testMinigame}`);
+
+            // Set level to 0 so endIntermission increments to 1 (not 2)
+            gameState.levelCount = 0;
 
             // Manually show intermission container
             const intermissionContainer = document.getElementById('intermission-container');

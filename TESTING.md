@@ -46,8 +46,11 @@ npm run test:e2e           # E2E tests only
 # Run with UI (headed mode)
 npm run test:headed
 
-# Generate coverage report
+# Generate coverage report (uses c8)
 npm run test:coverage
+
+# View coverage report in browser
+npm run coverage:view
 
 # View test report
 npm run test:report
@@ -78,14 +81,22 @@ npx playwright test --update-snapshots
 - **Lines**: 80%
 - **Functions**: 80%
 - **Branches**: 80%
+- **Statements**: 80%
 
 ### Checking Coverage
 
 ```bash
+# Run tests with coverage collection
 npm run test:coverage
+
+# View HTML coverage report
+npm run coverage:view
+
+# Or manually open the report
+open coverage/index.html
 ```
 
-Coverage reports are generated in `playwright-report/` directory.
+Coverage reports are generated in the `coverage/` directory using c8 (V8-based coverage).
 
 ### Current Coverage Status
 

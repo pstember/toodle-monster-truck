@@ -10,13 +10,19 @@
     "test:integration": "playwright test tests/integration/",
     "test:e2e": "playwright test tests/e2e/",
     "test:headed": "playwright test --headed",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "test:coverage": "c8 npm test",
+    "coverage:report": "c8 report",
+    "coverage:view": "open coverage/index.html"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@playwright/test": "^1.58.2",
+    "c8": "^11.0.0",
+    "nyc": "^18.0.0",
     "playwright": "^1.58.2"
   }
 }

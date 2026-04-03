@@ -6,6 +6,8 @@ test-results/
 playwright-report/
 coverage/
 .playwright/
+.c8/
+.nyc_output/
 
 # OS files
 .DS_Store

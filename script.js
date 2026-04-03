@@ -765,11 +765,11 @@ function startMudWashGame() {
         progressFill.style.width = displayPercent + '%';
         progressText.textContent = displayPercent + '%';
 
-        // Check if game should end (95% threshold)
-        if (percentCleared >= 95 && !gameEnding) {
+        // Check if game should end (99% threshold)
+        if (percentCleared >= 99 && !gameEnding) {
             gameEnding = true;
-            progressFill.style.width = '100%';
-            progressText.textContent = '100%';
+            progressFill.style.width = '99%';
+            progressText.textContent = '99%';
             setTimeout(() => {
                 endIntermission();
             }, 500);

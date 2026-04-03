@@ -955,6 +955,20 @@ body::after {
     transform: scale(0.7);
 }
 
+/* Adjust background-size for small tires to prevent overflow */
+.size-small.circle::after,
+.size-small.square::after,
+.size-small.triangle::after,
+.size-small.star::after,
+.size-small.heart::after,
+.size-small.hexagon::after {
+    background-size: 140%;
+}
+
+.size-small.diamond::after {
+    background-size: 110%;
+}
+
 /* Color Classes - Set rim colors for tires */
 .color-red {
     --rim-color: #FF4444;

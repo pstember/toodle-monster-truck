@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="A colorful, forgiving drag-and-drop matching game designed for 3-year-olds">
     <title>🚙 Monster Truck Match</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body role="application" aria-label="Monster Truck Match Game">
     <!-- Language Selector -->
     <div class="language-selector">
-        <select id="language-select">
+        <label for="language-select" class="sr-only">Select Language</label>
+        <select id="language-select" aria-label="Choose game language">
             <option value="en">🇬🇧 English</option>
             <option value="fr">🇧🇪 Français</option>
             <option value="es">🇪🇨 Español</option>
@@ -19,20 +21,20 @@
     </div>
 
     <!-- Splash Screen -->
-    <div id="splash-screen" class="splash-screen">
+    <div id="splash-screen" class="splash-screen" role="dialog" aria-labelledby="splash-title">
         <div class="splash-content">
-            <h1 class="splash-title" data-i18n="splash-title">🚙 Monster Truck Match 🚙</h1>
+            <h1 id="splash-title" class="splash-title" data-i18n="splash-title">🚙 Monster Truck Match 🚙</h1>
             <p class="splash-subtitle" data-i18n="splash-subtitle">Match the shapes and colors!</p>
-            <img src="assets/monster_truck.png" alt="Monster Truck" class="splash-truck">
-            <button id="start-game-btn" class="start-game-button" data-i18n="start-game">START GAME</button>
+            <img src="assets/monster_truck.png" alt="Colorful monster truck with large wheels" class="splash-truck">
+            <button id="start-game-btn" class="start-game-button" data-i18n="start-game" aria-label="Start the matching game">START GAME</button>
         </div>
     </div>
 
     <!-- Main Game Container -->
-    <div id="game-container" class="hidden">
+    <main id="game-container" class="hidden" role="main" aria-label="Game play area">
 
         <!-- Level Counter (hidden but tracked) -->
-        <div id="level-display" class="level-display">
+        <div id="level-display" class="level-display" role="status" aria-live="polite" aria-atomic="true">
             <span data-i18n="level">Level</span> <span id="level-number">1</span>
         </div>
 
@@ -46,7 +48,7 @@
                 </div>
 
                 <!-- Empty Slots (dynamically generated) -->
-                <div id="slots-container" class="slots-container">
+                <div id="slots-container" class="slots-container" role="group" aria-label="Drop zones for matching shapes">
                     <!-- Slots will be inserted here by JavaScript -->
                 </div>
 
@@ -59,8 +61,8 @@
         </div>
 
         <!-- Inventory Area (Bottom 40%) -->
-        <div id="inventory-area" class="inventory-area">
-            <div id="inventory-items" class="inventory-items">
+        <div id="inventory-area" class="inventory-area" role="region" aria-label="Inventory of shapes to drag">
+            <div id="inventory-items" class="inventory-items" role="group" aria-label="Draggable shapes">
                 <!-- Draggable items will be inserted here by JavaScript -->
             </div>
         </div>
@@ -69,26 +71,26 @@
         <div id="confetti-container" class="confetti-container"></div>
 
         <!-- Celebration Overlay -->
-        <div id="celebration-overlay" class="celebration-overlay hidden">
+        <div id="celebration-overlay" class="celebration-overlay hidden" role="alert" aria-live="assertive">
             <div class="celebration-text" data-i18n="amazing">🎉 Amazing! 🎉</div>
         </div>
 
         <!-- Intermission Container -->
-        <div id="intermission-container" class="intermission-container hidden">
+        <div id="intermission-container" class="intermission-container hidden" role="dialog" aria-labelledby="mini-game-title">
 
             <!-- Mud Wash Game -->
             <div id="mud-wash-game" class="mini-game hidden">
-                <div class="mini-game-title" data-i18n="mud-wash-title">🧽 Wash the Truck! 🧽</div>
+                <div id="mini-game-title" class="mini-game-title" data-i18n="mud-wash-title">🧽 Wash the Truck! 🧽</div>
                 <div class="mini-game-instructions" data-i18n="mud-wash-instructions">Swipe to clean off the mud!</div>
                 <div class="canvas-container">
-                    <canvas id="mud-canvas"></canvas>
+                    <canvas id="mud-canvas" aria-label="Swipe across the canvas to wash mud off the truck" role="application"></canvas>
                     <div id="clean-truck" class="clean-truck">
-                        <img src="assets/monster_truck.png" alt="Monster Truck" class="mud-truck-image">
+                        <img src="assets/monster_truck.png" alt="Clean monster truck underneath the mud layer" class="mud-truck-image">
                     </div>
                 </div>
-                <div class="mud-progress-container">
-                    <div class="mud-progress-label"><span data-i18n="cleaned">Cleaned:</span> <span id="mud-progress-text">0%</span></div>
-                    <div class="mud-progress-bar">
+                <div class="mud-progress-container" role="status" aria-live="polite">
+                    <div class="mud-progress-label"><span data-i18n="cleaned">Cleaned:</span> <span id="mud-progress-text" aria-live="polite">0%</span></div>
+                    <div class="mud-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Cleaning progress">
                         <div id="mud-progress-fill" class="mud-progress-fill"></div>
                     </div>
                 </div>
@@ -103,14 +105,14 @@
                         <div class="truck-cabin">🚙</div>
                     </div>
                 </div>
-                <div id="sticker-inventory" class="sticker-inventory">
-                    <div class="sticker" draggable="true">⭐</div>
-                    <div class="sticker" draggable="true">🔥</div>
-                    <div class="sticker" draggable="true">💀</div>
-                    <div class="sticker" draggable="true">🎉</div>
-                    <div class="sticker" draggable="true">🌈</div>
+                <div id="sticker-inventory" class="sticker-inventory" role="group" aria-label="Stickers to decorate your truck">
+                    <div class="sticker" draggable="true" role="button" aria-label="Star sticker">⭐</div>
+                    <div class="sticker" draggable="true" role="button" aria-label="Fire sticker">🔥</div>
+                    <div class="sticker" draggable="true" role="button" aria-label="Skull sticker">💀</div>
+                    <div class="sticker" draggable="true" role="button" aria-label="Party sticker">🎉</div>
+                    <div class="sticker" draggable="true" role="button" aria-label="Rainbow sticker">🌈</div>
                 </div>
-                <button id="sticker-done-btn" class="giant-button" data-i18n="done">DONE!</button>
+                <button id="sticker-done-btn" class="giant-button" data-i18n="done" aria-label="Finish decorating and continue">DONE!</button>
             </div>
 
             <!-- Big Jump Game -->
@@ -122,7 +124,7 @@
                         <img src="assets/monster_truck.png" alt="Monster Truck" class="truck-image">
                     </div>
                 </div>
-                <button id="jump-btn" class="giant-button jump-button" data-i18n="jump">JUMP!</button>
+                <button id="jump-btn" class="giant-button jump-button" data-i18n="jump" aria-label="Make the truck jump and do a backflip">JUMP!</button>
                 <div id="fireworks-container" class="fireworks-container"></div>
             </div>
 
@@ -130,10 +132,10 @@
             <div id="bubble-wrap-game" class="mini-game hidden">
                 <div class="mini-game-title" data-i18n="bubble-wrap-title">🎈 POP THE BUBBLES! 🎈</div>
                 <div class="mini-game-instructions" data-i18n="bubble-wrap-instructions">Tap all the bubbles to pop them!</div>
-                <div class="bubble-counter">
+                <div class="bubble-counter" role="status" aria-live="polite" aria-atomic="true">
                     <span id="bubbles-popped">0</span> / <span id="bubbles-total">12</span> <span data-i18n="popped">popped</span>
                 </div>
-                <div id="bubble-grid" class="bubble-grid">
+                <div id="bubble-grid" class="bubble-grid" role="group" aria-label="Bubbles to pop">
                     <!-- Bubbles will be generated by JavaScript -->
                 </div>
             </div>

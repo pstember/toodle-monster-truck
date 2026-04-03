@@ -349,6 +349,11 @@ function createSlot(shape, color, size) {
     slot.dataset.requiredColor = color;
     slot.dataset.requiredSize = size;
 
+    // ARIA accessibility
+    slot.setAttribute('role', 'button');
+    slot.setAttribute('aria-label', `Drop zone for ${size} ${color} ${shape}`);
+    slot.setAttribute('tabindex', '0');
+
     // Set size based on size parameter
     const slotSize = size === 'large' ? SLOT_SIZE_LARGE : SLOT_SIZE_SMALL;
     slot.style.width = `${slotSize}px`;
@@ -371,6 +376,12 @@ function createDraggableItem(shape, color, size) {
     item.dataset.shape = shape;
     item.dataset.color = color;
     item.dataset.size = size;
+
+    // ARIA accessibility
+    item.setAttribute('role', 'button');
+    item.setAttribute('aria-label', `Draggable ${size} ${color} ${shape}`);
+    item.setAttribute('aria-grabbed', 'false');
+    item.setAttribute('tabindex', '0');
 
     // Store original position
     setTimeout(() => {
@@ -434,6 +445,7 @@ function handleDragStart(e) {
 
     // Add dragging class (which now has no transforms)
     item.classList.add('dragging');
+    item.setAttribute('aria-grabbed', 'true');
 
     // Use transform for positioning (GPU accelerated)
     // Set initial position to where item currently is (in viewport coords)
@@ -621,6 +633,7 @@ function handleFailedMatch(item) {
 
     // Bounce back to inventory
     item.classList.remove('dragging');
+    item.setAttribute('aria-grabbed', 'false');
     item.classList.add('bouncing');
     item.style.position = 'relative';
     item.style.left = '';

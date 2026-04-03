@@ -1,4 +1,35 @@
 // ===================================
+// IMPORTS
+// ===================================
+
+import {
+    SLOT_SIZE_LARGE,
+    SLOT_SIZE_SMALL,
+    BRUSH_RADIUS,
+    CONFETTI_COUNT,
+    FIREWORK_COUNT,
+    BOUNCE_ANIMATION_DURATION,
+    LEVEL_COMPLETE_DELAY,
+    CELEBRATION_DURATION,
+    CONFETTI_CLEANUP_DELAY,
+    FIREWORK_CLEANUP_DELAY,
+    TIER_THRESHOLDS,
+    INTERMISSION_FREQUENCY,
+    MUD_WASH_COMPLETION_THRESHOLD,
+    BREAKPOINT_TABLET,
+    BREAKPOINT_MOBILE,
+    BUBBLE_GRID_MOBILE,
+    BUBBLE_GRID_SMALL,
+    BUBBLE_GRID_DEFAULT,
+    TIER_CONFIG,
+    FIREWORK_POSITION_VARIANCE,
+    FIREWORK_POSITION_CENTER,
+    FIREWORK_DISTANCE_MIN,
+    FIREWORK_DISTANCE_MAX,
+    PROGRESS_UPDATE_INTERVAL
+} from './src/constants.js';
+
+// ===================================
 // TRANSLATIONS
 // ===================================
 
@@ -119,13 +150,13 @@ function playSound(soundName) {
 // ===================================
 
 function getUnlockedShapes(level) {
-    if (level <= 3) {
+    if (level <= TIER_THRESHOLDS.TIER_1) {
         return ['circle', 'square']; // Tier 1: 2 shapes
-    } else if (level <= 6) {
+    } else if (level <= TIER_THRESHOLDS.TIER_2) {
         return ['circle', 'square', 'triangle']; // Tier 2: 3 shapes
-    } else if (level <= 9) {
+    } else if (level <= TIER_THRESHOLDS.TIER_3) {
         return ['circle', 'square', 'triangle', 'star', 'heart']; // Tier 3: 5 shapes
-    } else if (level <= 12) {
+    } else if (level <= TIER_THRESHOLDS.TIER_4) {
         return ['circle', 'square', 'triangle', 'star', 'heart', 'pentagon', 'hexagon']; // Tier 4: 7 shapes
     } else {
         return ALL_SHAPES; // Endless: all 8 shapes
@@ -133,13 +164,13 @@ function getUnlockedShapes(level) {
 }
 
 function getUnlockedColors(level) {
-    if (level <= 3) {
+    if (level <= TIER_THRESHOLDS.TIER_1) {
         return ['red']; // Tier 1: 1 color
-    } else if (level <= 6) {
+    } else if (level <= TIER_THRESHOLDS.TIER_2) {
         return ['red', 'blue']; // Tier 2: 2 colors
-    } else if (level <= 9) {
+    } else if (level <= TIER_THRESHOLDS.TIER_3) {
         return ['red', 'blue', 'green', 'yellow']; // Tier 3: 4 colors
-    } else if (level <= 12) {
+    } else if (level <= TIER_THRESHOLDS.TIER_4) {
         return ['red', 'blue', 'green', 'yellow', 'purple', 'orange']; // Tier 4: 6 colors
     } else {
         return ALL_COLORS; // Endless: all 10 colors (includes pink, cyan, brown, lime)
@@ -162,27 +193,27 @@ function generateLevel(level) {
     let numTargets, numInventory, useSize;
 
     // Tier logic
-    if (level <= 3) {
-        numTargets = 1;
-        numInventory = 3;
-        useSize = false;
-    } else if (level <= 6) {
-        numTargets = 2;
-        numInventory = 4;
-        useSize = false;
-    } else if (level <= 9) {
-        numTargets = 2 + Math.floor(Math.random() * 2); // 2-3
-        numInventory = 5;
-        useSize = false;
-    } else if (level <= 12) {
-        numTargets = 3;
-        numInventory = 6;
-        useSize = true;
+    if (level <= TIER_THRESHOLDS.TIER_1) {
+        numTargets = TIER_CONFIG.TIER_1.numTargets;
+        numInventory = TIER_CONFIG.TIER_1.numInventory;
+        useSize = TIER_CONFIG.TIER_1.useSize;
+    } else if (level <= TIER_THRESHOLDS.TIER_2) {
+        numTargets = TIER_CONFIG.TIER_2.numTargets;
+        numInventory = TIER_CONFIG.TIER_2.numInventory;
+        useSize = TIER_CONFIG.TIER_2.useSize;
+    } else if (level <= TIER_THRESHOLDS.TIER_3) {
+        numTargets = TIER_CONFIG.TIER_3.numTargetsMin + Math.floor(Math.random() * (TIER_CONFIG.TIER_3.numTargetsMax - TIER_CONFIG.TIER_3.numTargetsMin + 1));
+        numInventory = TIER_CONFIG.TIER_3.numInventory;
+        useSize = TIER_CONFIG.TIER_3.useSize;
+    } else if (level <= TIER_THRESHOLDS.TIER_4) {
+        numTargets = TIER_CONFIG.TIER_4.numTargets;
+        numInventory = TIER_CONFIG.TIER_4.numInventory;
+        useSize = TIER_CONFIG.TIER_4.useSize;
     } else {
         // Endless mode: randomize difficulty
-        numTargets = 2 + Math.floor(Math.random() * 3); // 2-4
-        numInventory = 4 + Math.floor(Math.random() * 5); // 4-8
-        useSize = Math.random() > 0.5;
+        numTargets = TIER_CONFIG.ENDLESS.numTargetsMin + Math.floor(Math.random() * (TIER_CONFIG.ENDLESS.numTargetsMax - TIER_CONFIG.ENDLESS.numTargetsMin + 1));
+        numInventory = TIER_CONFIG.ENDLESS.numInventoryMin + Math.floor(Math.random() * (TIER_CONFIG.ENDLESS.numInventoryMax - TIER_CONFIG.ENDLESS.numInventoryMin + 1));
+        useSize = Math.random() > TIER_CONFIG.ENDLESS.useSizeChance;
     }
 
     // Clear previous level
@@ -297,7 +328,7 @@ function createSlot(shape, color, size) {
     slot.dataset.requiredSize = size;
 
     // Set size based on size parameter
-    const slotSize = size === 'large' ? 120 : 80;
+    const slotSize = size === 'large' ? SLOT_SIZE_LARGE : SLOT_SIZE_SMALL;
     slot.style.width = `${slotSize}px`;
     slot.style.height = `${slotSize}px`;
 
@@ -583,7 +614,7 @@ function handleFailedMatch(item) {
 
     setTimeout(() => {
         item.classList.remove('bouncing');
-    }, 500);
+    }, BOUNCE_ANIMATION_DURATION);
 }
 
 // ===================================
@@ -610,19 +641,19 @@ function checkLevelComplete() {
         gameState.intermissionCounter++;
 
         setTimeout(() => {
-            if (gameState.intermissionCounter % 3 === 0) {
+            if (gameState.intermissionCounter % INTERMISSION_FREQUENCY === 0) {
                 playSound('tierComplete');
                 showCelebrationOverlay();
                 setTimeout(() => {
                     hideCelebrationOverlay();
                     triggerIntermission();
-                }, 2000);
+                }, CELEBRATION_DURATION);
             } else {
                 // Next level
                 gameState.levelCount++;
                 generateLevel(gameState.levelCount);
             }
-        }, 1500);
+        }, LEVEL_COMPLETE_DELAY);
     }
 }
 
@@ -632,7 +663,7 @@ function createConfetti() {
 
     const colors = ['#FF4444', '#4444FF', '#44FF44', '#FFFF44', '#AA44FF', '#FF8844'];
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < CONFETTI_COUNT; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         confetti.style.left = `${Math.random() * 100}vw`;
@@ -645,7 +676,7 @@ function createConfetti() {
     // Clear after animation
     setTimeout(() => {
         clearContainer(container);
-    }, 3000);
+    }, CONFETTI_CLEANUP_DELAY);
 }
 
 function showCelebrationOverlay() {
@@ -728,8 +759,8 @@ function startMudWashGame() {
     const ctx = canvas.getContext('2d');
 
     // Set canvas size - responsive to screen size
-    const isMobile = window.innerWidth <= 768;
-    const isSmallMobile = window.innerWidth <= 480;
+    const isMobile = window.innerWidth <= BREAKPOINT_TABLET;
+    const isSmallMobile = window.innerWidth <= BREAKPOINT_MOBILE;
 
     if (isSmallMobile) {
         canvas.width = Math.min(300, window.innerWidth * 0.85);
@@ -751,7 +782,6 @@ function startMudWashGame() {
     let gameEnding = false; // Prevent multiple calls to endIntermission
     let checkCounter = 0; // Throttle pixel checking
     let lastProgressUpdate = 0; // Timestamp of last progress calculation
-    const PROGRESS_UPDATE_INTERVAL = 100; // Max 10fps for progress updates
     let rafId = null; // RequestAnimationFrame ID
     let cachedCanvasRect = canvas.getBoundingClientRect(); // Cache canvas rect
     let currentMousePos = { x: 0, y: 0 }; // Track current position
@@ -784,17 +814,17 @@ function startMudWashGame() {
         lastProgressUpdate = now;
 
         const percentCleared = calculateClearedPercentage();
-        const displayPercent = Math.min(99, Math.floor(percentCleared)); // Cap at 99% until complete
+        const displayPercent = Math.min(MUD_WASH_COMPLETION_THRESHOLD, Math.floor(percentCleared)); // Cap at completion threshold until complete
 
         // Update progress bar
         progressFill.style.width = displayPercent + '%';
         progressText.textContent = displayPercent + '%';
 
-        // Check if game should end (99% threshold)
-        if (percentCleared >= 99 && !gameEnding) {
+        // Check if game should end (completion threshold)
+        if (percentCleared >= MUD_WASH_COMPLETION_THRESHOLD && !gameEnding) {
             gameEnding = true;
-            progressFill.style.width = '99%';
-            progressText.textContent = '99%';
+            progressFill.style.width = `${MUD_WASH_COMPLETION_THRESHOLD}%`;
+            progressText.textContent = `${MUD_WASH_COMPLETION_THRESHOLD}%`;
             setTimeout(() => {
                 endIntermission();
             }, 500);
@@ -804,7 +834,7 @@ function startMudWashGame() {
     function clearMud(x, y) {
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
-        ctx.arc(x, y, 30, 0, Math.PI * 2);
+        ctx.arc(x, y, BRUSH_RADIUS, 0, Math.PI * 2);
         ctx.fill();
 
         // Update progress every 5 strokes to avoid performance issues
@@ -1060,7 +1090,7 @@ function startBigJumpGame() {
 
             setTimeout(() => {
                 endIntermission();
-            }, 2000);
+            }, CELEBRATION_DURATION);
         }
     };
 }
@@ -1071,15 +1101,15 @@ function createFireworks() {
 
     const colors = ['#FF4444', '#4444FF', '#44FF44', '#FFFF44', '#AA44FF'];
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < FIREWORK_COUNT; i++) {
         const firework = document.createElement('div');
         firework.className = 'firework';
-        firework.style.left = `${50 + (Math.random() - 0.5) * 20}%`;
-        firework.style.top = `${30 + (Math.random() - 0.5) * 20}%`;
+        firework.style.left = `${FIREWORK_POSITION_CENTER.left + (Math.random() - 0.5) * FIREWORK_POSITION_VARIANCE.horizontal}%`;
+        firework.style.top = `${FIREWORK_POSITION_CENTER.top + (Math.random() - 0.5) * FIREWORK_POSITION_VARIANCE.vertical}%`;
         firework.style.background = colors[Math.floor(Math.random() * colors.length)];
 
         const angle = Math.random() * Math.PI * 2;
-        const distance = 50 + Math.random() * 100;
+        const distance = FIREWORK_DISTANCE_MIN + Math.random() * (FIREWORK_DISTANCE_MAX - FIREWORK_DISTANCE_MIN);
         firework.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
         firework.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
         firework.style.animationDelay = `${Math.random() * 0.5}s`;
@@ -1089,7 +1119,7 @@ function createFireworks() {
 
     setTimeout(() => {
         clearContainer(container);
-    }, 2000);
+    }, FIREWORK_CLEANUP_DELAY);
 }
 
 // ===================================
@@ -1105,19 +1135,19 @@ function startBubbleWrapGame() {
     const bubblesTotal = document.getElementById('bubbles-total');
 
     // Determine grid size based on screen size
-    const isMobile = window.innerWidth <= 768;
-    const isSmallMobile = window.innerWidth <= 480;
+    const isMobile = window.innerWidth <= BREAKPOINT_TABLET;
+    const isSmallMobile = window.innerWidth <= BREAKPOINT_MOBILE;
 
     let rows, cols;
     if (isSmallMobile) {
-        rows = 3;
-        cols = 2;
+        rows = BUBBLE_GRID_SMALL.rows;
+        cols = BUBBLE_GRID_SMALL.cols;
     } else if (isMobile) {
-        rows = 4;
-        cols = 3;
+        rows = BUBBLE_GRID_MOBILE.rows;
+        cols = BUBBLE_GRID_MOBILE.cols;
     } else {
-        rows = 3;
-        cols = 4;
+        rows = BUBBLE_GRID_DEFAULT.rows;
+        cols = BUBBLE_GRID_DEFAULT.cols;
     }
 
     const totalBubbles = rows * cols;

@@ -1,0 +1,132 @@
+// ===================================
+// CONSTANTS
+// ===================================
+// Extracted from script.js to eliminate magic numbers
+// and enable easy configuration adjustments
+
+// ===================================
+// SIZE CONSTANTS
+// ===================================
+
+export const SLOT_SIZE_LARGE = 120;
+export const SLOT_SIZE_SMALL = 80;
+export const BRUSH_RADIUS = 30;
+export const CONFETTI_COUNT = 50;
+export const FIREWORK_COUNT = 30;
+
+// ===================================
+// TIMING CONSTANTS (milliseconds)
+// ===================================
+
+export const BOUNCE_ANIMATION_DURATION = 500;
+export const LEVEL_COMPLETE_DELAY = 1500;
+export const CELEBRATION_DURATION = 2000;
+export const CONFETTI_CLEANUP_DELAY = 3000;
+export const FIREWORK_CLEANUP_DELAY = 2000;
+
+// ===================================
+// GAMEPLAY CONSTANTS
+// ===================================
+
+// Tier thresholds define when players advance to next difficulty tier
+export const TIER_THRESHOLDS = {
+    TIER_1: 3,   // Levels 1-3
+    TIER_2: 6,   // Levels 4-6
+    TIER_3: 9,   // Levels 7-9
+    TIER_4: 12   // Levels 10-12
+    // Level 13+ is endless mode with all features unlocked
+};
+
+// How many levels before an intermission mini-game
+export const INTERMISSION_FREQUENCY = 3;
+
+// Mud wash completion threshold (percentage)
+export const MUD_WASH_COMPLETION_THRESHOLD = 99;
+
+// ===================================
+// RESPONSIVE BREAKPOINTS (pixels)
+// ===================================
+
+export const BREAKPOINT_TABLET = 768;
+export const BREAKPOINT_MOBILE = 480;
+
+// ===================================
+// GRID CONFIGURATIONS
+// ===================================
+
+// Bubble wrap grid sizing for different screen sizes
+export const BUBBLE_GRID_MOBILE = {
+    rows: 4,
+    cols: 3
+};
+
+export const BUBBLE_GRID_SMALL = {
+    rows: 3,
+    cols: 2
+};
+
+// Default desktop bubble grid
+export const BUBBLE_GRID_DEFAULT = {
+    rows: 3,
+    cols: 4
+};
+
+// ===================================
+// LEVEL GENERATION CONSTANTS
+// ===================================
+
+// Number of targets and inventory items per tier
+export const TIER_CONFIG = {
+    TIER_1: {
+        numTargets: 1,
+        numInventory: 3,
+        useSize: false
+    },
+    TIER_2: {
+        numTargets: 2,
+        numInventory: 4,
+        useSize: false
+    },
+    TIER_3: {
+        numTargetsMin: 2,
+        numTargetsMax: 3,
+        numInventory: 5,
+        useSize: false
+    },
+    TIER_4: {
+        numTargets: 3,
+        numInventory: 6,
+        useSize: true
+    },
+    ENDLESS: {
+        numTargetsMin: 2,
+        numTargetsMax: 4,
+        numInventoryMin: 4,
+        numInventoryMax: 8,
+        useSizeChance: 0.5
+    }
+};
+
+// ===================================
+// FIREWORK ANIMATION CONSTANTS
+// ===================================
+
+export const FIREWORK_POSITION_VARIANCE = {
+    horizontal: 20, // ±20%
+    vertical: 20    // ±20%
+};
+
+export const FIREWORK_POSITION_CENTER = {
+    left: 50,  // 50% from left
+    top: 30    // 30% from top
+};
+
+export const FIREWORK_DISTANCE_MIN = 50;
+export const FIREWORK_DISTANCE_MAX = 150;
+
+// ===================================
+// PERFORMANCE CONSTANTS
+// ===================================
+
+// Progress update throttling for mud wash (milliseconds)
+export const PROGRESS_UPDATE_INTERVAL = 100; // Max 10fps

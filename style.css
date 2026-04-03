@@ -1512,8 +1512,9 @@ body::after {
 
 .giant-button {
     min-width: 300px;
-    max-width: 500px;
+    max-width: min(500px, 90vw);
     min-height: 120px;
+    max-height: 150px;
     padding: 25px 40px;
     font-size: clamp(40px, 7vw, 64px);
     font-weight: bold;
@@ -1702,6 +1703,7 @@ body::after {
         min-width: 200px;
         max-width: 90vw;
         min-height: 80px;
+        max-height: 120px;
         padding: 20px 30px;
         font-size: clamp(28px, 5vw, 36px);
         border-radius: 20px;
@@ -1822,6 +1824,7 @@ body::after {
         min-width: 180px;
         max-width: 90vw;
         min-height: 70px;
+        max-height: 100px;
         padding: 15px 25px;
         font-size: clamp(20px, 4.5vw, 28px);
     }

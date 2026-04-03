@@ -139,10 +139,13 @@ const SIZES = ['large', 'small'];
 // ===================================
 
 function playSound(soundName) {
-    console.log(`🔊 Playing: ${soundName}.mp3`);
     // Future implementation:
-    // const audio = new Audio(`sounds/${soundName}.mp3`);
-    // audio.play();
+    // try {
+    //     const audio = new Audio(`sounds/${soundName}.mp3`);
+    //     audio.play().catch(err => console.error('Failed to play sound:', err));
+    // } catch (error) {
+    //     console.error('Sound playback error:', error);
+    // }
 }
 
 // ===================================
@@ -182,17 +185,16 @@ function getUnlockedColors(level) {
 // ===================================
 
 function generateLevel(level) {
-    console.log(`📦 Generating Level ${level}`);
+    try {
+        // Reset level completing flag for new level
+        gameState.levelCompleting = false;
 
-    // Reset level completing flag for new level
-    gameState.levelCompleting = false;
+        const unlockedShapes = getUnlockedShapes(level);
+        const unlockedColors = getUnlockedColors(level);
 
-    const unlockedShapes = getUnlockedShapes(level);
-    const unlockedColors = getUnlockedColors(level);
+        let numTargets, numInventory, useSize;
 
-    let numTargets, numInventory, useSize;
-
-    // Tier logic
+        // Tier logic
     if (level <= TIER_THRESHOLDS.TIER_1) {
         numTargets = TIER_CONFIG.TIER_1.numTargets;
         numInventory = TIER_CONFIG.TIER_1.numInventory;
@@ -222,6 +224,12 @@ function generateLevel(level) {
 
     const slotsContainer = document.getElementById('slots-container');
     const inventoryContainer = document.getElementById('inventory-items');
+
+    if (!slotsContainer || !inventoryContainer) {
+        console.error('Failed to find game containers');
+        return;
+    }
+
     clearContainer(slotsContainer);
     clearContainer(inventoryContainer);
 
@@ -312,12 +320,26 @@ function generateLevel(level) {
     });
 
     // Update level display
-    document.getElementById('level-number').textContent = level;
+    const levelNumber = document.getElementById('level-number');
+    if (levelNumber) {
+        levelNumber.textContent = level;
+    }
 
     // Reset truck position
     const truck = document.getElementById('monster-truck');
-    truck.classList.remove('driving-off');
-    truck.style.transform = '';
+    if (truck) {
+        truck.classList.remove('driving-off');
+        truck.style.transform = '';
+    }
+
+    } catch (error) {
+        console.error('Failed to generate level:', error);
+        // Try to recover by reloading the page
+        const shouldReload = confirm('An error occurred. Would you like to reload the game?');
+        if (shouldReload) {
+            window.location.reload();
+        }
+    }
 }
 
 function createSlot(shape, color, size) {
@@ -553,7 +575,6 @@ function validateMatch(item, slot) {
 }
 
 function handleSuccessfulMatch(item, slot) {
-    console.log('✅ Match!');
     playSound('success');
 
     // Remove from inventory
@@ -585,7 +606,6 @@ function handleSuccessfulMatch(item, slot) {
 }
 
 function handleFailedMatch(item) {
-    console.log('❌ No match, try again!');
     playSound('tryAgain');
 
     // Restore to original parent if it was moved
@@ -627,7 +647,6 @@ function checkLevelComplete() {
     // Prevent race condition: only trigger once even if multiple matches happen rapidly
     if (allFilled && !gameState.levelCompleting) {
         gameState.levelCompleting = true;
-        console.log('🎉 Level Complete!');
         playSound('levelComplete');
 
         // Drive off animation
@@ -694,7 +713,6 @@ function hideCelebrationOverlay() {
 // ===================================
 
 function triggerIntermission() {
-    console.log('🎮 Starting Intermission!');
     gameState.isInIntermission = true;
 
     const intermissionContainer = document.getElementById('intermission-container');
@@ -704,7 +722,6 @@ function triggerIntermission() {
     const games = ['mud-wash', 'sticker-shop', 'big-jump', 'bubble-wrap'];
     const selectedGame = games[Math.floor(Math.random() * games.length)];
 
-    console.log(`🎯 Selected: ${selectedGame}`);
 
     switch (selectedGame) {
         case 'mud-wash':
@@ -723,7 +740,6 @@ function triggerIntermission() {
 }
 
 function endIntermission() {
-    console.log('🏁 Ending Intermission');
 
     // Clean up event listeners to prevent memory leaks
     cleanupMudWashListeners();
@@ -1219,7 +1235,6 @@ function shuffleArray(array) {
 // ===================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚙 Monster Truck Match - Starting!');
 
     // Initialize language
     const languageSelect = document.getElementById('language-select');
@@ -1250,7 +1265,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const testMinigame = urlParams.get('minigame');
 
         if (testMinigame) {
-            console.log(`🧪 Testing mini-game: ${testMinigame}`);
 
             // Set level to 0 so endIntermission increments to 1 (not 2)
             gameState.levelCount = 0;
@@ -1268,27 +1282,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 switch (testMinigame) {
                     case 'mud-wash':
                     case 'wash':
-                        console.log('🧽 Starting Mud Wash');
                         startMudWashGame();
                         break;
                     case 'sticker-shop':
                     case 'stickers':
-                        console.log('✨ Starting Sticker Shop');
                         startStickerShopGame();
                         break;
                     case 'big-jump':
                     case 'jump':
-                        console.log('🚀 Starting Big Jump');
                         startBigJumpGame();
                         break;
                     case 'bubble-wrap':
                     case 'bubbles':
-                        console.log('🎈 Starting Bubble Wrap');
                         startBubbleWrapGame();
                         break;
                     default:
-                        console.warn(`❌ Unknown mini-game: ${testMinigame}`);
-                        console.log('Available: mud-wash, sticker-shop, big-jump');
+                        console.error(`Unknown mini-game: ${testMinigame}. Available: mud-wash, sticker-shop, big-jump, bubble-wrap`);
                         // Show normal game if unknown
                         intermissionContainer.classList.add('hidden');
                         gameState.isInIntermission = false;

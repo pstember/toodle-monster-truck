@@ -9,6 +9,8 @@ on:
 jobs:
   puzzle:
     runs-on: ubuntu-latest
+    env:
+      NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
     defaults:
       run:
         working-directory: puzzle
@@ -28,6 +30,8 @@ jobs:
 
   truck:
     runs-on: ubuntu-latest
+    env:
+      NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
     defaults:
       run:
         working-directory: truck

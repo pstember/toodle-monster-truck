@@ -23,3 +23,18 @@ If Pages is set to deploy the `main` branch at the repository root, GitHub serve
 3. Push to `main` so the workflow runs; wait for it to finish
 
 The `Unchecked runtime.lastError` message in the console is usually from a browser extension and can be ignored.
+
+### npm / corporate proxy vs GitHub Actions
+
+Your machine may use a private npm proxy (Artifactory, etc.). This repo pins the **public** registry in [`puzzle/.npmrc`](puzzle/.npmrc) and [`truck/.npmrc`](truck/.npmrc) so `npm ci` in CI and `package-lock.json` URLs stay consistent with **registry.npmjs.org**. In `puzzle/` and `truck/`, that project file overrides your user-level proxy for this project only.
+
+Workflows also set `NPM_CONFIG_REGISTRY` so the runner never picks up a stray token.
+
+### Easiest ways to play (no npm headaches)
+
+| Goal | What to do |
+|------|------------|
+| **Just play everything** | Use the hosted site: [GitHub Pages](https://pstember.github.io/toodler-games/) (after Actions deploy). |
+| **Truck only, locally** | No install: `npx serve .` from the repo root (or `npx serve truck` from anywhere) and open the URL. The truck game is plain static files. |
+| **Puzzle only, locally** | Either use the hosted Pages URL, or run `npm ci && npm run dev` inside `puzzle/` (uses [`puzzle/.npmrc`](puzzle/.npmrc)), or `npm run build` then `npx serve puzzle/dist`. |
+| **Run Playwright tests** | Needs `npm ci` in `truck/` (or `puzzle/` for e2e) with the lockfiles as committed. |

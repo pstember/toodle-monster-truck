@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="A colorful, forgiving drag-and-drop matching game designed for 3-year-olds">
+    <title>🚙 Monster Truck Match</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body role="application" aria-label="Monster Truck Match Game">
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <label for="language-select" class="sr-only">Select Language</label>
+        <select id="language-select" aria-label="Choose game language">
+            <option value="en">🇬🇧 English</option>
+            <option value="fr">🇧🇪 Français</option>
+            <option value="es">🇪🇨 Español</option>
+        </select>
+    </div>
+
+    <!-- Splash Screen -->
+    <div id="splash-screen" class="splash-screen" role="dialog" aria-labelledby="splash-title">
+        <div class="splash-content">
+            <h1 id="splash-title" class="splash-title" data-i18n="splash-title">🚙 Monster Truck Match 🚙</h1>
+            <p class="splash-subtitle" data-i18n="splash-subtitle">Match the shapes and colors!</p>
+            <img src="assets/monster_truck.png" alt="Colorful monster truck with large wheels" class="splash-truck">
+            <button id="start-game-btn" class="start-game-button" data-i18n="start-game" aria-label="Start the matching game">START GAME</button>
+        </div>
+    </div>
+
+    <!-- Main Game Container -->
+    <main id="game-container" class="hidden" role="main" aria-label="Game play area">
+
+        <!-- Level Counter (hidden but tracked) -->
+        <div id="level-display" class="level-display" role="status" aria-live="polite" aria-atomic="true">
+            <span data-i18n="level">Level</span> <span id="level-number">1</span>
+        </div>
+
+        <!-- Truck Area (Top 60%) -->
+        <div id="truck-area" class="truck-area">
+            <!-- Monster Truck -->
+            <div id="monster-truck" class="monster-truck">
+                <div class="truck-body">
+                    <div class="truck-cabin">🚙</div>
+                    <div class="truck-bed"></div>
+                </div>
+
+                <!-- Empty Slots (dynamically generated) -->
+                <div id="slots-container" class="slots-container" role="group" aria-label="Drop zones for matching shapes">
+                    <!-- Slots will be inserted here by JavaScript -->
+                </div>
+
+                <!-- Truck Wheels -->
+                <div class="truck-wheels">
+                    <div class="wheel wheel-front"></div>
+                    <div class="wheel wheel-back"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Area (Bottom 40%) -->
+        <div id="inventory-area" class="inventory-area" role="region" aria-label="Inventory of shapes to drag">
+            <div id="inventory-items" class="inventory-items" role="group" aria-label="Draggable shapes">
+                <!-- Draggable items will be inserted here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Confetti Container (for celebrations) -->
+        <div id="confetti-container" class="confetti-container"></div>
+
+        <!-- Celebration Overlay -->
+        <div id="celebration-overlay" class="celebration-overlay hidden" role="alert" aria-live="assertive">
+            <div class="celebration-text" data-i18n="amazing">🎉 Amazing! 🎉</div>
+        </div>
+
+        <!-- Intermission Container -->
+        <div id="intermission-container" class="intermission-container hidden" role="dialog" aria-labelledby="mini-game-title">
+
+            <!-- Mud Wash Game -->
+            <div id="mud-wash-game" class="mini-game hidden">
+                <div id="mini-game-title" class="mini-game-title" data-i18n="mud-wash-title">🧽 Wash the Truck! 🧽</div>
+                <div class="mini-game-instructions" data-i18n="mud-wash-instructions">Swipe to clean off the mud!</div>
+                <div class="canvas-container">
+                    <canvas id="mud-canvas" aria-label="Swipe across the canvas to wash mud off the truck" role="application"></canvas>
+                    <div id="clean-truck" class="clean-truck">
+                        <img src="assets/monster_truck.png" alt="Clean monster truck underneath the mud layer" class="mud-truck-image">
+                    </div>
+                </div>
+                <div class="mud-progress-container" role="status" aria-live="polite">
+                    <div class="mud-progress-label"><span data-i18n="cleaned">Cleaned:</span> <span id="mud-progress-text" aria-live="polite">0%</span></div>
+                    <div class="mud-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Cleaning progress">
+                        <div id="mud-progress-fill" class="mud-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sticker Shop Game -->
+            <div id="sticker-shop-game" class="mini-game hidden">
+                <div class="mini-game-title" data-i18n="sticker-shop-title">✨ Decorate Your Truck! ✨</div>
+                <div class="mini-game-instructions" data-i18n="sticker-shop-instructions">Drag stickers onto your truck, then click DONE!</div>
+                <div id="sticker-truck-area" class="sticker-truck-area">
+                    <div class="truck-body large">
+                        <div class="truck-cabin">🚙</div>
+                    </div>
+                </div>
+                <div id="sticker-inventory" class="sticker-inventory" role="group" aria-label="Stickers to decorate your truck">
+                    <div class="sticker" draggable="true" role="button" aria-label="Star sticker">⭐</div>
+                    <div class="sticker" draggable="true" role="button" aria-label="Fire sticker">🔥</div>
+                    <div class="sticker" draggable="true" role="button" aria-label="Skull sticker">💀</div>
+                    <div class="sticker" draggable="true" role="button" aria-label="Party sticker">🎉</div>
+                    <div class="sticker" draggable="true" role="button" aria-label="Rainbow sticker">🌈</div>
+                </div>
+                <button id="sticker-done-btn" class="giant-button" data-i18n="done" aria-label="Finish decorating and continue">DONE!</button>
+            </div>
+
+            <!-- Big Jump Game -->
+            <div id="big-jump-game" class="mini-game hidden">
+                <div class="mini-game-title" data-i18n="big-jump-title">🚀 BIG JUMP! 🚀</div>
+                <div class="mini-game-instructions" data-i18n="big-jump-instructions">Click JUMP to do a backflip!</div>
+                <div id="jump-scene" class="jump-scene">
+                    <div id="jump-truck" class="jump-truck">
+                        <img src="assets/monster_truck.png" alt="Monster Truck" class="truck-image">
+                    </div>
+                </div>
+                <button id="jump-btn" class="giant-button jump-button" data-i18n="jump" aria-label="Make the truck jump and do a backflip">JUMP!</button>
+                <div id="fireworks-container" class="fireworks-container"></div>
+            </div>
+
+            <!-- Bubble Wrap Game -->
+            <div id="bubble-wrap-game" class="mini-game hidden">
+                <div class="mini-game-title" data-i18n="bubble-wrap-title">🎈 POP THE BUBBLES! 🎈</div>
+                <div class="mini-game-instructions" data-i18n="bubble-wrap-instructions">Tap all the bubbles to pop them!</div>
+                <div class="bubble-counter" role="status" aria-live="polite" aria-atomic="true">
+                    <span id="bubbles-popped">0</span> / <span id="bubbles-total">12</span> <span data-i18n="popped">popped</span>
+                </div>
+                <div id="bubble-grid" class="bubble-grid" role="group" aria-label="Bubbles to pop">
+                    <!-- Bubbles will be generated by JavaScript -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SVG Masks for tire rim colorization -->
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <mask id="tire-mask-circle" maskContentUnits="objectBoundingBox">
+                <image href="assets/images/tires/tire_circle.png" width="1" height="1" preserveAspectRatio="xMidYMid slice"/>
+            </mask>
+            <mask id="tire-mask-square" maskContentUnits="objectBoundingBox">
+                <image href="assets/images/tires/tire_square.png" width="1" height="1" preserveAspectRatio="xMidYMid slice"/>
+            </mask>
+            <mask id="tire-mask-triangle" maskContentUnits="objectBoundingBox">
+                <image href="assets/images/tires/tire_triangle.png" width="1" height="1" preserveAspectRatio="xMidYMid slice"/>
+            </mask>
+            <mask id="tire-mask-star" maskContentUnits="objectBoundingBox">
+                <image href="assets/images/tires/tire_star.png" width="1" height="1" preserveAspectRatio="xMidYMid slice"/>
+            </mask>
+            <mask id="tire-mask-heart" maskContentUnits="objectBoundingBox">
+                <image href="assets/images/tires/tire_heart.png" width="1" height="1" preserveAspectRatio="xMidYMid slice"/>
+            </mask>
+            <mask id="tire-mask-hexagon" maskContentUnits="objectBoundingBox">
+                <image href="assets/images/tires/tire_hexagon.png" width="1" height="1" preserveAspectRatio="xMidYMid slice"/>
+            </mask>
+            <mask id="tire-mask-diamond" maskContentUnits="objectBoundingBox">
+                <image href="assets/images/tires/tire_diamond.png" width="1" height="1" preserveAspectRatio="xMidYMid slice"/>
+            </mask>
+        </defs>
+    </svg>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

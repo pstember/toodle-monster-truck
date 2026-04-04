@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  puzzle:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: puzzle
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: puzzle/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - name: Production build (same base as Pages)
+        env:
+          VITE_BASE: /${{ github.event.repository.name }}/puzzle/
+        run: npm run build
+
+  truck:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: truck
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: truck/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npm test
+        env:
+          CI: true

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1e3a5f" id="meta-theme-color">
+  <title>Puzzle pour Enfants</title>
+  <script>
+    (function () {
+      try {
+        var k = 'puzzle-theme';
+        var pref = localStorage.getItem(k);
+        var effective;
+        if (pref === 'light') effective = 'light';
+        else if (pref === 'dark') effective = 'dark';
+        else {
+          effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', effective);
+        var meta = document.getElementById('meta-theme-color');
+        if (meta) meta.setAttribute('content', effective === 'dark' ? '#0f172a' : '#1e3a5f');
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Reserve space for menu + tongue summary + gaps + tray (fallback when no container query) */
+      --layout-chrome: clamp(240px, 44dvh, 400px);
+      /* Navy / green / orange — text ink always navy for light UI */
+      --play-ink: #1e3a5f;
+      --play-ink-soft: #334e68;
+      --play-card: #f8fafc;
+      --play-card-warm: #fff7ed;
+      --play-toy-shadow: 0 8px 0 rgba(30, 58, 95, 0.12);
+      --play-toy-shadow-soft: 0 4px 0 rgba(30, 58, 95, 0.08);
+      --play-shadow: var(--play-toy-shadow-soft);
+      --play-shadow-inset: inset 0 3px 0 rgba(255, 255, 255, 0.5);
+      --play-slot-fill: rgba(16, 185, 129, 0.22);
+      --play-slot-stroke: rgba(22, 101, 52, 0.88);
+      --play-drop-fill: rgba(14, 165, 233, 0.32);
+      --play-drop-stroke: #0369a1;
+      --play-focus-ring: rgba(234, 88, 12, 0.85);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Page background lives on <html> so it always matches data-theme (body stays transparent). */
+    html {
+      min-height: 100%;
+      min-height: 100dvh;
+    }
+
+    html[data-theme="light"] {
+      background-color: #bfdbfe;
+      background-image:
+        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.45) 0%, transparent 44%),
+        radial-gradient(circle at 14% 78%, rgba(16, 185, 129, 0.22) 0%, transparent 40%),
+        radial-gradient(circle at 88% 22%, rgba(249, 115, 22, 0.18) 0%, transparent 36%),
+        radial-gradient(ellipse 130% 85% at 50% -18%, rgba(255, 255, 255, 0.55) 0%, transparent 50%),
+        linear-gradient(168deg, #1e3a5f 0%, #0f766e 28%, #bfdbfe 52%, #e0f2fe 72%, #ffedd5 92%, #fed7aa 100%);
+      background-attachment: fixed;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100%;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      font-family: 'Fredoka', 'Segoe UI', system-ui, sans-serif;
+      color: var(--play-ink);
+      background: transparent;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #app-container {
+      width: 100%;
+      flex: 1 1 auto;
+      min-height: 0;
+      max-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 12px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+      gap: 10px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    #menu-bar {
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, #f8fafc 0%, #e0f2fe 48%, #fff7ed 100%);
+      border-radius: 24px;
+      border: 4px solid #fff;
+      box-shadow: var(--play-toy-shadow), 0 0 0 2px rgba(30, 64, 175, 0.12);
+      max-width: 95vw;
+    }
+
+    .btn {
+      min-width: 48px;
+      min-height: 48px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 16px;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      touch-action: manipulation;
+      box-shadow: var(--play-shadow), var(--play-shadow-inset);
+      transition: transform 0.08s ease, filter 0.12s ease;
+    }
+
+    .btn:hover {
+      filter: brightness(1.04);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 3px;
+      box-shadow: var(--play-shadow), var(--play-shadow-inset), 0 0 0 3px var(--play-focus-ring);
+    }
+
+    #difficulty-select.btn:focus-visible,
+    #theme-select.btn:focus-visible {
+      outline-offset: 2px;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 3px 0 rgba(30, 58, 95, 0.14), var(--play-shadow-inset);
+    }
+
+    /* Role-based colors (all use dark→deeper gradients for white text) */
+    .btn-primary {
+      background: linear-gradient(180deg, #f97316 0%, #c2410c 100%);
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.22);
+    }
+
+    .btn-success {
+      background: linear-gradient(180deg, #16a34a 0%, #14532d 100%);
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.22);
+    }
+
+    /* Help: violet so it’s never confused with the navy “theme” control */
+    .btn-info {
+      background: linear-gradient(180deg, #a78bfa 0%, #6d28d9 100%);
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-warning {
+      background: linear-gradient(180deg, #d97706 0%, #92400e 100%);
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.22);
+    }
+
+    .btn--win {
+      font-size: 22px;
+      padding: 16px 32px;
+      border-radius: 20px;
+    }
+
+    /*
+     * Native <select> + gradient: many browsers render the closed state with
+     * unreadable text; keep a solid base + option { color } for the open list.
+     */
+    #difficulty-select.btn {
+      appearance: none;
+      cursor: pointer;
+      color: #fff;
+      padding-right: 38px;
+      background-image:
+        linear-gradient(180deg, #22c55e 0%, #15803d 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='white' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-position: 0 0, right 12px center;
+      background-repeat: no-repeat, no-repeat;
+      background-size: auto, 12px;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.22);
+    }
+
+    #difficulty-select option {
+      color: var(--play-ink);
+      background: var(--play-card);
+      font-weight: 600;
+    }
+
+    #theme-select.btn {
+      appearance: none;
+      cursor: pointer;
+      color: #fff;
+      padding-right: 38px;
+      background-image:
+        linear-gradient(180deg, #2563eb 0%, #1e3a8a 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='white' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-position: 0 0, right 12px center;
+      background-repeat: no-repeat, no-repeat;
+      background-size: auto, 12px;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.22);
+    }
+
+    #theme-select option {
+      color: var(--play-ink);
+      background: var(--play-card);
+      font-weight: 600;
+    }
+
+    #play-area {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      width: 100%;
+      max-width: min(96vw, 900px);
+      flex: 1 1 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    #play-main {
+      flex: 1 1 0;
+      min-height: 0;
+      min-width: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    #puzzle-slot {
+      flex: 1 1 0;
+      min-width: 0;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #puzzle-container {
+      --grid-cols: 3;
+      --grid-rows: 3;
+      /* Fallback: fit puzzle in viewport minus chrome (no container queries) */
+      --max-size: min(85vw, max(100px, calc(100dvh - var(--layout-chrome))));
+
+      width: min(var(--max-size), calc(var(--max-size) * var(--grid-cols) / var(--grid-rows)));
+      min-width: min(100%, 140px);
+      aspect-ratio: var(--grid-cols) / var(--grid-rows);
+      position: relative;
+      z-index: 1;
+      overflow: visible;
+      background: linear-gradient(145deg, #ffffff 0%, #e0f2fe 42%, #fff7ed 100%);
+      border-radius: 20px;
+      padding: 10px;
+      border: 4px solid #fff;
+      box-shadow: var(--play-toy-shadow), 0 0 0 2px rgba(30, 64, 175, 0.14);
+      flex-shrink: 0;
+    }
+
+    @supports (container-type: size) {
+      #puzzle-slot {
+        container-type: size;
+        container-name: puzzle-slot;
+      }
+
+      /* Size puzzle from the slot’s box so board + tray always fit without page scroll */
+      #puzzle-container {
+        --max-size: min(
+          85cqw,
+          max(80px, calc(100cqh * var(--grid-cols) / var(--grid-rows)))
+        );
+      }
+    }
+
+    #puzzle-grid {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      min-height: 80px;
+      display: block;
+      overflow: visible;
+      touch-action: none;
+    }
+
+    .board-slot {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      border-radius: 4px;
+      overflow: visible;
+    }
+
+    .board-slot--empty {
+      background: transparent;
+    }
+
+    /* Jigsaw-shaped drop target (matches piece footprint; no overlapping rectangle) */
+    .board-slot-outline {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .board-slot-outline path {
+      fill: var(--play-slot-fill);
+      stroke: var(--play-slot-stroke);
+      stroke-width: 2.5px;
+      vector-effect: non-scaling-stroke;
+      stroke-dasharray: 10 6;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    /* Drag from tray: neutral blue — empty cell under pointer only (no “solve for you” coloring) */
+    .board-slot--drop-hover.board-slot--empty {
+      z-index: 6;
+    }
+
+    .board-slot--drop-hover.board-slot--empty .board-slot-outline path {
+      fill: var(--play-drop-fill);
+      stroke: var(--play-drop-stroke);
+      stroke-width: 3px;
+    }
+
+    .piece {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .piece-surface {
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+    }
+
+    .piece--placed {
+      cursor: default;
+    }
+
+    .piece-stack:active .piece-surface {
+      opacity: 0.92;
+    }
+
+    .piece-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(180deg, #fed7aa 0%, #fdba74 100%);
+      color: var(--play-ink);
+      font-size: clamp(14px, 3.5vw, 28px);
+      font-weight: 700;
+      border-radius: 50%;
+      width: 1.8em;
+      height: 1.8em;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 12;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 0 rgba(30, 58, 95, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    }
+
+    #puzzle-grid.show-numbers .piece-number,
+    #piece-tray.show-numbers .piece-number {
+      display: flex;
+    }
+
+    /* Empty slot: slightly smaller badge */
+    .piece-number--target {
+      font-size: clamp(12px, 3vw, 22px);
+      opacity: 0.95;
+    }
+
+    #piece-tray {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: flex-start;
+      gap: 10px;
+      width: 100%;
+      flex: 0 1 auto;
+      min-height: clamp(72px, 14dvh, 120px);
+      max-height: min(42dvh, 280px);
+      padding: clamp(10px, 2.5dvh, 18px);
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      background: linear-gradient(165deg, #e0f2fe 0%, #a7f3d0 38%, #fed7aa 100%);
+      border-radius: 22px;
+      border: 4px solid #fff;
+      box-shadow: var(--play-toy-shadow-soft), 0 0 0 2px rgba(30, 64, 175, 0.12);
+      touch-action: none;
+    }
+
+    .tray-piece-wrap {
+      position: relative;
+      flex: 0 0 auto;
+      min-width: 36px;
+      min-height: 36px;
+      padding: 0;
+      cursor: grab;
+      box-sizing: border-box;
+      /* Belt-and-suspenders with #piece-tray; direct target gets explicit gesture policy */
+      touch-action: none;
+    }
+
+    .tray-piece-wrap:hover .tray-piece-outline path {
+      stroke: rgba(255, 255, 255, 1);
+      stroke-width: 2.5px;
+    }
+
+    .tray-piece-wrap:active {
+      cursor: grabbing;
+    }
+
+    .tray-piece-stack {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Image + jigsaw clip; outline SVG stacked on top */
+    .tray-piece-surface {
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+    }
+
+    .tray-piece-outline {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 2;
+    }
+
+    .tray-piece-outline path {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.95);
+      stroke-width: 2.5px;
+      vector-effect: non-scaling-stroke;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 2px rgba(30, 58, 95, 0.35));
+    }
+
+    .piece-stack {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .drag-clone {
+      position: fixed;
+      z-index: 500;
+      pointer-events: none;
+      opacity: 0.98;
+      filter: drop-shadow(0 10px 18px rgba(30, 58, 95, 0.28));
+    }
+
+    #hint-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      pointer-events: none;
+      border-radius: 14px;
+      z-index: 3;
+    }
+
+    #hint-overlay.visible {
+      opacity: 0.3;
+    }
+
+    #win-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.28) 0%, transparent 45%),
+        linear-gradient(165deg, rgba(30, 64, 175, 0.5) 0%, rgba(22, 101, 52, 0.42) 45%, rgba(234, 88, 12, 0.55) 100%);
+      backdrop-filter: blur(8px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    #win-overlay.visible {
+      display: flex;
+    }
+
+    @keyframes win-pop {
+      0% {
+        transform: scale(0.82);
+        opacity: 0;
+      }
+      70% {
+        transform: scale(1.04);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .win-message {
+      font-size: clamp(48px, 12vw, 120px);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #fff;
+      text-shadow:
+        0 4px 0 #ea580c,
+        0 8px 24px rgba(0, 0, 0, 0.2),
+        0 0 40px rgba(253, 224, 71, 0.9);
+      margin-bottom: 40px;
+      filter: drop-shadow(0 2px 0 rgba(234, 88, 12, 0.4));
+    }
+
+    #win-overlay.visible .win-message {
+      animation: win-pop 0.65s cubic-bezier(0.34, 1.45, 0.64, 1) both;
+    }
+
+    /*
+     * Do NOT use visibility:hidden on this SVG: WebKit/Chromium may treat clipPath
+     * defs as non-rendered, so clip-path:url(#piece-r-c) on puzzle pieces becomes empty.
+     */
+    #puzzle-svg {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 22px;
+      color: var(--play-ink);
+      font-weight: 700;
+      text-align: center;
+      z-index: 20;
+      background: linear-gradient(180deg, #f8fafc 0%, #e0f2fe 100%);
+      padding: 18px 28px;
+      border-radius: 20px;
+      border: 4px solid #fff;
+      box-shadow: var(--play-toy-shadow);
+      display: none;
+    }
+
+    .loading.visible {
+      display: block;
+    }
+
+    .board-slot--hint .board-slot-outline path {
+      stroke: #f59e0b;
+      stroke-width: 3px;
+      fill: rgba(254, 243, 199, 0.55);
+    }
+
+    .board-slot--drop-hover.board-slot--hint.board-slot--empty .board-slot-outline path {
+      fill: var(--play-drop-fill);
+      stroke: var(--play-drop-stroke);
+    }
+
+    @media (max-width: 600px) {
+      #menu-bar {
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .btn {
+        font-size: 16px;
+        padding: 10px 16px;
+        min-width: 44px;
+        min-height: 44px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 600px) {
+      #app-container {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      #menu-bar {
+        flex-direction: column;
+        max-width: none;
+      }
+
+      #play-area {
+        max-width: none;
+        flex: 1 1 0;
+        min-width: 0;
+      }
+    }
+
+    #tongue-panel.tongue-panel {
+      flex-shrink: 1;
+      min-height: 0;
+    }
+
+    #tongue-panel.tongue-panel[open] {
+      max-height: min(46dvh, 360px);
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tongue-panel {
+      width: 100%;
+      max-width: min(96vw, 900px);
+      background: linear-gradient(180deg, #f0fdf4 0%, #fff7ed 100%);
+      border: 3px solid #fff;
+      border-radius: 18px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--play-ink-soft);
+      box-shadow: var(--play-toy-shadow-soft);
+    }
+
+    .tongue-panel__summary {
+      cursor: pointer;
+      font-weight: 600;
+      padding: 4px 0;
+    }
+
+    .tongue-panel__hint {
+      margin: 8px 0 10px;
+      opacity: 0.9;
+      line-height: 1.35;
+    }
+
+    .tongue-panel__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    @media (min-width: 640px) {
+      .tongue-panel__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .tongue-slider-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(120px, 1.2fr) 52px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tongue-slider-row__label {
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .tongue-slider-row__range {
+      width: 100%;
+      min-height: 28px;
+      accent-color: #ea580c;
+    }
+
+    .tongue-slider-row__val {
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      font-size: 12px;
+    }
+
+    .tongue-panel__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tongue-panel__actions .btn {
+      font-size: 14px;
+      padding: 8px 14px;
+      min-height: 40px;
+    }
+
+    /* ——— Dark theme (evening playroom) ——— */
+    html[data-theme="dark"] {
+      --play-ink: #f1f5f9;
+      --play-ink-soft: #cbd5e1;
+      --play-focus-ring: rgba(251, 191, 36, 0.8);
+      --play-toy-shadow: 0 8px 0 rgba(0, 0, 0, 0.38);
+      --play-toy-shadow-soft: 0 4px 0 rgba(0, 0, 0, 0.28);
+      --play-shadow-inset: inset 0 3px 0 rgba(255, 255, 255, 0.1);
+      --play-slot-fill: rgba(52, 211, 153, 0.18);
+      --play-slot-stroke: rgba(167, 243, 208, 0.88);
+      --play-drop-fill: rgba(56, 189, 248, 0.32);
+      --play-drop-stroke: #7dd3fc;
+      background-color: #0f172a;
+      background-image:
+        radial-gradient(circle at 48% 38%, rgba(251, 191, 36, 0.12) 0%, transparent 42%),
+        radial-gradient(circle at 12% 88%, rgba(16, 185, 129, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 18%, rgba(249, 115, 22, 0.12) 0%, transparent 36%),
+        radial-gradient(ellipse 130% 70% at 50% -15%, rgba(30, 64, 175, 0.22) 0%, transparent 48%),
+        linear-gradient(168deg, #0f172a 0%, #134e4a 35%, #1e3a5f 72%, #172554 100%);
+      background-attachment: fixed;
+    }
+
+    html[data-theme="dark"] body {
+      color: var(--play-ink);
+      background: transparent;
+    }
+
+    html[data-theme="dark"] .btn:active {
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35), var(--play-shadow-inset);
+    }
+
+    html[data-theme="dark"] .btn:focus-visible {
+      outline: 3px solid rgba(51, 65, 85, 0.95);
+      box-shadow: var(--play-shadow), var(--play-shadow-inset), 0 0 0 3px var(--play-focus-ring);
+    }
+
+    html[data-theme="dark"] #menu-bar {
+      background: linear-gradient(180deg, #1e293b 0%, #0f766e 48%, #1e3a5f 100%);
+      border: 4px solid rgba(148, 163, 184, 0.35);
+      box-shadow: var(--play-toy-shadow), 0 0 0 2px rgba(16, 185, 129, 0.15);
+    }
+
+    html[data-theme="dark"] #puzzle-container {
+      background: linear-gradient(145deg, #1e293b 0%, #0f172a 45%, #172554 100%);
+      border: 4px solid rgba(148, 163, 184, 0.32);
+      box-shadow: var(--play-toy-shadow), 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    html[data-theme="dark"] #piece-tray {
+      background: linear-gradient(165deg, #172554 0%, #14532d 42%, #9a3412 100%);
+      border: 4px solid rgba(148, 163, 184, 0.32);
+      box-shadow: var(--play-toy-shadow-soft), 0 0 0 2px rgba(234, 88, 12, 0.22);
+    }
+
+    html[data-theme="dark"] .piece-number {
+      color: #172554;
+      border: 3px solid rgba(248, 250, 252, 0.95);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    html[data-theme="dark"] .tray-piece-outline path {
+      stroke: rgba(255, 255, 255, 0.93);
+      filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.65));
+    }
+
+    html[data-theme="dark"] .drag-clone {
+      filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.55));
+    }
+
+    html[data-theme="dark"] #win-overlay {
+      background:
+        radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.1) 0%, transparent 45%),
+        linear-gradient(165deg, rgba(30, 58, 138, 0.85) 0%, rgba(22, 101, 52, 0.65) 48%, rgba(154, 52, 18, 0.78) 100%);
+    }
+
+    html[data-theme="dark"] .loading {
+      background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+      border: 4px solid rgba(148, 163, 184, 0.35);
+    }
+
+    html[data-theme="dark"] .board-slot--hint .board-slot-outline path {
+      stroke: #fbbf24;
+      fill: rgba(251, 191, 36, 0.22);
+    }
+
+    html[data-theme="dark"] .tongue-panel {
+      background: linear-gradient(180deg, #1e293b 0%, #172554 100%);
+      border: 3px solid rgba(148, 163, 184, 0.28);
+    }
+
+    html[data-theme="dark"] .tongue-slider-row__range {
+      accent-color: #fbbf24;
+    }
+
+    html[data-theme="dark"] #difficulty-select option,
+    html[data-theme="dark"] #theme-select option {
+      background: #1e293b;
+      color: var(--play-ink);
+    }
+
+    /* Dark mode: slightly brighter tops so buttons stay legible on the dark menu bar */
+    html[data-theme="dark"] .btn-primary {
+      background: linear-gradient(180deg, #fb923c 0%, #c2410c 100%);
+    }
+
+    html[data-theme="dark"] .btn-success {
+      background: linear-gradient(180deg, #22c55e 0%, #14532d 100%);
+    }
+
+    html[data-theme="dark"] .btn-info {
+      background: linear-gradient(180deg, #c4b5fd 0%, #7c3aed 100%);
+    }
+
+    html[data-theme="dark"] .btn-warning {
+      background: linear-gradient(180deg, #fbbf24 0%, #b45309 100%);
+    }
+
+    html[data-theme="dark"] #difficulty-select.btn {
+      background-image:
+        linear-gradient(180deg, #4ade80 0%, #15803d 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='white' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    }
+
+    html[data-theme="dark"] #theme-select.btn {
+      background-image:
+        linear-gradient(180deg, #3b82f6 0%, #1e3a8a 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='white' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body>
+  <!-- L’appli doit être servie par HTTP (npm run dev ou npm run preview). Ouvrir ce fichier en file:// ne charge pas les modules. -->
+  <div id="app-container">
+    <div id="menu-bar">
+      <button type="button" class="btn btn-primary" id="btn-photo">
+        📸 Choisir une photo
+      </button>
+
+      <select
+        class="btn"
+        id="difficulty-select"
+        aria-label="Difficulté du puzzle"
+        title="Taille de la grille : plus il y a de cases, plus c’est difficile."
+      >
+        <option value="0">Débutant (3×3)</option>
+        <option value="1">Intermédiaire (4×3)</option>
+        <option value="2">Avancé (4×4)</option>
+        <option value="3">Défi (5×4)</option>
+        <option value="4">Expert (8×6)</option>
+      </select>
+
+      <button type="button" class="btn btn-info" id="btn-hint">
+        💡 Aide
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-warning"
+        id="btn-numbers"
+        title="Affiche un numéro sur chaque pièce (et sur chaque case vide : la pièce qui doit s’y placer)."
+      >
+        🔢 Numéros
+      </button>
+
+      <select
+        class="btn"
+        id="theme-select"
+        aria-label="Thème d’affichage"
+        title="Clair, sombre ou comme le réglage du téléphone ou de la tablette"
+      >
+        <option value="system">🖥️ Système</option>
+        <option value="light">☀️ Clair</option>
+        <option value="dark">🌙 Sombre</option>
+      </select>
+    </div>
+
+    <details id="tongue-panel" class="tongue-panel">
+      <summary class="tongue-panel__summary">Réglages des langues (forme des pièces)</summary>
+      <p class="tongue-panel__hint">
+        Déplacez les curseurs pour tester les paramètres. La grille Voronoi ne change pas tant que vous n’appuyez pas sur « Nouvelle graine ».
+        Notez les valeurs qui vous conviennent pour les reporter dans le code.
+      </p>
+      <div class="tongue-panel__grid" id="tongue-sliders-root" aria-label="Paramètres des langues"></div>
+      <div class="tongue-panel__actions">
+        <button type="button" class="btn btn-info" id="btn-tongue-reset">Réinitialiser réglages</button>
+        <button type="button" class="btn btn-warning" id="btn-tongue-new-seed">Nouvelle graine</button>
+        <button type="button" class="btn btn-success" id="btn-tongue-copy">Copier JSON</button>
+      </div>
+    </details>
+
+    <div id="play-area">
+      <div id="play-main">
+        <div id="puzzle-slot">
+          <div id="puzzle-container">
+            <div id="puzzle-grid"></div>
+            <div id="hint-overlay"></div>
+            <div class="loading" id="loading">Chargement…</div>
+          </div>
+        </div>
+        <div id="piece-tray" data-testid="piece-tray" aria-label="Pièces du puzzle"></div>
+      </div>
+    </div>
+
+    <input type="file" id="file-input" accept="image/*" hidden>
+  </div>
+
+  <div id="win-overlay">
+    <div class="win-message">Bravo ! 🎉</div>
+    <button type="button" class="btn btn-success" id="btn-replay" style="font-size: 24px; padding: 16px 32px;">
+      🔄 Rejouer
+    </button>
+  </div>
+
+  <svg id="puzzle-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs id="svg-defs"></defs>
+  </svg>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

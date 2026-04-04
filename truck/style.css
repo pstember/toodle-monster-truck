@@ -2172,10 +2172,7 @@ body::after {
    DARK THEME (toddler-games-theme)
    =================================== */
 
-html[data-theme="dark"] body {
-    background-image: none;
-    background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 42%, #312e81 100%);
-}
+/* Dark theme: keep the same scenic background image as light mode; UI chrome adjusts below. */
 
 html[data-theme="dark"] .splash-screen {
     background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%);

@@ -67,7 +67,14 @@
       top: 12px;
       right: 12px;
       z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      max-width: calc(100vw - 24px);
     }
+    .hub-theme,
     .hub-lang {
       padding: 10px 14px;
       font-size: 16px;
@@ -80,6 +87,7 @@
       cursor: pointer;
       box-shadow: 0 4px 0 rgba(30, 58, 95, 0.2);
     }
+    html[data-theme="dark"] .hub-theme,
     html[data-theme="dark"] .hub-lang {
       border-color: rgba(148, 163, 184, 0.5);
       background: linear-gradient(180deg, #94a3b8 0%, #475569 100%);
@@ -145,6 +153,12 @@
 </head>
 <body>
   <div class="hub-top">
+    <label for="hub-theme" class="sr-only" id="hub-theme-label">Theme</label>
+    <select id="hub-theme" class="hub-theme" aria-labelledby="hub-theme-label">
+      <option value="system" data-opt="system">🖥️ System</option>
+      <option value="light" data-opt="light">☀️ Light</option>
+      <option value="dark" data-opt="dark">🌙 Dark</option>
+    </select>
     <label for="hub-lang" class="sr-only" id="hub-lang-label">Language</label>
     <select id="hub-lang" class="hub-lang" aria-labelledby="hub-lang-label">
       <option value="en">🇬🇧 English</option>
@@ -171,11 +185,17 @@
     (function () {
       var LANG_KEY = 'toddler-games-language';
       var LEGACY = 'monster-truck-language';
+      var THEME_KEY = 'toddler-games-theme';
+      var LEGACY_THEME = 'puzzle-theme';
       var HUB = {
         en: {
           title: 'Toddler Games',
           h1: 'Pick a game',
           langLabel: 'Language',
+          themeLabel: 'Theme',
+          themeSystem: '🖥️ System',
+          themeLight: '☀️ Light',
+          themeDark: '🌙 Dark',
           truckTitle: 'Monster Truck Match',
           truckDesc: 'Drag shapes and colors onto the truck. Made for tiny fingers.',
           puzzleTitle: 'Photo puzzle',
@@ -185,6 +205,10 @@
           title: 'Jeux pour tout-petits',
           h1: 'Choisis un jeu',
           langLabel: 'Langue',
+          themeLabel: 'Thème',
+          themeSystem: '🖥️ Système',
+          themeLight: '☀️ Clair',
+          themeDark: '🌙 Sombre',
           truckTitle: 'Match de Monster Truck',
           truckDesc: 'Glisse formes et couleurs sur le camion. Pensé pour les petits doigts.',
           puzzleTitle: 'Puzzle photo',
@@ -194,6 +218,10 @@
           title: 'Juegos para peques',
           h1: 'Elige un juego',
           langLabel: 'Idioma',
+          themeLabel: 'Tema',
+          themeSystem: '🖥️ Sistema',
+          themeLight: '☀️ Claro',
+          themeDark: '🌙 Oscuro',
           truckTitle: 'Monster Truck a emparejar',
           truckDesc: 'Arrastra formas y colores al camión. Hecho para deditos.',
           puzzleTitle: 'Puzzle de fotos',
@@ -209,6 +237,33 @@
         } catch (e) {}
         return 'en';
       }
+      function resolveEffectiveTheme(pref) {
+        if (pref === 'dark') return 'dark';
+        if (pref === 'light') return 'light';
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      function getThemePreference() {
+        try {
+          var v = localStorage.getItem(THEME_KEY) || localStorage.getItem(LEGACY_THEME);
+          if (v === 'light' || v === 'dark' || v === 'system') return v;
+        } catch (e) {}
+        return 'system';
+      }
+      function applyThemeToDocument() {
+        var pref = getThemePreference();
+        var effective = resolveEffectiveTheme(pref);
+        document.documentElement.setAttribute('data-theme', effective);
+        var meta = document.getElementById('meta-theme-color');
+        if (meta) meta.setAttribute('content', effective === 'dark' ? '#0f172a' : '#1e3a5f');
+      }
+      function applyThemeSelectLabels(lang) {
+        var t = HUB[lang] || HUB.en;
+        document.getElementById('hub-theme-label').textContent = t.themeLabel;
+        var themeSel = document.getElementById('hub-theme');
+        themeSel.querySelector('[data-opt="system"]').textContent = t.themeSystem;
+        themeSel.querySelector('[data-opt="light"]').textContent = t.themeLight;
+        themeSel.querySelector('[data-opt="dark"]').textContent = t.themeDark;
+      }
       function apply(lang) {
         var t = HUB[lang] || HUB.en;
         document.documentElement.lang = lang === 'en' ? 'en' : lang === 'es' ? 'es' : 'fr';
@@ -219,11 +274,26 @@
         document.getElementById('hub-card-truck-desc').textContent = t.truckDesc;
         document.getElementById('hub-card-puzzle-title').textContent = t.puzzleTitle;
         document.getElementById('hub-card-puzzle-desc').textContent = t.puzzleDesc;
+        applyThemeSelectLabels(lang);
       }
       var sel = document.getElementById('hub-lang');
+      var themeSel = document.getElementById('hub-theme');
       var lang = resolveLang();
       sel.value = lang;
+      themeSel.value = getThemePreference();
       apply(lang);
+      applyThemeToDocument();
+      themeSel.addEventListener('change', function () {
+        var v = themeSel.value;
+        if (v !== 'light' && v !== 'dark' && v !== 'system') return;
+        try {
+          localStorage.setItem(THEME_KEY, v);
+        } catch (e) {}
+        applyThemeToDocument();
+      });
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+        if (getThemePreference() === 'system') applyThemeToDocument();
+      });
       sel.addEventListener('change', function () {
         var v = sel.value;
         if (v !== 'en' && v !== 'fr' && v !== 'es') return;

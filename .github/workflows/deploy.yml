@@ -30,6 +30,14 @@ jobs:
           npm ci
           npm run build
 
+      - name: Verify puzzle dist (single-file build, no dev /src/main.js path)
+        run: |
+          test -s puzzle/dist/index.html
+          if grep -q '/src/main.js' puzzle/dist/index.html; then
+            echo "ERROR: puzzle/dist/index.html still references /src/main.js — dev HTML may have been copied by mistake."
+            exit 1
+          fi
+
       - name: Assemble site
         run: |
           mkdir -p _site/truck _site/puzzle

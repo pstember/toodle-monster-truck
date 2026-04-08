@@ -20,6 +20,7 @@ Un **puzzle jigsaw** web (pièces à emboîtements), glissable-déposable, pens�
 - Upload de photo (JPEG, PNG, etc.)
 - Recadrage type *cover* pour respecter le ratio de la grille
 - **Thème** : clair, sombre ou **système** (stocké dans `localStorage`)
+- **Synchronisation** : les préférences de thème et de langue sont partagées avec le hub et le jeu de camion via `../shared/theme.js` et `../shared/i18n.js`
 
 ### Réglages avancés (forme des pièces)
 

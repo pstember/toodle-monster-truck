@@ -1,14 +1,27 @@
-# Toddler games
+# Toddler Games
 
-Two small browser games for young children, served from one repo.
+A collection of browser games for young children (ages 3+), served from a unified hub.
 
 - **Hub (local):** from this directory run `npx serve .` and open the URL shown (port 3000 or 8080).
 - **GitHub Pages:** [https://pstember.github.io/toodler-games/](https://pstember.github.io/toodler-games/)
 
+## Project Structure
+
 | Folder | Contents |
 |--------|----------|
-| [truck/](truck/) | Monster Truck Match — vanilla HTML/CSS/JS |
-| [puzzle/](puzzle/) | Vite + single-file build for the jigsaw puzzle |
+| **/** | Hub page with game selection, theme/language controls |
+| [truck/](truck/) | Monster Truck Match — vanilla HTML/CSS/JS drag-and-drop game |
+| [puzzle/](puzzle/) | Photo Puzzle — Vite + single-file build, Voronoi jigsaw |
+| [shared/](shared/) | Shared theme and i18n utilities used by all three |
+
+### Shared Infrastructure
+
+All three games (Hub, Truck, Puzzle) share:
+- **Theme synchronization** - Light/dark/system preference syncs across games
+- **Language synchronization** - English/French/Spanish preference syncs across games
+- **Consistent colors** - Canonical theme colors (`#1e3a5f` light, `#0f172a` dark)
+
+See [shared/README.md](shared/README.md) for details on the shared utilities.
 
 Deployment builds the puzzle with `VITE_BASE=/toodler-games/puzzle/` (repo name comes from the workflow) and copies `truck/` and the hub `index.html` into the published site.
 

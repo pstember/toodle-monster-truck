@@ -9,6 +9,7 @@ A colorful, forgiving drag-and-drop matching game designed specifically for 3-ye
 - **Touch-Friendly:** Massive touch targets optimized for tiny fingers
 - **Intermission Mini-Games:** Fun breaks every 3 levels (Mud Wash, Sticker Shop, Big Jump)
 - **Zero Dependencies:** Pure HTML/CSS/JavaScript, no external images needed
+- **Theme & Language Sync:** Preferences shared with hub and puzzle via `../shared/` utilities
 
 ## Quick Start
 

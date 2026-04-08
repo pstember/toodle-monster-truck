@@ -35,13 +35,13 @@ In the monorepo, you can also run `npx serve .` from the repository root and ope
 - **Levels 4-6:** Shape + color matching (adds Triangle, Blue)
 - **Levels 7-9:** Expanded palette (adds Star, Heart, Green, Yellow)
 - **Levels 10-12:** Size sorting (adds Pentagon, Hexagon, Purple, Orange)
-- **Level 13+:** Endless mode with full palette (8 shapes, 10 colors)
+- **Level 13+:** Endless mode with full palette (8 shapes, 8 colors)
 
 ### Full Shape & Color Palette
 
 **Shapes (8):** Circle, Square, Triangle, Star, Heart, Pentagon, Hexagon, Diamond
 
-**Colors (10):** Red, Blue, Green, Yellow, Purple, Orange, Pink, Cyan, Brown, Lime
+**Colors (8):** Red, Blue, Green, Yellow, Purple, Orange, Pink, Cyan
 
 ## Development
 

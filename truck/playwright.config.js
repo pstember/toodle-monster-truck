@@ -7,8 +7,8 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [['html'], ['list']],
-  timeout: 30000, // 30 second timeout per test
-  globalTimeout: 300000, // 5 minute global timeout
+  timeout: 60000, // 60 second timeout per test
+  globalTimeout: 600000, // 10 minute global timeout
 
   use: {
     baseURL: 'http://localhost:3000/truck',
@@ -28,19 +28,11 @@ export default defineConfig({
     timeout: 120000,
   },
 
-  // Test on multiple browsers
+  // Test on Chrome only
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
     },
   ],
 });

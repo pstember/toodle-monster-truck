@@ -1064,6 +1064,27 @@ body::after {
     background-size: 110%;
 }
 
+/* Scale down colored shapes for small tires */
+.size-small.circle::before,
+.size-small.square::before,
+.size-small.hexagon::before,
+.size-small.star::before,
+.size-small.heart::before {
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+/* Diamond needs to preserve rotation */
+.size-small.diamond::before {
+    transform: translate(-50%, -50%) rotate(45deg) scale(0.8);
+}
+
+/* Triangle uses fixed pixels, needs specific scaling */
+.size-small.triangle::before {
+    border-left: 32px solid transparent;
+    border-right: 32px solid transparent;
+    border-bottom: 55px solid var(--rim-color);
+}
+
 /* Color Classes - Set rim colors for tires */
 .color-red {
     --rim-color: #FF4444;

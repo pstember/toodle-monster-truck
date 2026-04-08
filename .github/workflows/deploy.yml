@@ -19,9 +19,9 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: npm
@@ -45,10 +45,11 @@ jobs:
 
       - name: Assemble site
         run: |
-          mkdir -p _site/truck _site/puzzle
+          mkdir -p _site/truck _site/puzzle _site/shared
           cp index.html _site/
           rsync -a --exclude node_modules --exclude test-results --exclude playwright-report --exclude coverage --exclude .git truck/ _site/truck/
           cp -R puzzle/dist/. _site/puzzle/
+          cp -R shared/. _site/shared/
           touch _site/.nojekyll
 
       - uses: actions/upload-pages-artifact@v4
@@ -66,4 +67,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

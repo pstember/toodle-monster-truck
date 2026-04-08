@@ -564,8 +564,7 @@ function renderTray() {
   });
 
   // Start hint timers for pieces in the tray
-  // TEMPORARILY DISABLED FOR DEBUGGING
-  // updateHintsForTray();
+  updateHintsForTray();
 }
 
 function renderAll() {

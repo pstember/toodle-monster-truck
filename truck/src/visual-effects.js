@@ -100,6 +100,12 @@ export function triggerIntermission() {
     const intermissionContainer = document.getElementById('intermission-container');
     intermissionContainer.classList.remove('hidden');
 
+    // Hide inventory area during minigame
+    const inventoryArea = document.getElementById('inventory-area');
+    if (inventoryArea) {
+        inventoryArea.classList.add('hidden');
+    }
+
     // Randomly select a mini-game
     const games = ['mud-wash', 'sticker-shop', 'big-jump', 'bubble-wrap'];
     const selectedGame = games[Math.floor(Math.random() * games.length)];
@@ -136,6 +142,12 @@ export function endIntermission() {
     document.querySelectorAll('.mini-game').forEach(game => {
         game.classList.add('hidden');
     });
+
+    // Show inventory area when returning to gameplay
+    const inventoryArea = document.getElementById('inventory-area');
+    if (inventoryArea) {
+        inventoryArea.classList.remove('hidden');
+    }
 
     gameState.isInIntermission = false;
 

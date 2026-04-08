@@ -25,8 +25,9 @@ export class GamePage {
       `
     });
 
-    // Wait for game to initialize
-    await this.page.waitForTimeout(100);
+    // Wait for splash screen and start button to be visible
+    await this.page.waitForSelector('#splash-screen', { state: 'visible', timeout: 10000 });
+    await this.page.waitForSelector('#start-game-btn', { state: 'visible', timeout: 10000 });
 
     // Click start button to begin game
     await this.page.click('#start-game-btn');

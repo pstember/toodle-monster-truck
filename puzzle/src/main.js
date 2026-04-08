@@ -163,7 +163,6 @@ function updateHintsForTray() {
     console.warn('updateHintsForTray: no state or tray');
     return;
   }
-  console.log(`Starting hint timers for ${state.tray.length} pieces`);
   // Start timers for all pieces in the tray
   state.tray.forEach((pieceId) => {
     startHintTimer(pieceId);
@@ -651,7 +650,6 @@ function startNewGame(cols, rows, opts = {}) {
   } else {
     renderAll();
   }
-  console.log(`🎮 New jigsaw: ${cols}×${rows}`);
 }
 
 function tryDrop(pieceId, slotIndex) {
@@ -857,16 +855,13 @@ document.getElementById('btn-replay').addEventListener('click', () => {
   }
 });
 
-console.log('🎮 Initializing puzzle game...');
 try {
   startNewGame(LEVELS[0].cols, LEVELS[0].rows);
-  console.log('✓ Game started');
 } catch (e) {
   console.error('✗ Failed to start game:', e);
 }
 try {
   loadDefaultImage();
-  console.log('✓ Loading default image');
 } catch (e) {
   console.error('✗ Failed to load image:', e);
 }

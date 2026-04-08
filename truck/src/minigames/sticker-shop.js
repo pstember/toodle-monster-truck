@@ -14,8 +14,6 @@ export function startStickerShopGame() {
     const game = document.getElementById('sticker-shop-game');
     game.classList.remove('hidden');
 
-    const truckArea = document.getElementById('sticker-truck-area');
-
     // Clean up old sticker listeners first
     cleanupStickerListeners();
 

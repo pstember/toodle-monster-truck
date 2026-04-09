@@ -672,8 +672,22 @@ function endSong() {
     el.classList.toggle('star--lit', i < stars);
   });
 
-  document.getElementById('hit-count').textContent = String(state.hits);
-  document.getElementById('note-total').textContent = String(total);
+  const finiteScore = document.getElementById('win-score-finite');
+  const infiniteScore = document.getElementById('win-score-infinite');
+  if (state.infiniteMode) {
+    finiteScore?.classList.add('hidden');
+    if (infiniteScore) {
+      infiniteScore.textContent = translate('win-hits-only').replace('{n}', String(state.hits));
+      infiniteScore.classList.remove('hidden');
+    }
+  } else {
+    infiniteScore?.classList.add('hidden');
+    finiteScore?.classList.remove('hidden');
+    const hitEl = document.getElementById('hit-count');
+    const totalEl = document.getElementById('note-total');
+    if (hitEl) hitEl.textContent = String(state.hits);
+    if (totalEl) totalEl.textContent = String(total);
+  }
 
   win?.classList.remove('hidden');
 }

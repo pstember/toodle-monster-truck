@@ -12,18 +12,19 @@ A collection of browser games for young children (ages 3+), served from a unifie
 | **/** | Hub page with game selection, theme/language controls |
 | [truck/](truck/) | Monster Truck Match — vanilla HTML/CSS/JS drag-and-drop game |
 | [puzzle/](puzzle/) | Photo Puzzle — Vite + single-file build, Voronoi jigsaw |
-| [shared/](shared/) | Shared theme and i18n utilities used by all three |
+| [rhythm/](rhythm/) | Tap the Colors — levels 1–3, optional Challenger (4 lanes + tighter window), timing band (vanilla ES modules) |
+| [shared/](shared/) | Shared theme and i18n utilities used by the hub and all games |
 
 ### Shared Infrastructure
 
-All three games (Hub, Truck, Puzzle) share:
+All games (Hub, Truck, Puzzle, Rhythm) share:
 - **Theme synchronization** - Light/dark/system preference syncs across games
 - **Language synchronization** - English/French/Spanish preference syncs across games
 - **Consistent colors** - Canonical theme colors (`#1e3a5f` light, `#0f172a` dark)
 
 See [shared/README.md](shared/README.md) for details on the shared utilities.
 
-Deployment builds the puzzle with `VITE_BASE=/toodler-games/puzzle/` (repo name comes from the workflow) and copies `truck/` and the hub `index.html` into the published site.
+Deployment builds the puzzle with `VITE_BASE=/toodler-games/puzzle/` (repo name comes from the workflow) and copies `truck/`, `rhythm/`, and the hub `index.html` into the published site.
 
 ### GitHub Pages (required for the puzzle)
 
@@ -50,4 +51,5 @@ Workflows also set `NPM_CONFIG_REGISTRY` so the runner never picks up a stray to
 | **Just play everything** | Use the hosted site: [GitHub Pages](https://pstember.github.io/toodler-games/) (after Actions deploy). |
 | **Truck only, locally** | No install: `npx serve .` from the repo root (or `npx serve truck` from anywhere) and open the URL. The truck game is plain static files. |
 | **Puzzle only, locally** | Either use the hosted Pages URL, or run `npm ci && npm run dev` inside `puzzle/` (uses [`puzzle/.npmrc`](puzzle/.npmrc)), or `npm run build` then `npx serve puzzle/dist`. |
+| **Rhythm only, locally** | No install: `npx serve .` from the repo root and open `/rhythm/` (static ES modules, like Truck). |
 | **Run Playwright tests** | Needs `npm ci` in `truck/` (or `puzzle/` for e2e) with the lockfiles as committed. |

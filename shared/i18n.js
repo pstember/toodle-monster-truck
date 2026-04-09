@@ -1,5 +1,5 @@
 // Shared i18n utilities for toddler games
-// Used by: Hub, Monster Truck Match, Photo Puzzle
+// Used by: Hub, Monster Truck Match, Photo Puzzle, Tap the Colors (rhythm)
 
 export const LANGUAGE_STORAGE_KEY = 'toddler-games-language';
 export const LEGACY_LANGUAGE_STORAGE_KEY = 'monster-truck-language';

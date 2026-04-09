@@ -1,5 +1,5 @@
 // Shared theme management for toddler games
-// Used by: Hub, Monster Truck Match, Photo Puzzle
+// Used by: Hub, Monster Truck Match, Photo Puzzle, Tap the Colors (rhythm)
 
 export const THEME_STORAGE_KEY = 'toddler-games-theme';
 export const LEGACY_THEME_STORAGE_KEY = 'puzzle-theme';

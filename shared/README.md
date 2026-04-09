@@ -43,10 +43,11 @@ Canonical colors used across all games:
 
 ## Architecture
 
-The shared utilities ensure consistency across all three games:
+The shared utilities ensure consistency across the hub and all games:
 
 1. **Hub** (index.html) - Uses inline script for FOUC prevention, but same logic
 2. **Monster Truck Match** (truck/) - Imports shared utilities as ES modules
 3. **Photo Puzzle** (puzzle/) - Imports shared utilities as ES modules
+4. **Tap the Colors** (rhythm/) - Imports shared utilities as ES modules
 
-All three games synchronize theme and language preferences via localStorage using the same canonical keys.
+All games synchronize theme and language preferences via localStorage using the same canonical keys.

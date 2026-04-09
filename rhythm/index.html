@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="A gentle Guitar Hero–style rhythm game for young children">
+  <meta name="theme-color" content="#1e3a5f" id="meta-theme-color">
+  <title>🎸 Tap the Colors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/shared-design-tokens.css">
+  <script>
+    (function () {
+      try {
+        var k = 'toddler-games-theme';
+        var legacy = 'puzzle-theme';
+        var pref = localStorage.getItem(k) || localStorage.getItem(legacy);
+        var effective;
+        if (pref === 'light') effective = 'light';
+        else if (pref === 'dark') effective = 'dark';
+        else {
+          effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', effective);
+        var meta = document.getElementById('meta-theme-color');
+        if (meta) meta.setAttribute('content', effective === 'dark' ? '#0f172a' : '#1e3a5f');
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="top-nav">
+    <div class="top-nav__right">
+      <a class="hub-link" href="../index.html" data-i18n="more-games">More games</a>
+      <label for="theme-select" class="sr-only">Theme</label>
+      <select
+        id="theme-select"
+        class="theme-select"
+        data-i18n-aria="theme-aria"
+        data-i18n-title="theme-title"
+        aria-label="Display theme"
+        title="Light, dark, or match your device"
+      >
+        <option value="system" data-i18n="theme-opt-system">🖥️ System</option>
+        <option value="light" data-i18n="theme-opt-light">☀️ Light</option>
+        <option value="dark" data-i18n="theme-opt-dark">🌙 Dark</option>
+      </select>
+      <div class="language-selector">
+        <label for="language-select" class="sr-only">Language</label>
+        <select id="language-select" aria-label="Choose game language">
+          <option value="en">🇬🇧 English</option>
+          <option value="fr">🇧🇪 Français</option>
+          <option value="es">🇪🇨 Español</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div id="splash-screen" class="splash-screen" role="dialog" aria-labelledby="splash-title">
+    <div class="splash-content splash-content--wide">
+      <h1 id="splash-title" class="splash-title" data-i18n="splash-title">🎸 Tap the Colors! 🎸</h1>
+      <p class="splash-subtitle" data-i18n="splash-subtitle">When a note reaches the line, tap the matching color!</p>
+
+      <div class="splash-section">
+        <p class="splash-section__label" data-i18n="pick-level">Level</p>
+        <div class="level-pills" role="group" aria-label="Difficulty level">
+          <button type="button" class="level-pill level-pill--active" data-level="1" data-i18n-title="level-easy">1</button>
+          <button type="button" class="level-pill" data-level="2" data-i18n-title="level-mid">2</button>
+          <button type="button" class="level-pill" data-level="3" data-i18n-title="level-hard">3</button>
+        </div>
+      </div>
+
+      <label class="challenger-row">
+        <input type="checkbox" id="challenger-checkbox" class="challenger-row__input" />
+        <span class="challenger-row__text" data-i18n="challenger-mode">Challenger — 4 colors</span>
+      </label>
+      <p class="challenger-hint" data-i18n="challenger-hint">Narrower window, blue lane, faster beat.</p>
+
+      <div class="splash-extras">
+        <label class="extra-row">
+          <input type="checkbox" id="random-checkbox" class="extra-row__input" />
+          <span class="extra-row__text" data-i18n="opt-random">🎲 Random notes</span>
+        </label>
+        <p class="extra-hint" data-i18n="opt-random-hint">Mix up the colors each time.</p>
+        <label class="extra-row">
+          <input type="checkbox" id="infinite-checkbox" class="extra-row__input" />
+          <span class="extra-row__text" data-i18n="opt-infinite">♾️ Keep playing</span>
+        </label>
+        <p class="extra-hint" data-i18n="opt-infinite-hint">No end screen — notes keep coming!</p>
+      </div>
+
+      <p class="splash-hint" data-i18n="ready">Listen…</p>
+      <button id="start-game-btn" type="button" class="start-game-button" data-i18n="start-game">START</button>
+    </div>
+  </div>
+
+  <main id="game-ui" class="game-ui hidden" aria-hidden="true">
+    <div class="game-head">
+      <span class="game-head__label" data-i18n="score">Stars</span>
+      <span id="mode-badges" class="game-head__badges" hidden aria-hidden="true"></span>
+      <span id="infinite-tier-badge" class="game-head__tier" hidden aria-hidden="true"></span>
+      <span id="live-hits" class="game-head__value" aria-live="polite">0</span>
+    </div>
+
+    <div id="life-row" class="life-row" hidden aria-hidden="true" role="img"></div>
+
+    <div class="combo-row" aria-label="Combo meter">
+      <span class="combo-row__label" data-i18n="combo-label">Combo</span>
+      <div class="combo-bar" role="progressbar" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0" id="combo-bar" aria-label="Combo progress">
+        <div id="combo-bar-fill" class="combo-bar__fill"></div>
+      </div>
+      <span id="combo-count" class="combo-row__count" aria-live="polite">0</span>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="rhythm-canvas" class="rhythm-canvas" width="360" height="420" aria-label="Rhythm lanes"></canvas>
+    </div>
+    <p id="window-legend" class="window-legend" data-i18n="window-legend">Shaded band = good timing zone.</p>
+
+    <div id="timing-feedback" class="timing-feedback" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="lane-buttons" role="group" aria-label="Color lanes">
+      <button type="button" class="lane-btn lane-btn--0" data-lane="0" data-i18n-aria="lane-left" aria-label="Green">
+        <span class="lane-btn__dot"></span>
+      </button>
+      <button type="button" class="lane-btn lane-btn--1" data-lane="1" data-i18n-aria="lane-center" aria-label="Yellow">
+        <span class="lane-btn__dot"></span>
+      </button>
+      <button type="button" class="lane-btn lane-btn--2" data-lane="2" data-i18n-aria="lane-right" aria-label="Red">
+        <span class="lane-btn__dot"></span>
+      </button>
+      <button type="button" class="lane-btn lane-btn--3" data-lane="3" data-i18n-aria="lane-blue" aria-label="Blue" hidden aria-hidden="true">
+        <span class="lane-btn__dot"></span>
+      </button>
+    </div>
+    <p id="keyboard-hint" class="keyboard-hint">Z · X · C</p>
+  </main>
+
+  <div id="win-overlay" class="win-overlay hidden" role="dialog" aria-labelledby="win-title" aria-modal="true">
+    <div class="win-card">
+      <h2 id="win-title" class="win-title" data-i18n="you-did-it">🌟 You did it! 🌟</h2>
+      <div class="win-stars" aria-label="Stars">
+        <span class="star" data-star="1">☆</span>
+        <span class="star" data-star="2">☆</span>
+        <span class="star" data-star="3">☆</span>
+      </div>
+      <p class="win-score">
+        <span id="hit-count">0</span> / <span id="note-total">0</span>
+      </p>
+      <button type="button" id="play-again-btn" class="start-game-button" data-i18n="again">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

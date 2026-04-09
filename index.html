@@ -176,6 +176,8 @@
     html[data-theme="dark"] .card--truck .card__title { color: #fb923c; }
     .card--puzzle .card__title { color: #15803d; }
     html[data-theme="dark"] .card--puzzle .card__title { color: #4ade80; }
+    .card--rhythm .card__title { color: #7c3aed; }
+    html[data-theme="dark"] .card--rhythm .card__title { color: #c4b5fd; }
 
     /* Grid spacing */
     .grid {
@@ -211,6 +213,11 @@
       <div class="card__title" id="hub-card-puzzle-title">Photo puzzle</div>
       <div class="card__desc" id="hub-card-puzzle-desc">Jigsaw puzzle with your own photos. Voronoi pieces and gentle hints.</div>
     </a>
+    <a class="card card--rhythm" href="rhythm/">
+      <div class="card__icon" aria-hidden="true">🎸</div>
+      <div class="card__title" id="hub-card-rhythm-title">Tap the colors</div>
+      <div class="card__desc" id="hub-card-rhythm-desc">Gentle rhythm game — tap green, yellow, and red when the notes reach the line.</div>
+    </a>
   </nav>
 
   <script>
@@ -231,7 +238,9 @@
           truckTitle: 'Monster Truck Match',
           truckDesc: 'Drag shapes and colors onto the truck. Made for tiny fingers.',
           puzzleTitle: 'Photo puzzle',
-          puzzleDesc: 'Jigsaw puzzle with your own photos. Voronoi pieces and gentle hints.'
+          puzzleDesc: 'Jigsaw puzzle with your own photos. Voronoi pieces and gentle hints.',
+          rhythmTitle: 'Tap the colors',
+          rhythmDesc: 'Gentle rhythm game — tap green, yellow, and red when the notes reach the line.'
         },
         fr: {
           title: 'Jeux pour tout-petits',
@@ -244,7 +253,9 @@
           truckTitle: 'Match de Monster Truck',
           truckDesc: 'Glisse formes et couleurs sur le camion. Pensé pour les petits doigts.',
           puzzleTitle: 'Puzzle photo',
-          puzzleDesc: 'Puzzle avec tes photos. Pièces Voronoi et indices doux.'
+          puzzleDesc: 'Puzzle avec tes photos. Pièces Voronoi et indices doux.',
+          rhythmTitle: 'Tape les couleurs',
+          rhythmDesc: 'Jeu de rythme doux — tape vert, jaune et rouge quand les notes arrivent sur la ligne.'
         },
         es: {
           title: 'Juegos para peques',
@@ -257,7 +268,9 @@
           truckTitle: 'Monster Truck a emparejar',
           truckDesc: 'Arrastra formas y colores al camión. Hecho para deditos.',
           puzzleTitle: 'Puzzle de fotos',
-          puzzleDesc: 'Puzzle con tus fotos. Piezas Voronoi y pistas suaves.'
+          puzzleDesc: 'Puzzle con tus fotos. Piezas Voronoi y pistas suaves.',
+          rhythmTitle: 'Toca los colores',
+          rhythmDesc: 'Ritmo suave — toca verde, amarillo y rojo cuando las notas lleguen a la línea.'
         }
       };
       function resolveLang() {
@@ -306,6 +319,8 @@
         document.getElementById('hub-card-truck-desc').textContent = t.truckDesc;
         document.getElementById('hub-card-puzzle-title').textContent = t.puzzleTitle;
         document.getElementById('hub-card-puzzle-desc').textContent = t.puzzleDesc;
+        document.getElementById('hub-card-rhythm-title').textContent = t.rhythmTitle;
+        document.getElementById('hub-card-rhythm-desc').textContent = t.rhythmDesc;
         applyThemeSelectLabels(lang);
       }
       var sel = document.getElementById('hub-lang');

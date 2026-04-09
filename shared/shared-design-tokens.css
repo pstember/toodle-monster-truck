@@ -69,7 +69,7 @@ html[data-theme="dark"] {
   /* Text colors */
   --text-primary: #f1f5f9;
   --text-secondary: #cbd5e1;
-  --text-inverse: #0f172a;
+  --text-inverse: #ffffff;
 
   /* Button gradients - slightly muted for dark mode */
   --btn-primary: linear-gradient(135deg, #fb923c 0%, #f97316 100%);

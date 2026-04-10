@@ -312,6 +312,13 @@ function registerInfiniteMiss() {
   }
 }
 
+/** One life / one failure per note in ♾️: mark the note done and count a limitless miss (idempotent per note). */
+function consumeNoteMiss(note) {
+  if (note.hit || note.missed) return;
+  note.missed = true;
+  registerInfiniteMiss();
+}
+
 function ensureLifeHeartElements(row) {
   let hearts = row.querySelectorAll('.life-heart');
   if (hearts.length === INFINITE_LIFE_HEARTS) return hearts;
@@ -532,8 +539,7 @@ function draw(ctx, canvas) {
   for (const n of state.notes) {
     if (n.hit || n.missed) continue;
     if (t > n.time + missGrace) {
-      n.missed = true;
-      registerInfiniteMiss();
+      consumeNoteMiss(n);
       resetCombo();
       if (state.audioCtx) {
         playFailSound(state.audioCtx);
@@ -608,7 +614,7 @@ function tryHit(lane) {
   if (g.lane !== lane) {
     playFailSound(state.audioCtx);
     resetCombo();
-    registerInfiniteMiss();
+    consumeNoteMiss(g);
     if (bestAbs <= wkw) {
       showTimingFeedback('wrong', 'fail-wrong');
       flashGameUi('wrong');
@@ -644,14 +650,13 @@ function tryHit(lane) {
   resetCombo();
 
   if (delta > hw) {
-    registerInfiniteMiss();
+    consumeNoteMiss(g);
     showTimingFeedback('early', 'fail-early');
     flashGameUi('wrong');
     return;
   }
 
-  g.missed = true;
-  registerInfiniteMiss();
+  consumeNoteMiss(g);
   showTimingFeedback('late', 'fail-late');
   flashGameUi('late');
 }

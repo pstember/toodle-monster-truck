@@ -11,7 +11,8 @@ export default defineConfig({
   globalTimeout: 600000, // 10 minute global timeout
 
   use: {
-    baseURL: 'http://localhost:3000/truck',
+    // Trailing slash is required so relative navigations like goto('index.html') resolve under /truck/
+    baseURL: 'http://localhost:3000/truck/',
     trace: 'on-first-retry',
     headless: true,
     screenshot: 'only-on-failure',

@@ -149,7 +149,7 @@ test.describe('Click-Path Bug Fixes', () => {
     page.on('console', msg => console.log('BROWSER:', msg.text()));
 
     // Navigate with minigame parameter
-    await page.goto('/index.html?minigame=sticker-shop');
+    await page.goto('index.html?minigame=sticker-shop');
     await page.waitForLoadState('domcontentloaded');
 
     await page.waitForTimeout(100);
@@ -176,7 +176,7 @@ test.describe('Click-Path Bug Fixes', () => {
    * CLICK-PATH-003b: Verify regular mode still starts at level 1
    */
   test('CLICK-PATH-003b: normal mode starts at level 1', async ({ page }) => {
-    await page.goto('/index.html'); // No minigame parameter
+    await page.goto('index.html'); // No minigame parameter
     await page.waitForLoadState('domcontentloaded');
 
     await page.click('#start-game-btn');

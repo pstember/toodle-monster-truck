@@ -10,7 +10,7 @@ export class GamePage {
    * Navigate to the game and wait for it to load
    */
   async navigate() {
-    await this.page.goto('/index.html');
+    await this.page.goto('index.html');
     await this.page.waitForLoadState('domcontentloaded');
 
     // Disable animations for stable testing

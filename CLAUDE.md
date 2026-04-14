@@ -51,13 +51,14 @@ Always write unit tests first. E2E tests are expensive (slow, flaky, hard to deb
 
 **E2E tests:**
 - Slow (5-10s per test)
-- Only 2-3 critical user flows
+- Keep minimal - only critical user flows
 - Verify integration only
 - Supplement unit tests, don't replace them
+- Avoid testing implementation details (use unit tests instead)
 
 **Every game needs:**
 - Unit tests (vitest + jsdom)
-- E2E tests (Playwright, minimal - 2-3 critical flows only)
+- E2E tests (Playwright, minimal - critical flows only)
 - CI job in `.github/workflows/ci.yml`
 
 **Current coverage:**

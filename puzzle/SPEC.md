@@ -2,11 +2,11 @@
 
 ## Project overview
 
-Web **jigsaw** puzzle for toddlers (3+): drag pieces from a **tray** onto a **fixed board**; each piece only **snaps** into its **correct** slot. Wrong drops return to the tray.
+Web **jigsaw** for toddlers (3+): drag pieces from **tray** to **fixed board**; piece **snaps** only into **correct** slot. Wrong drops return tray.
 
 **Platform**: Static single-page app (Vite build → one `dist/index.html`).  
 **UI language**: French.  
-**Piece shapes**: **Voronoi cells** with **BSC-style “tongue” edges** along internal cuts (not a rectangular grid of classic tabs).
+**Piece shapes**: **Voronoi cells** with **BSC-style "tongue" edges** on internal cuts (not rectangular grid).
 
 ## Repository layout
 
@@ -38,23 +38,23 @@ toddler-puzzle/
 
 ### DOM essentials
 
-- `#puzzle-grid` — board area; slots are absolutely positioned from Voronoi bounds per piece.
+- `#puzzle-grid` — board area; slots positioned absolute from Voronoi bounds per piece.
 - `#piece-tray` (`data-testid="piece-tray"`) — shuffled pieces.
 - `#hint-overlay` — full-image overlay (toggle with **Aide**).
-- `#win-overlay` — “Bravo !” after solve.
+- `#win-overlay` — "Bravo !" after solve.
 - `svg#svg-defs` — `<clipPath id="piece-voronoi-{i}">` for each piece `i` (`clipPathUnits="objectBoundingBox"`).
 - `#theme-select` — clair / sombre / système (`localStorage` key `puzzle-theme`).
-- `#tongue-panel` — collapsible sliders tuning tongue parameters (dev/parent tuning); **Nouvelle graine** changes Voronoi sites while keeping layout seed logic in `main.js`.
+- `#tongue-panel` — collapsible sliders tune tongue params (dev/parent); **Nouvelle graine** changes Voronoi sites, keeps layout seed logic in `main.js`.
 
 ### Game state (`puzzle-logic.js`)
 
-Same invariants as before: `board[i] === i` when solved; only `pieceId === slotIndex` allowed for placement; tray holds unplaced ids.
+Same invariants: `board[i] === i` when solved; only `pieceId === slotIndex` allowed placement; tray holds unplaced ids.
 
 ### Piece geometry (`voronoi-jigsaw.js` + `bsc-tongue.js`)
 
-1. **Sites**: pseudo-random points in the unit square (seeded RNG via `createSeededRandom(voronoiLayoutSeed)` in `main.js`).
-2. **Delaunay / Voronoi**: `d3-delaunay` builds the diagram; each cell becomes one puzzle piece.
-3. **Edges**: Internal Voronoi edges are replaced by interlocking tongue curves (`sampleBscTongueEdge`), using parameters from `tongue-params.js`. Outer boundary edges stay straight (see `isOuterBoundaryEdge`).
+1. **Sites**: pseudo-random points in unit square (seeded RNG via `createSeededRandom(voronoiLayoutSeed)` in `main.js`).
+2. **Delaunay / Voronoi**: `d3-delaunay` builds diagram; each cell = one puzzle piece.
+3. **Edges**: Internal Voronoi edges replaced by interlocking tongue curves (`sampleBscTongueEdge`), use params from `tongue-params.js`. Outer boundary edges stay straight (see `isOuterBoundaryEdge`).
 4. **Output**: Per piece, normalized SVG path `pathDNormalized` for `clip-path: url(#piece-voronoi-{id})` and tray outlines.
 
 Reference idea: [Mathematica SE — Voronoi jigsaw cuts](https://mathematica.stackexchange.com/questions/6706/how-can-i-calculate-a-jigsaw-puzzle-cut-path).
@@ -67,18 +67,18 @@ Reference idea: [Mathematica SE — Voronoi jigsaw cuts](https://mathematica.sta
 
 ### Hints
 
-- **Aide**: toggles `#hint-overlay` visibility (opacity over the board).
-- **Delayed slot highlight**: `startHintTimer` / `board-slot--hint` after `HINT_DELAY_MS` (5s) exists in code; starting timers for all tray pieces (`updateHintsForTray`) is **not** called from `renderTray` (commented for debugging). Parents rely primarily on the overlay.
+- **Aide**: toggles `#hint-overlay` visibility (opacity over board).
+- **Delayed slot highlight**: `startHintTimer` / `board-slot--hint` after `HINT_DELAY_MS` (5s) exist in code; start timers for all tray pieces (`updateHintsForTray`) **not** called from `renderTray` (commented for debug). Parents rely on overlay.
 
 ### Win flow
 
-- `onWin()`: Web Audio three-tone “tada”, then `#win-overlay` visible.  
-- No confetti layer in the current codebase (older docs referred to CSS confetti; removed).
+- `onWin()`: Web Audio three-tone "tada", then `#win-overlay` visible.  
+- No confetti layer in current codebase (older docs had CSS confetti; removed).
 
 ### Test hook
 
 `window.__PUZZLE_TEST__.solve` — places every piece correctly (used by Playwright).  
-`cheatSolve` in `main.js` drives the same path.
+`cheatSolve` in `main.js` drives same path.
 
 ## Code map
 
@@ -100,7 +100,7 @@ Reference idea: [Mathematica SE — Voronoi jigsaw cuts](https://mathematica.sta
 | `npm run test:e2e` | Playwright WebKit; starts `npm run dev` unless URL reused |
 
 First-time E2E: `npx playwright install` (or `npx playwright install webkit`).  
-If port `5173` is busy, stop the other process or rely on `reuseExistingServer` when not in CI.
+If port `5173` busy, stop other process or use `reuseExistingServer` when not in CI.
 
 ## Automated test coverage
 
@@ -111,11 +111,11 @@ If port `5173` is busy, stop the other process or rely on `reuseExistingServer` 
 
 ### New difficulty row in `LEVELS` (`main.js`)
 
-Add `{ name, cols, rows }` and a matching `<option>` in `index.html` if the selector is hardcoded there.
+Add `{ name, cols, rows }` and matching `<option>` in `index.html` if selector hardcoded there.
 
 ### Stronger / weaker tongues
 
-Adjust `DEFAULT_TONGUE_PARAMS` in `tongue-params.js` or use the **Réglages des langues** panel + **Copier JSON**.
+Adjust `DEFAULT_TONGUE_PARAMS` in `tongue-params.js` or use **Réglages des langues** panel + **Copier JSON**.
 
 ### New Voronoi layout only (same cell count)
 
@@ -128,7 +128,7 @@ Recent browsers with **CSS `clip-path: url(#id)`**, **Canvas**, **Pointer events
 ## Known limitations
 
 - No screen-reader-first UX; toddler-focused visuals.
-- Unsplash default image may fail CORS in some environments; upload stays reliable.
+- Unsplash default image may fail CORS in some envs; upload stays reliable.
 - Very large images may slow canvas encoding.
 
 ## File manifest (source)
@@ -139,9 +139,9 @@ Recent browsers with **CSS `clip-path: url(#id)`**, **Canvas**, **Pointer events
 
 ## Quick start (contributors)
 
-1. `npm install && npm run dev` — open the printed URL.
+1. `npm install && npm run dev` — open printed URL.
 2. `npm test` and `npm run test:e2e` before shipping.
 3. `npm run build` → deploy `dist/index.html`.
-4. In the browser: `window.__PUZZLE_TEST__?.solve()` to verify win UI.
+4. In browser: `window.__PUZZLE_TEST__?.solve()` verify win UI.
 
-**Last reviewed**: 2026-04-04 (aligned with Voronoi implementation and current UI).
+**Last reviewed**: 2026-04-04 (aligned with Voronoi impl and current UI).

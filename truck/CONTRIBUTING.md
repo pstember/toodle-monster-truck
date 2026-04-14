@@ -1,6 +1,6 @@
 # Contributing to Toddler Monster Truck Match
 
-Thank you for your interest in contributing! This document provides guidelines for contributing to the project.
+Guidelines for contributing to project.
 
 ## Getting Started
 
@@ -11,7 +11,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 ### Local Setup
 
-1. Clone the repository:
+1. Clone repository:
 ```bash
 git clone https://github.com/yourusername/toddler-truck-game.git
 cd toddler-truck-game
@@ -32,7 +32,7 @@ npx serve .
 ## Code Style Guide
 
 ### Immutability (CRITICAL)
-Always create new objects, never mutate existing ones:
+Create new objects, never mutate existing:
 
 ```javascript
 // ❌ Wrong: mutates existing object
@@ -53,10 +53,10 @@ const updatedItems = [...items, newItem];
 ### File Size Limits
 - **Functions**: Maximum 50 lines
 - **Files**: Target 200-400 lines, maximum 800 lines
-- If a file exceeds limits, extract utilities or split by domain
+- File exceeds limits: extract utilities or split by domain
 
 ### Error Handling
-- Always add try-catch blocks around DOM operations
+- Add try-catch blocks around DOM operations
 - Add null checks before accessing elements
 - Validate touch events before accessing properties
 
@@ -77,7 +77,7 @@ function generateLevel(level) {
 ```
 
 ### No Hardcoded Values
-Extract all magic numbers to `src/constants.js`:
+Extract magic numbers to `src/constants.js`:
 
 ```javascript
 // ❌ Wrong
@@ -118,16 +118,16 @@ npm run test:coverage
 ```
 
 ### Writing Tests
-- Follow existing test structure in `tests/` directory
+- Follow test structure in `tests/` directory
 - Use descriptive test names: `test('should bounce back when wrong item dragged to slot', ...)`
-- Test both success and failure cases
+- Test success and failure cases
 - Use test helpers from `tests/helpers/game-page.js`
 
 ### Test-Driven Development (TDD)
 1. Write test first (RED)
-2. Run test - it should FAIL
+2. Run test - should FAIL
 3. Write minimal implementation (GREEN)
-4. Run test - it should PASS
+4. Run test - should PASS
 5. Refactor (IMPROVE)
 6. Verify coverage >= 80%
 
@@ -182,7 +182,7 @@ test: add missing tests for visual effects functions
 ```
 
 ### PR Title
-Use the same format as commit messages:
+Same format as commit messages:
 - `feat: add bubble wrap mini-game`
 - `fix: memory leak in sticker shop`
 
@@ -206,7 +206,7 @@ Brief description of changes
 
 ## Code Review Standards
 
-All PRs must pass code review before merging:
+All PRs must pass code review before merge:
 - No CRITICAL or HIGH severity issues
 - Code quality checklist passed
 - Tests adequate and passing
@@ -215,7 +215,7 @@ All PRs must pass code review before merging:
 ## Development Workflow
 
 1. **Plan First**
-   - For complex features, create an issue first
+   - For complex features, create issue first
    - Discuss approach before implementing
 
 2. **TDD Approach**
@@ -238,4 +238,4 @@ All PRs must pass code review before merging:
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the project's ISC License.
+By contributing, you agree contributions will be licensed under project's ISC License.

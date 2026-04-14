@@ -2,12 +2,12 @@
 
 ## Design Direction: "Playful Organic Toy"
 
-A cohesive, joyful design system optimized for toddlers aged 2-5 years.
+Design system for toddlers 2-5 years.
 
 ### Core Principles
 
 1. **Soft & Approachable** - Rounded shapes, gentle depth, no harsh edges
-2. **High Contrast** - Colors and text clearly visible for developing eyes
+2. **High Contrast** - Colors and text visible for developing eyes
 3. **Consistent Motion** - Gentle bounces and floats, never jarring
 4. **Accessible** - Large touch targets, clear focus states, screen reader friendly
 
@@ -17,7 +17,7 @@ A cohesive, joyful design system optimized for toddlers aged 2-5 years.
 
 **Font Family:** `Fredoka` (Google Fonts)
 - Modern, rounded, toddler-friendly
-- Excellent readability at all sizes
+- Excellent readability all sizes
 - Replaces outdated Comic Sans MS
 
 **Font Weights:**
@@ -56,7 +56,7 @@ A cohesive, joyful design system optimized for toddlers aged 2-5 years.
 
 ## Spacing System
 
-Following an 8px grid for consistency:
+8px grid for consistency:
 
 ```
 --space-xs:  8px   (tight spacing)
@@ -71,7 +71,7 @@ Following an 8px grid for consistency:
 
 ## Border Radius
 
-Consistently rounded for toddler-friendly softness:
+Rounded for toddler-friendly softness:
 
 ```
 --radius-sm:  12px  (small elements)
@@ -84,7 +84,7 @@ Consistently rounded for toddler-friendly softness:
 
 ## Shadow System - "Toy Depth"
 
-Creates playful, tactile depth without harsh drops:
+Playful, tactile depth without harsh drops:
 
 ```
 --shadow-toy:      0 8px 0 rgba(30, 58, 95, 0.12)   (standard depth)
@@ -243,7 +243,7 @@ html[data-theme="dark"] .element {
 ### 4. Accessibility
 - Always include `aria-label` on interactive elements
 - Use `.sr-only` for screen-reader-only text
-- Minimum 48×48px touch targets
+- Min 48×48px touch targets
 - 3px focus outlines with high contrast
 
 ---
@@ -276,7 +276,7 @@ Before shipping any game:
 - [ ] Dark theme fully supported
 - [ ] All text has proper contrast (WCAG AA)
 - [ ] Touch targets ≥ 48×48px
-- [ ] Animations are smooth (60fps)
+- [ ] Animations smooth (60fps)
 - [ ] Theme switcher works correctly
 - [ ] No Comic Sans MS references
 

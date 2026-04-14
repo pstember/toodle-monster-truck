@@ -1,34 +1,34 @@
 # 🚙 Toddler Monster Truck Match
 
-A colorful, forgiving drag-and-drop matching game designed specifically for 3-year-olds.
+Colorful drag-drop matching game for 3-year-olds.
 
 ## Features
 
 - **Progressive Difficulty:** Shapes and colors unlock gradually across 4 tiers
 - **Positive Reinforcement:** No timers, no fail states, only celebrations
-- **Touch-Friendly:** Massive touch targets optimized for tiny fingers
+- **Touch-Friendly:** Massive touch targets for tiny fingers
 - **Intermission Mini-Games:** Fun breaks every 3 levels (Mud Wash, Sticker Shop, Big Jump)
-- **Zero Dependencies:** Pure HTML/CSS/JavaScript, no external images needed
+- **Zero Dependencies:** Pure HTML/CSS/JavaScript, no external images
 - **Theme & Language Sync:** Preferences shared with hub and puzzle via `../shared/` utilities
 
 ## Quick Start
 
-This game uses ES modules; serve the `truck/` folder over HTTP (do not open `index.html` as `file://`).
+Game uses ES modules; serve `truck/` folder over HTTP (do not open `index.html` as `file://`).
 
 ```bash
 cd truck && npx serve . -l 3000
 ```
 
-Then open the URL shown (e.g. `http://localhost:3000`). Works best on mobile devices in landscape mode.
+Open URL shown (e.g. `http://localhost:3000`). Works best on mobile in landscape.
 
-In the monorepo, you can also run `npx serve .` from the repository root and open the hub, then choose **Monster Truck Match**.
+In monorepo, run `npx serve .` from repo root and open hub, choose **Monster Truck Match**.
 
 ## Tech Stack
 
 - Vanilla JavaScript
 - CSS Flexbox/Grid
 - HTML5 Canvas (for mini-games)
-- CSS Shapes (no image dependencies)
+- CSS Shapes (no image deps)
 
 ## Game Structure
 
@@ -46,13 +46,13 @@ In the monorepo, you can also run `npx serve .` from the repository root and ope
 
 ## Development
 
-For detailed architecture documentation, see `ARCHITECTURE.md`.
-For testing guidelines, see `TESTING.md`.
-For contribution guidelines, see `CONTRIBUTING.md`.
+Detailed architecture in `ARCHITECTURE.md`.
+Testing guidelines in `TESTING.md`.
+Contribution guidelines in `CONTRIBUTING.md`.
 
 ### Testing Mini-Games
 
-You can test specific mini-games directly using URL parameters:
+Test specific mini-games using URL parameters:
 
 ```
 # Mud Wash Game
@@ -72,11 +72,11 @@ or ?minigame=jump
 - Local: `http://localhost:3000?minigame=mud-wash`
 - GitHub Pages: `https://pstember.github.io/toodler-games/truck/?minigame=jump`
 
-This is useful for testing individual mini-games without playing through 3 levels.
+Useful for testing mini-games without playing through 3 levels.
 
 ## Adding Sounds
 
-Replace the placeholder `playSound()` function in `script.js` with:
+Replace placeholder `playSound()` function in `script.js` with:
 
 ```javascript
 function playSound(soundName) {
@@ -84,7 +84,7 @@ function playSound(soundName) {
 }
 ```
 
-Then add your `.mp3` files to a `sounds/` directory:
+Add `.mp3` files to `sounds/` directory:
 - `success.mp3`
 - `tryAgain.mp3`
 - `levelComplete.mp3`

@@ -2,14 +2,14 @@
 
 ## Overview
 
-Toddler Monster Truck Match is a browser-based drag-and-drop matching game built with vanilla JavaScript, HTML5, and CSS3. The architecture prioritizes simplicity, performance, and accessibility for young children.
+Browser drag-drop match game. Vanilla JS, HTML5, CSS3. Focus: simplicity, performance, accessibility for toddlers.
 
 ## Core Principles
 
-1. **Zero Dependencies**: No external libraries or frameworks
-2. **Progressive Enhancement**: Works on all modern browsers
-3. **Touch-First Design**: Optimized for mobile devices
-4. **Immutable State**: All state changes create new objects
+1. **Zero Dependencies**: No external libs or frameworks
+2. **Progressive Enhancement**: Work all modern browsers
+3. **Touch-First Design**: Optimized for mobile
+4. **Immutable State**: State changes create new objects
 5. **Modular Code**: Small, focused files and functions
 
 ## File Structure
@@ -42,7 +42,7 @@ toddler-truck-game/
 
 ## Progressive Difficulty System
 
-The game uses a tier-based progression system that gradually introduces complexity:
+Game use tier-based progression. Gradual complexity increase.
 
 ### Tier Algorithm
 
@@ -86,13 +86,13 @@ function getSlotCount(tier) {
 
 ### Architecture
 
-The drag system uses a hybrid approach combining mouse and touch events with `requestAnimationFrame` for smooth performance.
+Drag system use hybrid approach. Mouse and touch events with `requestAnimationFrame` for smooth performance.
 
 ### Key Components
 
-1. **Event Listeners**: Attached to draggable items
-2. **RAF Loop**: Updates item position during drag
-3. **Collision Detection**: Cached slot rectangles for fast proximity checks
+1. **Event Listeners**: Attach to draggable items
+2. **RAF Loop**: Update item position during drag
+3. **Collision Detection**: Cache slot rectangles for fast proximity check
 4. **Visual Feedback**: Hover states and animations
 
 ### State Management
@@ -130,10 +130,10 @@ const gameState = {
 
 ### Performance Optimizations
 
-1. **RAF Throttling**: Position updates synchronized with browser render cycle
-2. **Rect Caching**: Slot positions cached and only recalculated when needed
-3. **Hover State Optimization**: Only updates DOM when hover state changes
-4. **Transform-based Movement**: Uses CSS `translate` for GPU acceleration
+1. **RAF Throttling**: Position updates sync with browser render cycle
+2. **Rect Caching**: Slot positions cached, recalc only when needed
+3. **Hover State Optimization**: Update DOM only when hover state change
+4. **Transform-based Movement**: Use CSS `translate` for GPU acceleration
 
 ## Match Validation
 
@@ -157,13 +157,13 @@ function validateMatch(item, slot) {
 
 ### Match Feedback
 
-- **Correct Match**: Success sound, confetti animation, item snaps to slot
-- **Incorrect Match**: Try-again sound, item bounces back with animation
+- **Correct Match**: Success sound, confetti animation, snap to slot
+- **Incorrect Match**: Try-again sound, bounce back with animation
 - **Level Complete**: Celebration overlay, fireworks, tier advancement check
 
 ## Intermission Mini-Games
 
-Every 3 levels, players get a break with a mini-game. This prevents fatigue and adds variety.
+Every 3 levels, players get break with mini-game. Prevent fatigue, add variety.
 
 ### Mini-Game Rotation
 
@@ -179,30 +179,30 @@ function getNextMinigame(intermissionCount) {
 ### Mini-Game Descriptions
 
 1. **Mud Wash** (Canvas-based):
-   - Player swipes to clean mud off truck
-   - Uses HTML5 Canvas with alpha channel manipulation
-   - Progress tracked by transparent pixel percentage
+   - Player swipe to clean mud off truck
+   - Use HTML5 Canvas with alpha channel manipulation
+   - Progress track by transparent pixel percentage
 
 2. **Sticker Shop** (Drag-based):
-   - Player drags stickers onto truck
-   - Free-form placement with no validation
+   - Player drag stickers onto truck
+   - Free-form placement, no validation
    - Click DONE when satisfied
 
 3. **Big Jump** (Animation):
    - Click JUMP button to trigger animation
    - CSS keyframe animation with arc trajectory
-   - Auto-completes after animation
+   - Auto-complete after animation
 
 4. **Bubble Wrap** (Click-based):
    - Grid of bubbles to pop
    - Responsive grid sizing (mobile vs desktop)
-   - Completes when all bubbles popped
+   - Complete when all bubbles popped
 
 ## State Management
 
 ### Immutable State Pattern
 
-All state changes create new objects rather than mutating existing ones:
+All state changes create new objects. No mutate existing.
 
 ```javascript
 // ❌ Bad: Mutation
@@ -234,7 +234,7 @@ const gameState = {
 
 ### Confetti System
 
-Creates 50 animated div elements with random:
+Create 50 animated div elements with random:
 - Colors (from palette)
 - Sizes (10-20px)
 - Starting positions (spread across width)
@@ -245,11 +245,11 @@ Auto-cleanup after 3 seconds.
 
 ### Fireworks System
 
-Creates 30 circular div elements with:
+Create 30 circular div elements with:
 - Random colors
 - Radial expansion animation
 - Opacity fade-out
-- Positioned at random screen locations
+- Position at random screen locations
 
 Auto-cleanup after 2 seconds.
 
@@ -259,7 +259,7 @@ Full-screen overlay with:
 - "🎉 Amazing! 🎉" message
 - Gradient background
 - Fade-in/fade-out animation
-- Auto-dismisses after 2 seconds
+- Auto-dismiss after 2 seconds
 
 ## Internationalization (i18n)
 
@@ -285,27 +285,27 @@ const translations = {
 
 ### Language Selection
 
-- Persisted in localStorage
-- Applied on page load
-- Updates all elements with `data-i18n` attribute
+- Persist in localStorage
+- Apply on page load
+- Update all elements with `data-i18n` attribute
 
 ### Adding New Languages
 
 1. Add language code to `translations` object
 2. Translate all keys
-3. Add language selector option (if UI exists)
+3. Add language selector option (if UI exist)
 
 ## Performance Considerations
 
 ### Canvas Optimization (Mud Wash)
 
-- **Problem**: `getImageData()` is expensive (100+ calls per swipe)
+- **Problem**: `getImageData()` expensive (100+ calls per swipe)
 - **Solution**: Throttle to max 10fps, cache imageData between checks
 
 ### Memory Management
 
 - **Event Listeners**: Store references, clean up on game end
-- **DOM Cleanup**: Remove elements before creating new ones
+- **DOM Cleanup**: Remove elements before create new
 - **RAF Cancellation**: Cancel animation frames when not needed
 
 ### Mobile Optimizations
@@ -390,7 +390,7 @@ All features use widely-supported web standards:
 
 ### Test Helpers
 
-`GamePage` class provides common test utilities:
+`GamePage` class provide common test utilities:
 - Navigation
 - Element selection
 - Drag operations
@@ -421,12 +421,12 @@ All features use widely-supported web standards:
 - **Learning Goal**: Educational project demonstrating fundamentals
 - **Performance**: No framework overhead
 - **Simplicity**: Easy to understand and modify
-- **Portability**: Works anywhere without build step
+- **Portability**: Work anywhere without build step
 
 ### Why No Image Files for Shapes?
 
 - **Performance**: CSS shapes faster than images
-- **Scalability**: Vector-based, scales perfectly
+- **Scalability**: Vector-based, scale perfectly
 - **Size**: Smaller payload, faster load
 - **Flexibility**: Easy color changes
 
@@ -438,7 +438,7 @@ All features use widely-supported web standards:
 
 ### Why RAF for Drag System?
 
-- **Performance**: Syncs with browser render cycle
+- **Performance**: Sync with browser render cycle
 - **Smoothness**: 60fps on all devices
 - **Battery**: More efficient than timers
 

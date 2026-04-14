@@ -76,3 +76,21 @@ jobs:
       - run: npm test
         env:
           CI: true
+
+  rhythm:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rhythm
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: rhythm/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npm test
+        env:
+          CI: true

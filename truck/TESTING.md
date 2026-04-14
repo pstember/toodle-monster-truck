@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project uses [Playwright](https://playwright.dev/) for all testing needs - unit, integration, and end-to-end tests. The test suite ensures 80%+ coverage and maintains code quality.
+Project use [Playwright](https://playwright.dev/) for all testing - unit, integration, E2E. Test suite ensure 80%+ coverage, maintain code quality.
 
 ## Test Structure
 
@@ -96,7 +96,7 @@ npm run coverage:view
 open coverage/index.html
 ```
 
-Coverage reports are generated in the `coverage/` directory using c8 (V8-based coverage).
+Coverage reports generate in `coverage/` directory using c8 (V8-based coverage).
 
 ### Current Coverage Status
 
@@ -117,7 +117,7 @@ As of last update:
 
 ### Test Naming Convention
 
-Use descriptive names that explain the expected behavior:
+Use descriptive names that explain expected behavior:
 
 ```javascript
 // ✅ Good
@@ -152,7 +152,7 @@ test('should match correct shape and color', async ({ page }) => {
 
 ### Using Test Helpers
 
-The `GamePage` class provides common utilities:
+`GamePage` class provide common utilities:
 
 ```javascript
 import { GamePage } from './helpers/game-page.js';
@@ -202,7 +202,7 @@ class GamePage {
 
 ### Purpose
 
-Test pure functions in isolation without DOM dependencies.
+Test pure functions in isolation. No DOM dependencies.
 
 ### Example
 
@@ -228,7 +228,7 @@ test('validates matching shape and color', () => {
 
 ### Purpose
 
-Test component interactions and DOM manipulation.
+Test component interactions, DOM manipulation.
 
 ### Example
 
@@ -256,7 +256,7 @@ test('generates correct number of slots for tier 1', async ({ page }) => {
 
 ### Purpose
 
-Test complete user workflows from start to finish.
+Test complete user workflows start to finish.
 
 ### Example
 
@@ -427,7 +427,7 @@ await button2.click();
 npm run test:headed
 ```
 
-Shows browser window during test execution.
+Show browser window during test execution.
 
 ### Using Debug Mode
 
@@ -435,7 +435,7 @@ Shows browser window during test execution.
 npx playwright test --debug
 ```
 
-Opens Playwright Inspector for step-by-step debugging.
+Open Playwright Inspector for step-by-step debugging.
 
 ### Using Console Logs
 
@@ -476,7 +476,7 @@ test('screenshot on failure', async ({ page }) => {
 
 ### Parallel Execution
 
-Playwright runs tests in parallel by default:
+Playwright run tests in parallel by default:
 
 ```javascript
 // playwright.config.js
@@ -488,7 +488,7 @@ export default {
 
 ### Test Isolation
 
-Each test gets a fresh browser context:
+Each test get fresh browser context:
 - No shared state between tests
 - Independent localStorage/cookies
 - Clean DOM for each test
@@ -522,7 +522,7 @@ jobs:
 
 ### Viewing Reports
 
-After running `npm run test:coverage`:
+After run `npm run test:coverage`:
 
 ```bash
 # Open HTML report
@@ -564,7 +564,7 @@ open playwright-report/index.html
 
 ### Skipping Tests
 
-Use sparingly and document why:
+Use sparingly. Document why:
 
 ```javascript
 test.skip('flaky test - needs investigation', async ({ page }) => {

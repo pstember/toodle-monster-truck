@@ -1,6 +1,6 @@
 # Contributing to Photo Puzzle
 
-Thank you for your interest in contributing! This document provides guidelines for contributing to the project.
+Thanks for contributing! Guidelines below.
 
 ## Getting Started
 
@@ -11,18 +11,18 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 ### Local Setup
 
-1. Clone the repository:
+1. Clone repo:
 ```bash
 git clone https://github.com/yourusername/toddler-games.git
 cd toddler-games/puzzle
 ```
 
-2. Install dependencies:
+2. Install deps:
 ```bash
 npm install
 ```
 
-3. Run development server:
+3. Run dev server:
 ```bash
 npm run dev
 ```
@@ -30,7 +30,7 @@ npm run dev
 ## Code Style Guide
 
 ### Immutability (CRITICAL)
-Always create new objects, never mutate existing ones:
+Create new objects, never mutate:
 
 ```javascript
 // ❌ Wrong: mutates existing object
@@ -54,12 +54,12 @@ const updatedPieces = pieces.filter((_, i) => i !== index);
 ### File Size Limits
 - **Functions**: Maximum 50 lines
 - **Files**: Target 200-400 lines, maximum 800 lines
-- If a file exceeds limits, extract utilities or split by domain
+- File exceeds limits → extract utilities or split by domain
 
 ### Error Handling
-- Always add try-catch blocks around DOM operations
-- Add null checks before accessing elements
-- Validate image loading and Canvas operations
+- Add try-catch for DOM ops
+- Null check before element access
+- Validate image load and Canvas ops
 
 ```javascript
 // ✅ Good error handling
@@ -81,7 +81,7 @@ async function loadImage(url) {
 ```
 
 ### No Hardcoded Values
-Extract all magic numbers to constants:
+Extract magic numbers to constants:
 
 ```javascript
 // ❌ Wrong
@@ -121,17 +121,17 @@ npm run test:coverage
 ```
 
 ### Writing Tests
-- Unit tests go in `src/*.test.js` files (e.g., `puzzle-logic.test.js`)
-- E2E tests go in `e2e/` directory
-- Use descriptive test names: `test('should place piece in correct slot', ...)`
-- Test both success and failure cases
-- For geometry tests, verify mathematical correctness
+- Unit tests in `src/*.test.js` files (e.g., `puzzle-logic.test.js`)
+- E2E tests in `e2e/` directory
+- Descriptive test names: `test('should place piece in correct slot', ...)`
+- Test success and failure cases
+- Geometry tests: verify math correctness
 
 ### Test-Driven Development (TDD)
 1. Write test first (RED)
-2. Run test - it should FAIL
+2. Run test - should FAIL
 3. Write minimal implementation (GREEN)
-4. Run test - it should PASS
+4. Run test - should PASS
 5. Refactor (IMPROVE)
 6. Verify coverage >= 80%
 
@@ -187,7 +187,7 @@ test: add tests for NURBS tongue curve generation
 ```
 
 ### PR Title
-Use the same format as commit messages:
+Same format as commits:
 - `feat: add image upload functionality`
 - `fix: hint timer not starting correctly`
 
@@ -211,7 +211,7 @@ Brief description of changes
 
 ## Code Review Standards
 
-All PRs must pass code review before merging:
+PRs must pass review before merge:
 - No CRITICAL or HIGH severity issues
 - Code quality checklist passed
 - Tests adequate and passing
@@ -220,17 +220,17 @@ All PRs must pass code review before merging:
 ## Development Workflow
 
 1. **Plan First**
-   - For complex features, create an issue first
-   - Discuss approach before implementing
+   - Complex features → create issue first
+   - Discuss before implementing
 
 2. **TDD Approach**
    - Write tests before implementation
-   - Ensure tests fail, then implement
+   - Tests fail → implement
    - Refactor with test safety net
 
 3. **Code Review**
-   - Address all CRITICAL/HIGH issues
-   - Fix MEDIUM issues when possible
+   - Address CRITICAL/HIGH issues
+   - Fix MEDIUM when possible
 
 4. **Commit & Push**
    - Follow commit message format
@@ -243,4 +243,4 @@ All PRs must pass code review before merging:
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the project's ISC License.
+Contributing = agree to ISC License.

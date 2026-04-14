@@ -1,6 +1,6 @@
 # Project Hand-off Checklist
 
-This document summarizes the audit, cleanup, and improvements made to prepare the Toddler Games project for hand-off.
+Document summarizes audit, cleanup, improvements for Toddler Games hand-off.
 
 ## ✅ Completed Work
 
@@ -66,7 +66,7 @@ This document summarizes the audit, cleanup, and improvements made to prepare th
 - [ ] Theme changes sync back to Hub
 - [ ] Language changes sync back to Hub
 - [ ] Upload custom photo works
-- [ ] Complete a 3×3 puzzle successfully
+- [ ] Complete 3×3 puzzle successfully
 - [ ] Navigate back to Hub via "More games" link
 - [ ] Victory celebration appears
 
@@ -113,13 +113,13 @@ All three games share preferences via localStorage:
 - Light mode: `#1e3a5f`
 - Dark mode: `#0f172a`
 
-These are defined in `shared/theme.js` as `CANONICAL_THEME_COLORS`.
+Defined in `shared/theme.js` as `CANONICAL_THEME_COLORS`.
 
 ## 🚀 Deployment
 
 ### GitHub Pages
 
-The project is configured to deploy via GitHub Actions:
+Project configured to deploy via GitHub Actions:
 
 1. `.github/workflows/deploy.yml` runs on push to `main`
 2. Builds puzzle with `VITE_BASE=/toodler-games/puzzle/`
@@ -127,7 +127,7 @@ The project is configured to deploy via GitHub Actions:
 4. Assembles site: hub + truck/ + puzzle/dist/
 5. Deploys to GitHub Pages
 
-**Important:** Pages must be set to deploy from **GitHub Actions**, not "Deploy from a branch".
+**Important:** Pages must deploy from **GitHub Actions**, not "Deploy from branch".
 
 ### Local Development
 
@@ -164,11 +164,11 @@ npm run build  # Production build
 
 **Status:** ✅ **Ready for Hand-off**
 
-All critical and medium-priority issues identified in the audit have been resolved:
-- Code is clean and consistent
+All critical and medium-priority issues from audit resolved:
+- Code clean and consistent
 - No stale debugging code
 - No unused assets
-- Documentation is complete and accurate
+- Documentation complete and accurate
 - Theme/language synchronization works across all games
 - Shared utilities eliminate duplication
 - All automated tests passing
@@ -184,7 +184,7 @@ All critical and medium-priority issues identified in the audit have been resolv
 
 ### Adding a New Game
 
-To add a fourth game to the monorepo:
+To add fourth game to monorepo:
 
 1. Create new directory (e.g., `memory/`)
 2. Import shared utilities:
@@ -192,7 +192,7 @@ To add a fourth game to the monorepo:
    import { initThemeManagement, CANONICAL_THEME_COLORS } from '../shared/theme.js';
    import { resolveStoredLanguage, saveLanguagePreference } from '../shared/i18n.js';
    ```
-3. Initialize in your entry point:
+3. Initialize in entry point:
    ```javascript
    initThemeManagement(CANONICAL_THEME_COLORS);
    ```
@@ -201,7 +201,7 @@ To add a fourth game to the monorepo:
 
 ### Changing Theme Colors
 
-To change the canonical theme colors for all games:
+To change canonical theme colors for all games:
 
 1. Edit `shared/theme.js`:
    ```javascript
@@ -211,7 +211,7 @@ To change the canonical theme colors for all games:
    };
    ```
 2. Update hub inline script in `index.html` (line 23)
-3. All games will use new colors automatically
+3. All games use new colors automatically
 
 ## 📞 Support
 
@@ -230,4 +230,4 @@ For issues or questions:
 - `bdbc916` - feat: extract shared theme/i18n utilities and align theme colors
 - `3ccd9f1` - feat(puzzle): re-enable hint timers
 
-All changes are on the `main` branch and ready for deployment.
+All changes on `main` branch, ready for deployment.

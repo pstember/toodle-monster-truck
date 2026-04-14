@@ -1,10 +1,10 @@
 # Shared Utilities
 
-Common theme and i18n utilities used across all Toddler Games projects.
+Common theme and i18n utils across Toddler Games projects.
 
 ## Files
 
-- **theme.js** - Theme management (light/dark/system)
+- **theme.js** - Theme mgmt (light/dark/system)
 - **i18n.js** - Language resolution (en/fr/es)
 
 ## Usage
@@ -37,17 +37,17 @@ saveLanguagePreference('fr');
 
 ## Theme Colors
 
-Canonical colors used across all games:
+Canonical colors across games:
 - Light mode: `#1e3a5f`
 - Dark mode: `#0f172a`
 
 ## Architecture
 
-The shared utilities ensure consistency across the hub and all games:
+Shared utils ensure consistency across hub and games:
 
-1. **Hub** (index.html) - Uses inline script for FOUC prevention, but same logic
-2. **Monster Truck Match** (truck/) - Imports shared utilities as ES modules
-3. **Photo Puzzle** (puzzle/) - Imports shared utilities as ES modules
-4. **Tap the Colors** (rhythm/) - Imports shared utilities as ES modules
+1. **Hub** (index.html) - Inline script for FOUC prevention, same logic
+2. **Monster Truck Match** (truck/) - Imports shared utils as ES modules
+3. **Photo Puzzle** (puzzle/) - Imports shared utils as ES modules
+4. **Tap the Colors** (rhythm/) - Imports shared utils as ES modules
 
-All games synchronize theme and language preferences via localStorage using the same canonical keys.
+Games sync theme and language via localStorage using same canonical keys.

@@ -14,8 +14,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
     permissions:
       contents: read
     steps:
@@ -26,6 +24,22 @@ jobs:
           node-version: '24'
           cache: npm
           cache-dependency-path: puzzle/package-lock.json
+
+      - name: Configure npm to use public registry
+        working-directory: puzzle
+        run: |
+          # Remove any .npmrc files
+          rm -f ~/.npmrc
+          rm -f .npmrc
+
+          # Rewrite package-lock.json to use public npm registry instead of Artifactory
+          if [ -f package-lock.json ]; then
+            echo "Rewriting package-lock.json URLs from Artifactory to public registry..."
+            sed -i 's|https://repox.jfrog.io/artifactory/api/npm/npm/|https://registry.npmjs.org/|g' package-lock.json
+            echo "✅ Rewritten $(grep -c 'registry.npmjs.org' package-lock.json) URLs"
+          fi
+
+          echo "✅ npm configured to use public registry"
 
       - name: Install and build puzzle
         working-directory: puzzle

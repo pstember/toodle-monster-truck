@@ -10,13 +10,44 @@ import {
 import { gameState } from '../../src/state.js';
 import { CONFETTI_COUNT, FIREWORK_COUNT } from '../../src/constants.js';
 
+// Mock dynamic imports to prevent side effects
+vi.mock('../../src/minigames/mud-wash.js', () => ({
+  startMudWashGame: vi.fn(),
+  cleanupMudWashListeners: vi.fn()
+}));
+
+vi.mock('../../src/minigames/sticker-shop.js', () => ({
+  startStickerShopGame: vi.fn(),
+  cleanupStickerListeners: vi.fn()
+}));
+
+vi.mock('../../src/minigames/big-jump.js', () => ({
+  startBigJumpGame: vi.fn()
+}));
+
+vi.mock('../../src/minigames/bubble-wrap.js', () => ({
+  startBubbleWrapGame: vi.fn()
+}));
+
+vi.mock('../../src/levels.js', () => ({
+  generateLevel: vi.fn()
+}));
+
+vi.mock('../../src/drag-drop.js', () => ({
+  handleDragStart: vi.fn()
+}));
+
 describe('Visual Effects', () => {
   beforeEach(() => {
     // Reset game state
     gameState.isInIntermission = false;
     gameState.levelCount = 1;
 
-    // Setup DOM
+    // Mock browser globals
+    global.confirm = vi.fn(() => false);
+    global.window = { location: { reload: vi.fn() } };
+
+    // Setup DOM with all required elements
     document.body.innerHTML = `
       <div id="confetti-container"></div>
       <div id="celebration-overlay" class="hidden"></div>
@@ -24,11 +55,16 @@ describe('Visual Effects', () => {
       <div id="intermission-container" class="hidden"></div>
       <div id="inventory-area"></div>
       <div class="mini-game hidden"></div>
+      <div id="sticker-shop-game" class="hidden"></div>
+      <div id="mud-wash-game" class="hidden"></div>
+      <div id="big-jump-game" class="hidden"></div>
+      <div id="bubble-wrap-game" class="hidden"></div>
     `;
   });
 
   afterEach(() => {
     vi.clearAllTimers();
+    vi.clearAllMocks();
   });
 
   describe('createConfetti', () => {

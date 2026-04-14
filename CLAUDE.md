@@ -38,14 +38,27 @@ registry=https://registry.npmjs.org/
 
 ## Testing Requirements
 
+**CRITICAL: Prioritize unit tests over E2E tests**
+
+Always write unit tests first. E2E tests are expensive (slow, flaky, hard to debug).
+
+**Unit tests:**
+- Fast (<2s total)
+- Test pure logic, functions, calculations
+- Easy to debug
+- Run on every save
+- Target: 80%+ coverage
+
+**E2E tests:**
+- Slow (5-10s per test)
+- Only 2-3 critical user flows
+- Verify integration only
+- Supplement unit tests, don't replace them
+
 **Every game needs:**
 - Unit tests (vitest + jsdom)
 - E2E tests (Playwright, minimal - 2-3 critical flows only)
 - CI job in `.github/workflows/ci.yml`
-
-**Prioritize unit over E2E:**
-- Unit tests: fast (<2s), test pure logic
-- E2E tests: slow (5-10s), test critical user flows only
 
 **Current coverage:**
 - puzzle: 49 unit + 6 E2E = 55 tests

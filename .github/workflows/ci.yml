@@ -13,8 +13,6 @@ env:
 jobs:
   puzzle:
     runs-on: ubuntu-latest
-    env:
-      NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
     defaults:
       run:
         working-directory: puzzle
@@ -23,7 +21,23 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
-      - run: npm install --prefer-offline --no-audit
+          cache: npm
+          cache-dependency-path: puzzle/package-lock.json
+      - name: Configure npm to use public registry
+        run: |
+          # Remove any .npmrc files
+          rm -f ~/.npmrc
+          rm -f .npmrc
+
+          # Rewrite package-lock.json to use public npm registry instead of Artifactory
+          if [ -f package-lock.json ]; then
+            echo "Rewriting package-lock.json URLs from Artifactory to public registry..."
+            sed -i 's|https://repox.jfrog.io/artifactory/api/npm/npm/|https://registry.npmjs.org/|g' package-lock.json
+            echo "✅ Rewritten $(grep -c 'registry.npmjs.org' package-lock.json) URLs"
+          fi
+
+          echo "✅ npm configured to use public registry"
+      - run: npm ci
       - run: npm test
       - name: Production build (same base as Pages)
         env:
@@ -32,8 +46,6 @@ jobs:
 
   truck:
     runs-on: ubuntu-latest
-    env:
-      NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
     defaults:
       run:
         working-directory: truck
@@ -42,7 +54,23 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
-      - run: npm install --prefer-offline --no-audit
+          cache: npm
+          cache-dependency-path: truck/package-lock.json
+      - name: Configure npm to use public registry
+        run: |
+          # Remove any .npmrc files
+          rm -f ~/.npmrc
+          rm -f .npmrc
+
+          # Rewrite package-lock.json to use public npm registry instead of Artifactory
+          if [ -f package-lock.json ]; then
+            echo "Rewriting package-lock.json URLs from Artifactory to public registry..."
+            sed -i 's|https://repox.jfrog.io/artifactory/api/npm/npm/|https://registry.npmjs.org/|g' package-lock.json
+            echo "✅ Rewritten $(grep -c 'registry.npmjs.org' package-lock.json) URLs"
+          fi
+
+          echo "✅ npm configured to use public registry"
+      - run: npm ci
       - run: npx playwright install --with-deps
       - run: npm test
         env:

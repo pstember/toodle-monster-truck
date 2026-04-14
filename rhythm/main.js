@@ -523,7 +523,7 @@ function draw(ctx, canvas) {
     ctx.fillStyle = LANE_COLORS[n.lane] ?? '#fff';
     const top = y - nh / 2;
     ctx.beginPath();
-    if (typeof ctx.roundRect === 'function') {
+    if (state.hasRoundRect) {
       ctx.roundRect(x, top, laneW, nh, 10);
     } else {
       ctx.rect(x, top, laneW, nh);
@@ -566,9 +566,10 @@ function gameLoop(canvas, ctx) {
 
   if (state.infiniteMode && state.notes.length > 0) {
     let guard = 0;
+    const maxTime = t + 120; // Safety: don't generate more than 2 minutes ahead
     while (guard++ < 6) {
       const last = state.notes.at(-1);
-      if (last.time - t >= INFINITE_EXTEND_BUFFER_SEC) break;
+      if (last.time - t >= INFINITE_EXTEND_BUFFER_SEC || last.time > maxTime) break;
       appendInfiniteSegment();
     }
   }
@@ -786,6 +787,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const canvas = document.getElementById('rhythm-canvas');
   const ctx = canvas.getContext('2d');
+
+  // Cache roundRect support to avoid checking in render loop
+  state.hasRoundRect = typeof ctx.roundRect === 'function';
 
   const splash = document.getElementById('splash-screen');
   const gameUi = document.getElementById('game-ui');

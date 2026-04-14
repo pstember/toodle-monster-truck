@@ -304,12 +304,13 @@ export function generateLevel(level, handleDragStart) {
         // Clear previous level
         gameState.slots = [];
         gameState.inventory = [];
+        gameState.slotRects = [];
+        gameState.levelCompleting = false;
 
         const slotsContainer = document.getElementById('slots-container');
         const inventoryContainer = document.getElementById('inventory-items');
 
         if (!slotsContainer || !inventoryContainer) {
-            console.error('Failed to find game containers');
             return;
         }
 

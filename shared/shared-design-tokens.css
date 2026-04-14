@@ -26,6 +26,13 @@
   --shadow-hover: 0 10px 0 rgba(30, 58, 95, 0.15);
   --shadow-inset: inset 0 3px 0 rgba(255, 255, 255, 0.5);
   --shadow-lifted: 0 12px 24px rgba(0, 0, 0, 0.2);
+
+  /* === TEXT EFFECTS === */
+  --text-shadow-dark:
+    2px 2px 0px #000000,
+    -1px -1px 0px #000000,
+    1px -1px 0px #000000,
+    -1px 1px 0px #000000;
 }
 
 /* === LIGHT THEME === */
@@ -112,11 +119,7 @@ html[data-theme="dark"] {
   border-radius: var(--radius-md);
   cursor: pointer;
   box-shadow: var(--shadow-toy), var(--shadow-inset);
-  text-shadow:
-    2px 2px 0px #000000,
-    -1px -1px 0px #000000,
-    1px -1px 0px #000000,
-    -1px 1px 0px #000000;
+  text-shadow: var(--text-shadow-dark);
   transition: all 0.2s ease;
   touch-action: manipulation;
   user-select: none;
@@ -174,10 +177,7 @@ html[data-theme="dark"] {
   font-weight: 800;
   color: var(--splash-title-color);
   text-shadow:
-    3px 3px 0px #000000,
-    -1px -1px 0px #000000,
-    1px -1px 0px #000000,
-    -1px 1px 0px #000000,
+    var(--text-shadow-dark),
     0 0 20px rgba(255, 215, 0, 0.6);
   margin-bottom: var(--space-lg);
   filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
@@ -189,11 +189,7 @@ html[data-theme="dark"] {
   font-size: clamp(20px, 4vw, 32px);
   font-weight: 700;
   color: var(--splash-subtitle-color);
-  text-shadow:
-    2px 2px 0px #000000,
-    -1px -1px 0px #000000,
-    1px -1px 0px #000000,
-    -1px 1px 0px #000000;
+  text-shadow: var(--text-shadow-dark);
   margin-bottom: var(--space-2xl);
   line-height: 1.3;
 }

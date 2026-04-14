@@ -10,6 +10,12 @@ import {
 } from './constants.js';
 import { gameState } from './state.js';
 import { playSound } from './utils.js';
+import {
+    createConfetti,
+    showCelebrationOverlay,
+    hideCelebrationOverlay,
+    triggerIntermission
+} from './visual-effects.js';
 
 /**
  * Validates if an item matches a slot's requirements
@@ -106,8 +112,6 @@ export function handleFailedMatch(item) {
 
 /**
  * Checks if the level is complete and triggers next actions
- * Note: Imports generateLevel, createConfetti, showCelebrationOverlay,
- * hideCelebrationOverlay, and triggerIntermission dynamically to avoid circular dependencies
  */
 export function checkLevelComplete() {
     const allFilled = gameState.slots.every(slot => slot.filled);
@@ -121,32 +125,24 @@ export function checkLevelComplete() {
         const truck = document.getElementById('monster-truck');
         truck.classList.add('driving-off');
 
-        // Import and execute confetti (dynamic to avoid circular dependency)
-        import('./visual-effects.js').then(({ createConfetti, showCelebrationOverlay, hideCelebrationOverlay, triggerIntermission }) => {
-            createConfetti();
+        createConfetti();
 
-            // Check for tier completion (every 3 levels)
-            gameState.intermissionCounter++;
+        // Check for tier completion (every 3 levels)
+        gameState.intermissionCounter++;
 
-            setTimeout(() => {
-                if (gameState.intermissionCounter % INTERMISSION_FREQUENCY === 0) {
-                    playSound('tierComplete');
-                    showCelebrationOverlay();
-                    setTimeout(() => {
-                        hideCelebrationOverlay();
-                        triggerIntermission();
-                    }, CELEBRATION_DURATION);
-                } else {
-                    // Next level
-                    gameState.levelCount++;
-                    // Dynamic import to avoid circular dependency
-                    import('./levels.js').then(({ generateLevel }) => {
-                        import('./drag-drop.js').then(({ handleDragStart }) => {
-                            generateLevel(gameState.levelCount, handleDragStart);
-                        });
-                    });
-                }
-            }, LEVEL_COMPLETE_DELAY);
-        });
+        setTimeout(() => {
+            if (gameState.intermissionCounter % INTERMISSION_FREQUENCY === 0) {
+                playSound('tierComplete');
+                showCelebrationOverlay();
+                setTimeout(() => {
+                    hideCelebrationOverlay();
+                    triggerIntermission();
+                }, CELEBRATION_DURATION);
+            } else {
+                // Next level
+                gameState.levelCount++;
+                generateLevel(gameState.levelCount, handleDragStart);
+            }
+        }, LEVEL_COMPLETE_DELAY);
     }
 }

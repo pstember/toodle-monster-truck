@@ -126,8 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         startBubbleWrapGame();
                         break;
                     default:
-                        console.error(`Unknown mini-game: ${testMinigame}. Available: mud-wash, sticker-shop, big-jump, bubble-wrap`);
-                        // Show normal game if unknown
+                        // Unknown mini-game - show normal game
                         intermissionContainer.classList.add('hidden');
                         gameState.isInIntermission = false;
                         generateLevel(gameState.levelCount, handleDragStart);

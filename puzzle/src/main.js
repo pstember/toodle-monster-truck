@@ -105,7 +105,6 @@ function startHintTimer(pieceId) {
 
 function updateHintsForTray() {
   if (!state || !state.tray) {
-    console.warn('updateHintsForTray: no state or tray');
     return;
   }
   // Start timers for all pieces in the tray

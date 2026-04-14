@@ -73,8 +73,8 @@ export function createFireworks() {
         const angle = Math.random() * Math.PI * 2;
         const distance = FIREWORK_DISTANCE_MIN + Math.random() * (FIREWORK_DISTANCE_MAX - FIREWORK_DISTANCE_MIN);
 
-        const x = FIREWORK_POSITION_CENTER + Math.cos(angle) * distance + (Math.random() - 0.5) * FIREWORK_POSITION_VARIANCE;
-        const y = FIREWORK_POSITION_CENTER + Math.sin(angle) * distance + (Math.random() - 0.5) * FIREWORK_POSITION_VARIANCE;
+        const x = FIREWORK_POSITION_CENTER.left + Math.cos(angle) * distance + (Math.random() - 0.5) * FIREWORK_POSITION_VARIANCE.horizontal;
+        const y = FIREWORK_POSITION_CENTER.top + Math.sin(angle) * distance + (Math.random() - 0.5) * FIREWORK_POSITION_VARIANCE.vertical;
 
         firework.style.left = `${x}%`;
         firework.style.top = `${y}%`;
